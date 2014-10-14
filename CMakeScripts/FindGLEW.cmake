@@ -19,7 +19,7 @@ FIND_PATH(GLEW_INCLUDE_DIR GL/glew.h
 )
 
 FIND_LIBRARY(GLEW_LIBRARY 
-    NAMES glew32 libGLEW.so
+    NAMES glew32s libGLEW.so
     DOC "Absolute path to GLEW library."
     HINTS 
     $ENV{GLEW_ROOT}

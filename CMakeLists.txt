@@ -33,27 +33,26 @@ include_directories(${GLM_INCLUDE_DIR})
 find_package(OpenGL REQUIRED)
 include_directories(${OPENGL_INCLUDE_DIRS})
 
-# global definitions
-set(LOCAL_EXTRA_C_FLAGS "")
-
+# Compiler flags
+set(CPP_COMPILER_FLAGS "")
 if(CMAKE_COMPILER_IS_GNUCXX)
     message(STATUS "Detected GNUCXX")
-    set(LOCAL_EXTRA_C_FLAGS "${LOCAL_EXTRA_C_FLAGS} -Wall -Wextra -std=c++11 -pedantic -g")
+    set(CPP_COMPILER_FLAGS "-Wall  -Wextra -std=c++11 -pedantic -g")
 elseif(MSVC)
     message(STATUS "Detected MSVC")
-    add_definitions("-D_CRT_SECURE_NO_WARNINGS")
+    #add_definitions("-D_CRT_SECURE_NO_WARNINGS")
+    set(CPP_COMPILER_FLAGS "-D_CRT_SECURE_NO_WARNINGS")
 elseif("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
     message(STATUS "Detected Clang++")
-    set(LOCAL_EXTRA_C_FLAGS "${LOCAL_EXTRA_C_FLAGS} -Wall -Wextra -Wno-c++98-compat -std=c++11 -pedantic")
+    set(CPP_COMPILER_FLAGS "-Wall -Wextra -Wno-c++98-compat -std=c++11 -pedantic")
 else()
     message(STATUS "Unknown Compiler")
 endif()
 
-add_definitions("${LOCAL_EXTRA_C_FLAGS}")
-
 
 # Add subdirs
 add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/src")
+set_property(DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/src" PROPERTY COMPILE_DEFINITIONS ${CPP_COMPILER_FLAGS})
 
 if(MSVC)
     message(STATUS "Detected MSVC")
