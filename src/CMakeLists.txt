@@ -26,4 +26,4 @@ list(APPEND SOURCES ${SRC_SHADER} ${SRC_GEOMETRY} ${SRC_SOURCE})
 # Stuff
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 add_executable(${PROJECT_NAME} ${SOURCES})
-target_link_libraries (${PROJECT_NAME} glfw3 glew32s ${OPENGL_LIBRARIES})
+target_link_libraries (${PROJECT_NAME} glfw GLEW ${OPENGL_LIBRARIES})
