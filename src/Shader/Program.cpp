@@ -66,7 +66,7 @@ namespace Shader
 			addShader(shader->type(), shader->name());
 		}
 
-		compile();
+		link();
 
 		auto oldLocations = _uniformLocations;
 		for (auto location : _uniformLocations)
@@ -77,7 +77,7 @@ namespace Shader
 		return true;
 	}
 	
-	void Program::compile()
+	void Program::link()
 	{
 		if (_compiled == false)
 		{
@@ -103,15 +103,27 @@ namespace Shader
 
 	void Program::use()
 	{
-		compile();
+		link();
 		glUseProgram(_shaderProgram);
 	}
 
 	const GLuint Program::getProgram()
 	{
-		compile();
+		link();
 		return _shaderProgram;
 	}
 
+	UniformHandle Program::createUniform(std::string name)
+	{
+		link();
 
+		auto it = _uniformLocations.find(name);
+		if (it == _uniformLocations.end())
+		{
+			GLuint location = glGetUniformLocation(_shaderProgram, name.c_str());
+			_uniformLocations[name] = new GLint(location);
+		}
+
+		return UniformHandle(_uniformLocations[name]);
+	}
 }
