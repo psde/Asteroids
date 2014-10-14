@@ -4,6 +4,7 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
+#include <memory>
 #include <glm/gtc/matrix_transform.hpp>
 
 #include "Shader/Shader.h"
@@ -12,19 +13,6 @@
 static void error_callback(int error, const char* description)
 {
     fputs(description, stderr);
-}
-
-void setupShader(Shader::Program shader)
-{
-	//glBindFragDataLocation(shader.getProgram(), 0, "outColor");
-
-	GLint posAttrib = glGetAttribLocation(shader.getProgram(), "position");
-	glEnableVertexAttribArray(posAttrib);
-	glVertexAttribPointer(posAttrib, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(GLfloat), 0);
-
-	//GLint colAttrib = glGetAttribLocation(shader.getProgram(), "color");
-	//glEnableVertexAttribArray(colAttrib);
-	//glVertexAttribPointer(colAttrib, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (void*)(2 * sizeof(GLfloat)));
 }
 
 int main()
@@ -63,35 +51,29 @@ int main()
 		2, 3, 0
 	};
 
-	auto *mesh = new Geometry::Mesh(vertices, elements);
+	std::unique_ptr<Geometry::Mesh> mesh(new Geometry::Mesh(vertices, elements));
 
 	Shader::Program shader;
 	shader.addFragmentShader("data/shader/test.glsl");
 	shader.addVertexShader("data/shader/test.glsl");
-
-	glBindVertexArray(mesh->id());
-	setupShader(shader);
-	glBindVertexArray(0);
-
-	glm::mat4 o = glm::ortho(0.0f, 800.0f, 600.0f, 0.0f);
-
-
-	auto factorUniform = shader.createUniform<float>("factor");
-	auto widthUniform = shader.createUniform<float>("width");
-	auto heightUniform = shader.createUniform<float>("height");
-	auto matUniform = shader.createUniform<glm::mat4>("mat");
+	
+	auto factorUniform = shader.createUniform("factor");
+	auto widthUniform = shader.createUniform("width");
+	auto heightUniform = shader.createUniform("height");
 	
 	float factor = 0.0f;
 	int tick = 0;
 	double time = glfwGetTime();
 	double timeDelta = 0;
     while (!glfwWindowShouldClose(window))
-    {
+	{
+		double oldTime = time;
+		time = glfwGetTime();
+		timeDelta = time - oldTime;
+
 		if (tick % 1000 == 0 && shader.reload())
 		{
-			glBindVertexArray(mesh->id());
-			setupShader(shader);
-			glBindVertexArray(0);
+			mesh->setup(&shader);
 		}
 
 		tick++;
@@ -99,29 +81,24 @@ int main()
 		int width, height;
 		
 		factor += 1.5f * timeDelta;
-		factorUniform = fmod(factor, 1.0f);
+		factorUniform.update(fmod(factor, 1.0f));
 
 		glfwGetWindowSize(window, &width, &height);
 		ratio = width / (float)height;
 
 		glViewport(0, 0, width, height);
-		//widthUniform = width;
-		//heightUniform = height;
-
-		matUniform = o;
-
+		widthUniform.update(width);
+		heightUniform.update(height);
+		
 		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
 
 		shader.use();
+		mesh->setup(&shader);
 		mesh->draw();
 
         glfwSwapBuffers(window);
         glfwPollEvents();
-
-		double oldTime = time;
-		time = glfwGetTime();
-		timeDelta = time - oldTime;
     }
 
     glfwDestroyWindow(window);

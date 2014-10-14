@@ -21,7 +21,7 @@ namespace Shader
 		bool addShader(GLuint type, std::string file);
 
 		std::vector<std::shared_ptr<Shader>> _shaders;
-		std::map<std::string, GLuint*> _uniformLocations;
+		std::map<std::string, GLint*> _uniformLocations;
 
 		void compile();
 	public:
@@ -38,8 +38,7 @@ namespace Shader
 
 		const GLuint getProgram();
 
-		template<typename T>
-		UniformHandle<T> createUniform(std::string name)
+		UniformHandle createUniform(std::string name)
 		{
 			compile();
 
@@ -47,10 +46,10 @@ namespace Shader
 			if (it == _uniformLocations.end())
 			{
 				GLuint location = glGetUniformLocation(_shaderProgram, name.c_str());
-				_uniformLocations[name] = new GLuint(location);
+				_uniformLocations[name] = new GLint(location);
 			}
 
-			return UniformHandle<T>(_uniformLocations[name]);
+			return UniformHandle(_uniformLocations[name]);
 		}
 	};
 }

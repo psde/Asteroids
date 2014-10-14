@@ -48,7 +48,7 @@ namespace Shader
 
 		_content = fileContents;
 
-		std::string source("#version 150 core\n");
+		std::string source("#version 330 core\n");
 
 		switch (_type)
 		{

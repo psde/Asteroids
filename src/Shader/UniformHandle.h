@@ -6,32 +6,25 @@
 
 namespace Shader
 {
-	template<typename T>
 	class UniformHandle
 	{
-		friend class Program;
 	private:
-		GLuint *_location;
-		UniformHandle(GLuint *location)
+		GLint *_location;
+
+	public:
+		UniformHandle(GLint *location)
 			: _location(location)
 		{
 		}
 
-	public:
-		UniformHandle &operator=(const T &rhs)
+		void update(const glm::mat4 &val)
 		{
-			set(rhs);
-			return *this;
+			glUniformMatrix4fv(*_location, 1, GL_FALSE, glm::value_ptr(val));
 		}
 
-		void set(const glm::mat4 &val)
+		void update(const float &val)
 		{
-			glUniformMatrix4fv(0, 1, GL_FALSE, glm::value_ptr(val));
-		}
-
-		void set(const float &val)
-		{
-			glUniform1f(0, val);
+			glUniform1f(*_location, val);
 		}
 	};
 }

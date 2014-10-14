@@ -2,7 +2,6 @@
 
 namespace Geometry
 {
-
 	Mesh::Mesh(std::vector<GLfloat> vertices, std::vector<GLuint> indices)
 	{
 		_vertices = vertices;
@@ -24,7 +23,10 @@ namespace Geometry
 
 	void Mesh::setup(Shader::Program *program)
 	{
-
+		glBindVertexArray(_vao);
+		glEnableVertexAttribArray(0);
+		glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(GLfloat), 0);
+		glBindVertexArray(0);
 	}
 
 	void Mesh::draw()
