@@ -1,0 +1,6 @@
+# This file is used on unusual systems for setting up dependencies
+# Copy this file to 'UserDefinitions.cmake' to take effect
+# Windows users: Don't forget to change the directory seperator to '/'
+
+set(GLFW3_ROOT "~/devel/glfw3/")
+set(GLEW_ROOT "~/devel/glew/")
