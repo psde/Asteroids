@@ -1,6 +1,7 @@
 # Shader sources
 list(APPEND SRC_SHADER
 	Shader/Shader.h
+	Shader/Shader.cpp
 	Shader/Program.cpp
 	Shader/Program.h
 	Shader/UniformHandle.h

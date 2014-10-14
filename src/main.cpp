@@ -51,25 +51,11 @@ int main()
 		fprintf(stderr, "Error: %s\n", glewGetErrorString(err));
 	}
 
-	std::vector<GLfloat> vertices__ = { 
-		-0.5f,  0.5f, 1.0f, 0.0f, 0.0f, // Top-left
-		 0.5f,  0.5f, 0.0f, 1.0f, 0.0f, // Top-right
-		 0.5f, -0.5f, 0.0f, 0.0f, 1.0f, // Bottom-right
-		-0.5f, -0.5f, 1.0f, 1.0f, 1.0f  // Bottom-left
-	};
-
 	std::vector<GLfloat> vertices = {
 		100.0f, 500.0f,
 		500.0f, 500.0f,
 		500.0f, 100.0f,
 		100.0f, 100.0f
-	};
-
-	std::vector<GLfloat> vertices11 = {
-		-0.5f,  0.5f,
-		 0.5f,  0.5f,
-		 0.5f, -0.5f,
-		-0.5f, -0.5f
 	};
 
 	std::vector<GLuint> elements = {
@@ -112,7 +98,7 @@ int main()
 		float ratio;
 		int width, height;
 		
-		factor += 1.5 * timeDelta;
+		factor += 1.5f * timeDelta;
 		factorUniform = fmod(factor, 1.0f);
 
 		glfwGetWindowSize(window, &width, &height);
