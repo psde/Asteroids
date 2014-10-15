@@ -3,8 +3,10 @@
 #define GLEW_STATIC
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
-#include <glm/glm.hpp>
 #include <memory>
+
+#define GLM_FORCE_RADIANS
+#include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
 #include "Shader/Shader.h"
