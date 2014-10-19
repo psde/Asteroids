@@ -27,6 +27,13 @@ namespace Shader
 		return true;
 	}
 
+
+	void Program::addUniversalShader(std::string file)
+	{
+		addShader(GL_VERTEX_SHADER, file);
+		addShader(GL_FRAGMENT_SHADER, file);
+	}
+
 	void Program::addVertexShader(std::string file)
 	{
 		addShader(GL_VERTEX_SHADER, file);

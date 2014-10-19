@@ -1,5 +1,6 @@
 #include <iostream>
 #include <fstream>
+#include <sstream>
 #include <vector>
 
 #include "Shader.h"
@@ -13,62 +14,59 @@ namespace Shader
 
 	bool Shader::needsReload()
 	{
-		std::ifstream stream(_name);
-		if (stream.is_open() == false)
-		{
-			std::cout << "Could not open file " << _name << std::endl;
-			return false;
-		}
-
-		std::string fileContents((std::istreambuf_iterator<char>(stream)), (std::istreambuf_iterator<char>()));
-		stream.close();
-
-		if (fileContents != _content)
+		if (loadShaderfile(_name) != _content || loadShaderfile("data/shader/global.inc.glsl") != _global)
 		{
 			return true;
 		}
 		return false;
 	}
 
-	bool Shader::load()
+
+	std::string Shader::loadShaderfile(std::string filename)
 	{
-		std::ifstream stream(_name);
+		std::ifstream stream(filename);
 		if (stream.is_open() == false)
 		{
-			std::cout << "Could not open file " << _name << std::endl;
-			return false;
+			std::cout << "Could not open file " << filename << std::endl;
+			return "";
 		}
-
-		_shader = glCreateShader(_type);
 
 		std::string fileContents((std::istreambuf_iterator<char>(stream)), (std::istreambuf_iterator<char>()));
 		stream.close();
+		return fileContents;
+	}
 
-		_content = fileContents;
+	bool Shader::load()
+	{
+		_global = loadShaderfile("data/shader/global.inc.glsl");
+		_content = loadShaderfile(_name);
 
-		std::string source("#version 330 core\n");
+		std::stringstream source;
+		source << "#version 330 core\n";
 
 		switch (_type)
 		{
 		case GL_GEOMETRY_SHADER:
-			source.append("#define GEOMETRY\n");
+			source << "#define GEOMETRY\n";
 			break;
 		case GL_VERTEX_SHADER:
-			source.append("#define VERTEX\n");
+			source << "#define VERTEX\n";
 			break;
 		case GL_FRAGMENT_SHADER:
-			source.append("#define FRAGMENT\n");
+			source << "#define FRAGMENT\n";
 			break;
 
 		default:
 			std::cout << "Unknown shader type " << _type << std::endl;
 		}
 
-		source.append("#line 0\n");
+		source << _global << "\n";
+		source << "#line 0\n";
+		source << _content;
 
-		source.append(fileContents);
-
-		const char *src = source.c_str();
+		_shader = glCreateShader(_type);
+		std::string s = source.str();
+		const char *src = s.c_str();
 		glShaderSource(_shader, 1, &src, NULL);
 		glCompileShader(_shader);
 

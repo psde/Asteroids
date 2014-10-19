@@ -89,9 +89,7 @@ namespace Game
 	: _size(size)
 	{
 
-		_shader.addFragmentShader("data/shader/asteroid.glsl");
-		_shader.addVertexShader("data/shader/asteroid.glsl");
-
+		_shader.addUniversalShader("data/shader/asteroid.glsl");
 
 		std::random_device rd;
 		std::mt19937 gen(rd());

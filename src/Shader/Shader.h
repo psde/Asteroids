@@ -14,6 +14,9 @@ namespace Shader
 		std::string _name;
 		GLuint _type;
 		std::string _content;
+		std::string _global;
+
+		std::string loadShaderfile(std::string filename);
 
 	public:
 		Shader(std::string name, GLuint type);

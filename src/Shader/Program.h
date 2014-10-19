@@ -15,6 +15,7 @@ namespace Shader
 	class Program
 	{
 	private:
+		
 		GLuint _shaderProgram;
 		bool _linked;
 
@@ -29,6 +30,7 @@ namespace Shader
 		Program();
 		~Program();
 
+		void addUniversalShader(std::string file);
 		void addVertexShader(std::string file);
 		void addFragmentShader(std::string file);
 
