@@ -1,4 +1,6 @@
 #include <iostream>
+#include <sstream>
+#include <iomanip>
 #include <memory>
 #include <random>
 
@@ -11,6 +13,7 @@
 #include "Shader/Shader.h"
 #include "Geometry/Mesh.h"
 #include "Game/Asteroid.h"
+#include "Game/Ship.h"
 #include "Game/FontRenderer.h"
 
 static void error_callback(int error, const char* description)
@@ -32,7 +35,7 @@ int main()
 	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 	glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
-	glfwWindowHint(GLFW_SAMPLES, 2);
+	glfwWindowHint(GLFW_SAMPLES, 8);
 
 	window = glfwCreateWindow(800, 600, "Asteroids!", nullptr, nullptr);
     if (!window)
@@ -53,6 +56,8 @@ int main()
 
 	Game::FontRenderer fontRenderer;
 
+	Game::Ship ship;
+
 	std::vector<Game::Asteroid*> asteroids;
 
 	for (int i = 0; i < 20; ++i)
@@ -63,6 +68,10 @@ int main()
 		asteroids.push_back(new Game::Asteroid(dis(gen)));
 	}
 	
+	std::stringstream ss;
+	ss << std::setw(12) << std::setfill('0') << 123456789;
+	std::string score = ss.str();
+
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 	float ratio;
 	int width, height;
@@ -92,7 +101,10 @@ int main()
 			asteroid->draw();
 		}
 
-		fontRenderer.draw(glm::vec2(10, 10), "0123456789", 25.f);
+		ship.update((float)timeDelta);
+		ship.draw();
+
+		fontRenderer.draw(glm::vec2(10, 10), score, 25.f);
 
         glfwSwapBuffers(window);
         glfwPollEvents();

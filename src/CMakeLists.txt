@@ -24,6 +24,8 @@ list(APPEND SRC_GAME
 	Game/PhysicsObject.cpp
 	Game/FontRenderer.h
 	Game/FontRenderer.cpp
+	Game/Ship.h
+	Game/Ship.cpp
 )
 SOURCE_GROUP("Game" FILES ${SRC_GAME})
 
