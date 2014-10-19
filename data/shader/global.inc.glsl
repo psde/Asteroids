@@ -3,7 +3,7 @@ uniform mat4 projection;
 uniform vec2 windowDimensions;
 
 #ifdef VERTEX
-//layout(location = 0) in vec2 vertexPosition;
+layout(location = 0) in vec2 vertexPosition;
 #endif
 
 mat4 generateProjection()

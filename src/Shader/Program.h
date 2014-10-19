@@ -12,6 +12,57 @@
 
 namespace Shader
 {
+	class Program;
+
+	namespace
+	{
+		class GlobalBase
+		{
+		public:
+			virtual void update(Program *program) = 0;
+		};
+
+		template<class T>
+		class Global : public GlobalBase
+		{
+		private:
+			T _val;
+			std::string _name;
+
+		public:
+			Global(std::string name, T val) : _name(name), _val(val) { }
+
+			void update(Program *program)
+			{
+				(*program)[_name] = _val;
+			}
+		};
+	}
+
+	class Globals
+	{
+	private:
+		std::map<std::string, std::shared_ptr<GlobalBase>> _globals;
+
+	public:
+		Globals() {};
+
+		template<class T>
+		void update(std::string name, T val)
+		{
+			std::shared_ptr<Global<T>> global = std::make_shared<Global<T>>(name, val);
+			_globals[name] = global;
+		}
+
+		void updateProgram(Program *program)
+		{
+			for (auto global : _globals)
+			{
+				global.second->update(program);
+			}
+		}
+	};
+
 	class Program
 	{
 	private:
@@ -42,5 +93,11 @@ namespace Shader
 		const GLuint getProgram();
 		
 		UniformAssigner operator[](const std::string& uniform_name);
+
+		static Globals &globals()
+		{
+			static Globals globals;
+			return globals;
+		}
 	};
 }

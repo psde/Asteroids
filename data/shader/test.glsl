@@ -1,5 +1,4 @@
 #ifdef VERTEX
-layout(location = 0) in vec2 vertexPosition;
 
 uniform float width;
 uniform float height;
@@ -11,12 +10,7 @@ void main()
 	float bottom = height;
 	float top = 0.0;
 
-	mat4 m = mat4(
-		2.0/(right-left), 0.0, 0.0, 0.0,
-		0.0, 2.0/(top-bottom), 0.0, 0.0,
-		0.0, 0.0, -1.0, 0.0,
-		-(right+left)/(right-left), -(top+bottom)/(top-bottom), 0.0, 1.0
-	);
+	mat4 m = generateProjection();
 
 	vec4 pos = m * vec4(vertexPosition, 1.0, 1.0);
 	gl_Position = pos;

@@ -117,6 +117,8 @@ namespace Shader
 
 		link();
 		glUseProgram(_shaderProgram);
+
+		globals().updateProgram(this);
 	}
 
 	const GLuint Program::getProgram()
