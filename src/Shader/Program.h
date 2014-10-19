@@ -7,7 +7,7 @@
 #include <utility>
 #include <memory>
 
-#include "UniformHandle.h"
+#include "UniformAssigner.h"
 #include "Shader.h"
 
 namespace Shader
@@ -16,12 +16,12 @@ namespace Shader
 	{
 	private:
 		GLuint _shaderProgram;
-		bool _compiled;
+		bool _linked;
 
 		bool addShader(GLuint type, std::string file);
 
 		std::vector<std::shared_ptr<Shader>> _shaders;
-		std::map<std::string, GLint*> _uniformLocations;
+		std::map<std::string, GLuint> _uniformLocations;
 
 		void link();
 
@@ -33,12 +33,12 @@ namespace Shader
 		void addFragmentShader(std::string file);
 
 		void use();
-		
+
 		bool needsReload();
 		bool reload();
 
 		const GLuint getProgram();
-
-		UniformHandle createUniform(std::string name);
+		
+		UniformAssigner operator[](const std::string& uniform_name);
 	};
 }

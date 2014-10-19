@@ -3,13 +3,11 @@
 #include <iostream>
 #include <fstream>
 
-#include "UniformHandle.h"
-
 namespace Shader
 {
 	Program::Program()
 	{
-		_compiled = false;
+		_linked = false;
 		_shaderProgram = glCreateProgram();
 	}
 
@@ -56,7 +54,7 @@ namespace Shader
 		if (needsReload() == false)
 			return false;
 
-		_compiled = false;
+		_linked = false;
 		_shaderProgram = glCreateProgram();
 
 		auto oldShaders = _shaders;
@@ -68,41 +66,48 @@ namespace Shader
 
 		link();
 
-		auto oldLocations = _uniformLocations;
-		for (auto location : _uniformLocations)
-		{
-			*_uniformLocations[location.first] = glGetUniformLocation(_shaderProgram, location.first.c_str());
-		}
+		_uniformLocations.clear();
 
 		return true;
 	}
 	
 	void Program::link()
 	{
-		if (_compiled == false)
+		if (_linked == false)
 		{
 			glLinkProgram(_shaderProgram);
 
-			/*
-			glGetProgramiv(_shaderProgram, GL_LINK_STATUS, (int *)&IsLinked);
-			if (IsLinked == FALSE)
+			GLint isCompiled = 0;
+			glGetProgramiv(_shaderProgram, GL_LINK_STATUS, &isCompiled);
+
+			if (isCompiled == GL_FALSE)
 			{
-				glGetProgramiv(_shaderprogram, GL_INFO_LOG_LENGTH, &maxLength);
+				GLint maxLength = 1000;
+				glGetProgramiv(_shaderProgram, GL_INFO_LOG_LENGTH, &maxLength);
 
-				shaderProgramInfoLog = (char *)malloc(maxLength);
+				std::vector<char> errorLog(maxLength);
+				glGetProgramInfoLog(_shaderProgram, maxLength, &maxLength, &errorLog[0]);
 
-				glGetProgramInfoLog(shaderprogram, maxLength, &maxLength, shaderProgramInfoLog);
+				std::cout << "Failed to compile program" << std::endl << &errorLog[0] << std::endl;
 
-				free(shaderProgramInfoLog);
+				glDeleteProgram(_shaderProgram);
 				return;
-			}*/
+			}
 
-			_compiled = true;
+			_linked = true;
 		}
 	}
 
 	void Program::use()
 	{
+		static int tick = 0;
+		tick++;
+
+		if (tick > 2000) {
+			reload();
+			tick = 0;
+		}
+
 		link();
 		glUseProgram(_shaderProgram);
 	}
@@ -113,17 +118,20 @@ namespace Shader
 		return _shaderProgram;
 	}
 
-	UniformHandle Program::createUniform(std::string name)
+	UniformAssigner Program::operator[](const std::string& uniform_name)
 	{
-		link();
-
-		auto it = _uniformLocations.find(name);
+		GLuint location = -1;
+		auto it = _uniformLocations.find(uniform_name);
 		if (it == _uniformLocations.end())
 		{
-			GLuint location = glGetUniformLocation(_shaderProgram, name.c_str());
-			_uniformLocations[name] = new GLint(location);
+			location = glGetUniformLocation(_shaderProgram, uniform_name.c_str());
+			_uniformLocations[uniform_name] = location;
+		}
+		else
+		{
+			location = it->second;
 		}
 
-		return UniformHandle(_uniformLocations[name]);
+		return UniformAssigner(location);
 	}
 }

@@ -1,16 +1,17 @@
 #include <iostream>
+#include <memory>
+#include <random>
 
-#define GLEW_STATIC
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
-#include <memory>
 
-#define GLM_FORCE_RADIANS
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
 #include "Shader/Shader.h"
 #include "Geometry/Mesh.h"
+#include "Game/Asteroid.h"
+#include "Game/FontRenderer.h"
 
 static void error_callback(int error, const char* description)
 {
@@ -31,8 +32,9 @@ int main()
 	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 	glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
+	glfwWindowHint(GLFW_SAMPLES, 2);
 
-    window = glfwCreateWindow(800, 600, "Simple example", NULL, NULL);
+	window = glfwCreateWindow(800, 600, "Asteroids!", nullptr, nullptr);
     if (!window)
     {
         glfwTerminate();
@@ -49,66 +51,64 @@ int main()
 		exit(EXIT_FAILURE);
 	}
 
-	std::vector<GLfloat> vertices = {
-		100.0f, 500.0f,
-		500.0f, 500.0f,
-		500.0f, 100.0f,
-		100.0f, 100.0f
-	};
+	Game::FontRenderer fontRenderer;
 
-	std::vector<GLuint> elements = {
-		0, 1, 2,
-		2, 3, 0
-	};
+	std::vector<Game::Asteroid*> asteroids;
 
-	std::unique_ptr<Geometry::Mesh> mesh(new Geometry::Mesh(vertices, elements));
-
-	Shader::Program shader;
-	shader.addFragmentShader("data/shader/test.glsl");
-	shader.addVertexShader("data/shader/test.glsl");
+	for (int i = 0; i < 20; ++i)
+	{
+		std::random_device rd;
+		std::mt19937 gen(rd());
+		std::uniform_int_distribution<> dis(50, 90);
+		asteroids.push_back(new Game::Asteroid(dis(gen)));
+	}
 	
-	auto factorUniform = shader.createUniform("factor");
-	auto widthUniform = shader.createUniform("width");
-	auto heightUniform = shader.createUniform("height");
-	
+	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+	float ratio;
+	int width, height;
+	glfwGetWindowSize(window, &width, &height);
+	ratio = width / (float)height;
+
+	glViewport(0, 0, width, height);
+
 	float factor = 0.0f;
-	int tick = 0;
 	double time = glfwGetTime();
 	double timeDelta = 0;
-    while (!glfwWindowShouldClose(window))
+	
+	double last_frametime = time;
+	const double frametime_max = 0.1;
+	double acc_frametime = 0.0;
+	int frames = 0;
+	while (!glfwWindowShouldClose(window))
 	{
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		double oldTime = time;
 		time = glfwGetTime();
 		timeDelta = time - oldTime;
-
-		if (tick % 1000 == 0)
+		
+		for (Game::Asteroid* asteroid : asteroids)
 		{
-			shader.reload();
+			asteroid->update((float)timeDelta);
+			asteroid->draw();
 		}
 
-		tick++;
-		float ratio;
-		int width, height;
-		
-		factor += 1.5f * timeDelta;
-		factorUniform.update(fmod(factor, 1.0f));
-
-		glfwGetWindowSize(window, &width, &height);
-		ratio = width / (float)height;
-
-		glViewport(0, 0, width, height);
-		widthUniform.update(width);
-		heightUniform.update(height);
-		
-		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-		glClear(GL_COLOR_BUFFER_BIT);
-
-		shader.use();
-		mesh->setup(&shader);
-		mesh->draw();
+		fontRenderer.draw(glm::vec2(10, 10), "0123456789", 25.f);
 
         glfwSwapBuffers(window);
         glfwPollEvents();
+
+		if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+			glfwSetWindowShouldClose(window, GL_TRUE);
+
+		acc_frametime += timeDelta;
+		frames++;
+		if (time > last_frametime + frametime_max)
+		{
+			std::cout << "Frametime: " << (acc_frametime / (double)frames) * 1000.0f << "ms" << std::endl;
+			last_frametime = time;
+			acc_frametime = 0.0f;
+			frames = 0;
+		}
     }
 
     glfwDestroyWindow(window);

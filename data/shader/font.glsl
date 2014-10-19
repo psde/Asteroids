@@ -1,14 +1,14 @@
 #ifdef VERTEX
 layout(location = 0) in vec2 vertexPosition;
 
-uniform float width;
-uniform float height;
+uniform vec2 position;
+uniform float size;
 
 void main()
 {
-	float right = width;
+	float right = 800;
 	float left = 0.0;
-	float bottom = height;
+	float bottom = 600;
 	float top = 0.0;
 
 	mat4 m = mat4(
@@ -18,21 +18,21 @@ void main()
 		-(right+left)/(right-left), -(top+bottom)/(top-bottom), 0.0, 1.0
 	);
 
-	vec4 pos = m * vec4(vertexPosition, 1.0, 1.0);
+	mat2 scale = mat2(
+		size, 0.0,
+		0.0, size
+	);
+
+	vec4 pos = m  * vec4((vertexPosition * scale) + position, 1.0, 1.0);
 	gl_Position = pos;
 }
 #endif
 
 #ifdef FRAGMENT
-in vec3 Color;
-out vec4 outColor;
+out vec4 color;
 
-uniform float factor;
-
-uniform mat4 mat;
 void main()
 {
-	vec3 fooColor = mix(vec3(0.0, 0.0, 0.0), vec3(1.0, 1.0, 1.0), factor);
-	outColor = vec4(fooColor, 1.0);
+	color = vec4(vec3(1.0, 1.0, 1.0), 1.0);
 }
 #endif

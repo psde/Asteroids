@@ -1,12 +1,28 @@
 #include "Mesh.h"
 
+#include <iostream>
+
 namespace Geometry
 {
-	Mesh::Mesh(std::vector<GLfloat> vertices, std::vector<GLuint> indices)
+	Mesh::Mesh(std::vector<GLfloat> vertices)
+		: _vertices(vertices)
 	{
-		_vertices = vertices;
-		_indices = indices;
+		for (unsigned int i = 0; i < (vertices.size() / 2); i++)
+		{
+			_indices.push_back(i);
+		}
+		initializeMesh();
+	}
 
+	Mesh::Mesh(std::vector<GLfloat> vertices, std::vector<GLuint> indices)
+		: _vertices(vertices)
+		, _indices(indices)
+	{
+		initializeMesh();
+	}
+
+	void Mesh::initializeMesh()
+	{
 		glGenVertexArrays(1, &_vao);
 		glBindVertexArray(_vao);
 
@@ -18,21 +34,21 @@ namespace Geometry
 		glGenBuffers(1, &_ebo);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _ebo);
 		glBufferData(GL_ELEMENT_ARRAY_BUFFER, _indices.size() * sizeof(GLuint), _indices.data(), GL_STATIC_DRAW);
-		glBindVertexArray(0);
-	}
 
-	void Mesh::setup(Shader::Program *program)
-	{
-		glBindVertexArray(_vao);
-		glEnableVertexAttribArray(0);
 		glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(GLfloat), 0);
+		glEnableVertexAttribArray(0);
 		glBindVertexArray(0);
 	}
 
-	void Mesh::draw()
+	void Mesh::draw(GLenum mode)
+	{
+		draw(mode, _indices.size(), 0);
+	}
+
+	void Mesh::draw(GLenum mode, int count, int offset)
 	{
 		glBindVertexArray(_vao);
-		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+		glDrawElements(mode, count, GL_UNSIGNED_INT, (void*)(offset * sizeof(GLuint)));
 		glBindVertexArray(0);
 	}
 }

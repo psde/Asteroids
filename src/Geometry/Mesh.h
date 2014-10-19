@@ -14,13 +14,12 @@ namespace Geometry
 		std::vector<GLfloat> _vertices;
 		std::vector<GLuint> _indices;
 
+		void initializeMesh();
 	public:
+		Mesh(std::vector<GLfloat> vertices);
 		Mesh(std::vector<GLfloat> vertices, std::vector<GLuint> indices);
-
-		void setup(Shader::Program *program);
-
-		void draw();
-
-		GLuint id() { return _vao; }
+		
+		void draw(GLenum mode);
+		void draw(GLenum mode, int count, int offset);
 	};
 }

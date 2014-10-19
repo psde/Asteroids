@@ -2,8 +2,6 @@
 #include <fstream>
 #include <vector>
 
-#include "UniformHandle.h"
-
 #include "Shader.h"
 
 namespace Shader
@@ -79,13 +77,13 @@ namespace Shader
 
 		if (isCompiled == GL_FALSE)
 		{
-			GLint maxLength = 0;
+			GLint maxLength = 1000;
 			glGetShaderiv(_shader, GL_INFO_LOG_LENGTH, &maxLength);
 
 			std::vector<char> errorLog(maxLength);
 			glGetShaderInfoLog(_shader, maxLength, &maxLength, &errorLog[0]);
 
-			std::cout << "Failed to compile shader" << std::endl << &errorLog[0] << std::endl;
+			std::cout << "Failed to compile shader '" << _name << "'" << std::endl << &errorLog[0] << std::endl;
 
 			glDeleteShader(_shader);
 			return false;
