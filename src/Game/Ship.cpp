@@ -8,9 +8,8 @@
 namespace Game
 {
 	Ship::Ship()
+	: _shader("data/shader/asteroid.glsl")
 	{
-		_shader.addUniversalShader("data/shader/asteroid.glsl");
-
 		_size = 25.f;
 		_position = glm::vec2(400.0f - _size / 2.f, 300 - _size / 2.f);
 		_velocity = glm::vec2(0, 0);

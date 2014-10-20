@@ -7,10 +7,11 @@
 
 namespace Shader
 {
-	Program::Program()
+	Program::Program(std::string universalShader)
 	{
 		_linked = false;
 		_shaderProgram = glCreateProgram();
+		addUniversalShader(universalShader);
 	}
 
 	Program::~Program()
@@ -32,8 +33,8 @@ namespace Shader
 
 	void Program::addUniversalShader(std::string file)
 	{
-		addShader(GL_VERTEX_SHADER, file);
-		addShader(GL_FRAGMENT_SHADER, file);
+		addVertexShader(file);
+		addFragmentShader(file);
 	}
 
 	void Program::addVertexShader(std::string file)

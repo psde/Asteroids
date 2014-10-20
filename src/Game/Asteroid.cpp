@@ -88,10 +88,8 @@ namespace Game
 
 	Asteroid::Asteroid(int size)
 	: _size(size)
+	, _shader("data/shader/asteroid.glsl")
 	{
-
-		_shader.addUniversalShader("data/shader/asteroid.glsl");
-
 		std::random_device rd;
 		std::mt19937 gen(rd());
 		std::uniform_real_distribution<> dis_x(0, 800);

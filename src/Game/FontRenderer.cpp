@@ -5,8 +5,8 @@
 namespace Game
 {
 	FontRenderer::FontRenderer()
+	: _shader("data/shader/font.glsl")
 	{
-		_shader.addUniversalShader("data/shader/font.glsl");
 
 		std::vector<GLfloat> vertices = {
 			0.10f, 0.10f, // 0 top left

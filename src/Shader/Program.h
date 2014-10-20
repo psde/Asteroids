@@ -29,13 +29,13 @@ namespace Shader
 
 		void link();
 
-	public:
-		Program();
-		~Program();
-
 		void addUniversalShader(std::string file);
 		void addVertexShader(std::string file);
 		void addFragmentShader(std::string file);
+
+	public:
+		Program(std::string universalFile);
+		~Program();
 
 		void use();
 
