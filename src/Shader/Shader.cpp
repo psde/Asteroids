@@ -12,6 +12,11 @@ namespace Shader
 	{
 	}
 
+	Shader::~Shader()
+	{
+		glDeleteShader(_shader);
+	};
+
 	bool Shader::needsReload()
 	{
 		if (loadShaderfile(_name) != _content || loadShaderfile("data/shader/global.inc.glsl") != _global)

@@ -6,8 +6,11 @@
 
 namespace Shader
 {
+	class Program;
+
 	class Shader
 	{
+		friend class Program;
 	private:
 		GLuint _shader;
 
@@ -18,12 +21,9 @@ namespace Shader
 
 		std::string loadShaderfile(std::string filename);
 
-	public:
 		Shader(std::string name, GLuint type);
-		~Shader()
-		{
-			glDeleteShader(_shader);
-		};
+	public:
+		~Shader();
 
 		bool load();
 		bool needsReload();
