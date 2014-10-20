@@ -30,7 +30,6 @@ namespace Shader
 		return true;
 	}
 
-
 	void Program::addUniversalShader(std::string file)
 	{
 		addVertexShader(file);
@@ -130,14 +129,20 @@ namespace Shader
 		return _shaderProgram;
 	}
 
-	UniformAssigner Program::operator[](const std::string& uniform_name)
+
+	UniformAssigner Program::uniform(const std::string& uniformName)
+	{
+		return (*this)[uniformName];
+	}
+
+	UniformAssigner Program::operator[](const std::string& uniformName)
 	{
 		GLuint location = -1;
-		auto it = _uniformLocations.find(uniform_name);
+		auto it = _uniformLocations.find(uniformName);
 		if (it == _uniformLocations.end())
 		{
-			location = glGetUniformLocation(_shaderProgram, uniform_name.c_str());
-			_uniformLocations[uniform_name] = location;
+			location = glGetUniformLocation(_shaderProgram, uniformName.c_str());
+			_uniformLocations[uniformName] = location;
 		}
 		else
 		{

@@ -3,12 +3,14 @@
 
 #include <glm/gtx/rotate_vector.hpp>
 
+#include "Shader/Manager.h"
+
 #include "Ship.h"
 
 namespace Game
 {
 	Ship::Ship()
-	: _shader("data/shader/asteroid.glsl")
+	: _shader(Shader::Manager::getProgram("data/shader/asteroid.glsl"))
 	{
 		_size = 25.f;
 		_position = glm::vec2(400.0f - _size / 2.f, 300 - _size / 2.f);
@@ -56,12 +58,12 @@ namespace Game
 
 	void Ship::draw()
 	{
-		_shader.use();
+		_shader->use();
 
 		for (int y = -1; y < 1; ++y)
 		for (int x = -1; x < 1; ++x)
 		{
-			_shader["position"] = _position + glm::vec2(800 * x, 600 * y);
+			_shader->uniform("position") = _position + glm::vec2(800 * x, 600 * y);
 			_mesh->draw(GL_LINE_STRIP);
 		}
 	}

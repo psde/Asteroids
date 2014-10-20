@@ -18,7 +18,7 @@ namespace Game
 
 		std::map<char, std::pair<int, int>> _characterLookup;
 
-		Shader::Program _shader;
+		std::shared_ptr<Shader::Program> _shader;
 
 		void addCharacter(char c, int size);
 	public:

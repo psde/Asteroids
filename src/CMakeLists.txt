@@ -1,5 +1,6 @@
 # Shader sources
 list(APPEND SRC_SHADER
+	Shader/Manager.h
 	Shader/Globals.h
 	Shader/Shader.h
 	Shader/Shader.cpp

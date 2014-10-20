@@ -14,9 +14,11 @@
 namespace Shader
 {
 	class Globals;
+	class Manager;
 
 	class Program
 	{
+		friend class Manager;
 	private:
 		
 		GLuint _shaderProgram;
@@ -33,8 +35,8 @@ namespace Shader
 		void addVertexShader(std::string file);
 		void addFragmentShader(std::string file);
 
-	public:
 		Program(std::string universalFile);
+	public:
 		~Program();
 
 		void use();
@@ -43,7 +45,9 @@ namespace Shader
 		bool reload();
 
 		GLuint getProgram();
+
+		UniformAssigner uniform(const std::string& uniformName);
 		
-		UniformAssigner operator[](const std::string& uniform_name);
+		UniformAssigner operator[](const std::string& uniformName);
 	};
 }

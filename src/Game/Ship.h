@@ -18,7 +18,7 @@ namespace Game
 		float _rotation;
 
 		std::unique_ptr<Geometry::Mesh> _mesh;
-		Shader::Program _shader;
+		std::shared_ptr<Shader::Program> _shader;
 
 	public:
 		Ship();

@@ -1,11 +1,13 @@
 #include <iostream>
 
+#include "Shader/Manager.h"
+
 #include "FontRenderer.h"
 
 namespace Game
 {
 	FontRenderer::FontRenderer()
-	: _shader("data/shader/font.glsl")
+	: _shader(Shader::Manager::getProgram("data/shader/font.glsl"))
 	{
 
 		std::vector<GLfloat> vertices = {
@@ -55,12 +57,12 @@ namespace Game
 
 	void FontRenderer::draw(glm::vec2 position, std::string text, float size)
 	{
-		_shader.use();
-		_shader["size"] = size;
+		_shader->use();
+		_shader->uniform("size") = size;
 
 		for (char &c : text)
 		{
-			_shader["position"] = position;
+			_shader->uniform("position") = position;
 
 			auto it = _characterLookup.find(c);
 

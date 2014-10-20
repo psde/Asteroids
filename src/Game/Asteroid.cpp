@@ -4,6 +4,8 @@
 #include <memory>
 #include <glm/gtx/rotate_vector.hpp>
 
+#include "Shader/Manager.h"
+
 #include "Asteroid.h"
 
 namespace Game
@@ -88,7 +90,7 @@ namespace Game
 
 	Asteroid::Asteroid(int size)
 	: _size(size)
-	, _shader("data/shader/asteroid.glsl")
+	, _shader(Shader::Manager::getProgram("data/shader/asteroid.glsl"))
 	{
 		std::random_device rd;
 		std::mt19937 gen(rd());
@@ -133,12 +135,12 @@ namespace Game
 
 	void Asteroid::draw()
 	{
-		_shader.use();
+		_shader->use();
 
 		for (int y = -1; y < 1; ++y)
 		for (int x = -1; x < 1; ++x)
 		{
-			_shader["position"] = _position + glm::vec2(800 * x, 600 * y);
+			_shader->uniform("position") = _position + glm::vec2(800 * x, 600 * y);
 			_mesh->draw(GL_LINE_LOOP);
 		}
 	}
