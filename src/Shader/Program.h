@@ -45,7 +45,5 @@ namespace Shader
 		GLuint getProgram();
 		
 		UniformAssigner operator[](const std::string& uniform_name);
-
-		static Globals& globals();
 	};
 }

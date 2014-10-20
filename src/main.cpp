@@ -94,8 +94,8 @@ int main()
 		time = glfwGetTime();
 		timeDelta = time - oldTime;
 
-		Shader::Program::globals().update<float>("time", time);
-		Shader::Program::globals().update<glm::vec2>("windowDimensions", glm::vec2(width, height));
+		Shader::Globals::globals().update<float>("time", time);
+		Shader::Globals::globals().update<glm::vec2>("windowDimensions", glm::vec2(width, height));
 
 		for (Game::Asteroid* asteroid : asteroids)
 		{

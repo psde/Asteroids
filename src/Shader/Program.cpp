@@ -120,7 +120,7 @@ namespace Shader
 		link();
 		glUseProgram(_shaderProgram);
 
-		globals().updateProgram(this);
+		Globals::globals().updateProgram(this);
 	}
 
 	GLuint Program::getProgram()
@@ -144,11 +144,5 @@ namespace Shader
 		}
 
 		return UniformAssigner(location);
-	}
-
-	Globals& Program::globals()
-	{
-		static Globals globals;
-		return globals;
 	}
 }

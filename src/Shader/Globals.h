@@ -44,9 +44,8 @@ namespace Shader
 	private:
 		std::map<std::string, std::shared_ptr<GlobalBase>> _globals;
 
-	public:
 		Globals() {};
-
+	public:
 		template<class T>
 		void update(std::string name, T val)
 		{
@@ -71,6 +70,12 @@ namespace Shader
 			{
 				global.second->update(program);
 			}
+		}
+
+		static Globals& globals()
+		{
+			static Globals globals;
+			return globals;
 		}
 	};
 }
