@@ -32,7 +32,7 @@ namespace Game
 			7, 1, 0, 6, 7, 3 // 9
 		};
 
-		_mesh = std::make_unique<Geometry::Mesh>(vertices, elements);
+		_mesh.reset(new Geometry::Mesh(vertices, elements));
 
 		addCharacter('0', 5);
 		addCharacter('1', 2);

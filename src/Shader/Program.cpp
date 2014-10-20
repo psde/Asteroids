@@ -1,5 +1,7 @@
 ﻿#include "Program.h"
 
+#include "Globals.h"
+
 #include <iostream>
 #include <fstream>
 
@@ -121,7 +123,7 @@ namespace Shader
 		globals().updateProgram(this);
 	}
 
-	const GLuint Program::getProgram()
+	GLuint Program::getProgram()
 	{
 		link();
 		return _shaderProgram;
@@ -142,5 +144,11 @@ namespace Shader
 		}
 
 		return UniformAssigner(location);
+	}
+
+	Globals& Program::globals()
+	{
+		static Globals globals;
+		return globals;
 	}
 }

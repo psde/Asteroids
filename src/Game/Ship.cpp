@@ -9,12 +9,7 @@ namespace Game
 {
 	Ship::Ship()
 	{
-
-		_shader.addFragmentShader("data/shader/asteroid.glsl");
-		_shader.addVertexShader("data/shader/asteroid.glsl");
-
-
-		float foo[] = { -1.f, 1.f };
+		_shader.addUniversalShader("data/shader/asteroid.glsl");
 
 		_size = 25.f;
 		_position = glm::vec2(400.0f - _size / 2.f, 300 - _size / 2.f);
@@ -34,7 +29,7 @@ namespace Game
 			1, 0, 2, 4, 3, 5, 4
 		};
 
-		_mesh = std::make_unique<Geometry::Mesh>(vertices, elements);
+		_mesh.reset(new Geometry::Mesh(vertices, elements));
 	}
 
 	void Ship::update(float delta)

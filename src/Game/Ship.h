@@ -4,7 +4,7 @@
 
 #include <glm/glm.hpp>
 
-#include "Geometry\Mesh.h"
+#include "Geometry/Mesh.h"
 
 namespace Game
 {

@@ -11,6 +11,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 
 #include "Shader/Shader.h"
+#include "Shader/Globals.h"
 #include "Geometry/Mesh.h"
 #include "Game/Asteroid.h"
 #include "Game/Ship.h"
@@ -18,7 +19,7 @@
 
 static void error_callback(int error, const char* description)
 {
-    fputs(description, stderr);
+    std::cout << "Error: " << error << " " << description << std::endl;
 }
 
 int main()
@@ -73,14 +74,12 @@ int main()
 	std::string score = ss.str();
 
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-	float ratio;
 	int width, height;
 	glfwGetWindowSize(window, &width, &height);
-	ratio = width / (float)height;
+	//float ratio; = width / (float)height;
 
 	glViewport(0, 0, width, height);
 
-	float factor = 0.0f;
 	double time = glfwGetTime();
 	double timeDelta = 0;
 	

@@ -1,6 +1,7 @@
 #include <random>
 #include <iostream>
 
+#include <memory>
 #include <glm/gtx/rotate_vector.hpp>
 
 #include "Asteroid.h"
@@ -70,7 +71,7 @@ namespace Game
 				break;
 			}
 
-			for (int i = 0; i < vertices.size(); i+=2)
+			for (decltype(vertices)::size_type i = 0; i < vertices.size(); i+=2)
 			{
 				glm::vec2 v(vertices[i] - 0.5f, vertices[i + 1] - 0.5f);
 				v += glm::vec2(offset(gen), offset(gen));
@@ -79,7 +80,7 @@ namespace Game
 				vertices[i + 1] = (v.y + 0.5f) * size;
 			}
 
-			std::unique_ptr<Geometry::Mesh> mesh = std::make_unique<Geometry::Mesh>(vertices);
+			std::unique_ptr<Geometry::Mesh> mesh(new Geometry::Mesh(vertices));
 			return std::move(mesh);
 		}
 	}

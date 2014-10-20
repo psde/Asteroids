@@ -3,10 +3,10 @@
 #include <map>
 #include <string>
 
-#include <glm\glm.hpp>
+#include <glm/glm.hpp>
 
-#include "Shader\Program.h"
-#include "Geometry\Mesh.h"
+#include "Shader/Program.h"
+#include "Geometry/Mesh.h"
 
 namespace Game
 {

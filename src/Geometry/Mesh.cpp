@@ -7,7 +7,7 @@ namespace Geometry
 	Mesh::Mesh(std::vector<GLfloat> vertices)
 		: _vertices(vertices)
 	{
-		for (unsigned int i = 0; i < (vertices.size() / 2); i++)
+		for (decltype(vertices)::size_type i = 0; i < (vertices.size() / 2); ++i)
 		{
 			_indices.push_back(i);
 		}
