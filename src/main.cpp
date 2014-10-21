@@ -19,17 +19,17 @@
 
 static void error_callback(int error, const char* description)
 {
-    std::cout << "Error: " << error << " " << description << std::endl;
+	std::cout << "Error: " << error << " " << description << std::endl;
 }
 
 int main()
 {
-    GLFWwindow* window;
+	GLFWwindow* window;
 
-    glfwSetErrorCallback(error_callback);
+	glfwSetErrorCallback(error_callback);
 
-    if (!glfwInit())
-        exit(EXIT_FAILURE);
+	if (!glfwInit())
+		exit(EXIT_FAILURE);
 
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
@@ -39,10 +39,10 @@ int main()
 	glfwWindowHint(GLFW_SAMPLES, 8);
 
 	window = glfwCreateWindow(800, 600, "Asteroids!", nullptr, nullptr);
-    if (!window)
-    {
-        glfwTerminate();
-        exit(EXIT_FAILURE);
+	if (!window)
+	{
+		glfwTerminate();
+		exit(EXIT_FAILURE);
 	}
 
 	glfwMakeContextCurrent(window);
@@ -108,8 +108,8 @@ int main()
 
 		fontRenderer.draw(glm::vec2(10, 10), score, 25.f);
 
-        glfwSwapBuffers(window);
-        glfwPollEvents();
+		glfwSwapBuffers(window);
+		glfwPollEvents();
 
 		if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
 			glfwSetWindowShouldClose(window, GL_TRUE);
@@ -123,10 +123,10 @@ int main()
 			acc_frametime = 0.0f;
 			frames = 0;
 		}
-    }
+	}
 
-    glfwDestroyWindow(window);
+	glfwDestroyWindow(window);
 
-    glfwTerminate();
-    exit(EXIT_SUCCESS);
+	glfwTerminate();
+	exit(EXIT_SUCCESS);
 }
