@@ -15,7 +15,7 @@ namespace Shader
 	Shader::~Shader()
 	{
 		glDeleteShader(_shader);
-	};
+	}
 
 	bool Shader::needsReload()
 	{

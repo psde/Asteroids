@@ -28,6 +28,8 @@ list(APPEND SRC_GAME
 	Game/FontRenderer.cpp
 	Game/Ship.h
 	Game/Ship.cpp
+	Game/Game.h
+	Game/Game.cpp
 )
 SOURCE_GROUP("Game" FILES ${SRC_GAME})
 

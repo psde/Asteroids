@@ -1,8 +1,4 @@
 #include <iostream>
-#include <sstream>
-#include <iomanip>
-#include <memory>
-#include <random>
 
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
@@ -10,12 +6,8 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
-#include "Shader/Shader.h"
+#include "Game/Game.h"
 #include "Shader/Globals.h"
-#include "Geometry/Mesh.h"
-#include "Game/Asteroid.h"
-#include "Game/Ship.h"
-#include "Game/FontRenderer.h"
 
 static void error_callback(int error, const char* description)
 {
@@ -55,23 +47,7 @@ int main()
 		exit(EXIT_FAILURE);
 	}
 
-	Game::FontRenderer fontRenderer;
-
-	Game::Ship ship;
-
-	std::vector<Game::Asteroid*> asteroids;
-
-	for (int i = 0; i < 20; ++i)
-	{
-		std::random_device rd;
-		std::mt19937 gen(rd());
-		std::uniform_int_distribution<> dis(50, 90);
-		asteroids.push_back(new Game::Asteroid(dis(gen)));
-	}
-	
-	std::stringstream ss;
-	ss << std::setw(12) << std::setfill('0') << 123456789;
-	std::string score = ss.str();
+	Game::Game game;
 
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 	int width, height;
@@ -94,19 +70,12 @@ int main()
 		time = glfwGetTime();
 		timeDelta = time - oldTime;
 
+		game.update(timeDelta);
+
 		Shader::Globals::globals().update<float>("time", time);
 		Shader::Globals::globals().update<glm::vec2>("windowDimensions", glm::vec2(width, height));
 
-		for (Game::Asteroid* asteroid : asteroids)
-		{
-			asteroid->update((float)timeDelta);
-			asteroid->draw();
-		}
-
-		ship.update((float)timeDelta);
-		ship.draw();
-
-		fontRenderer.draw(glm::vec2(10, 10), score, 25.f);
+		game.draw();
 
 		glfwSwapBuffers(window);
 		glfwPollEvents();
