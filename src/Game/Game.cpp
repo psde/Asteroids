@@ -2,11 +2,15 @@
 #include <iomanip>
 #include <random>
 
+
 #include "Game.h"
+
+#include <GLFW/glfw3.h>
 
 namespace Game
 {
-	Game::Game()
+	Game::Game(GLFWwindow *window)
+	: _window(window)
 	{
 		_score = 123456789;
 		for (int i = 0; i < 20; ++i)
@@ -25,7 +29,7 @@ namespace Game
 			asteroid->update(timeDelta);
 		}
 
-		_ship.update(timeDelta);
+		_ship.update(glfwGetKey(_window, GLFW_KEY_UP) == GLFW_PRESS, timeDelta);
 	}
 
 	void Game::draw()

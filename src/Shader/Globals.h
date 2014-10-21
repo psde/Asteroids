@@ -1,5 +1,8 @@
 #pragma once
 
+#include <unordered_map>
+#include <memory>
+
 #include <GL/glew.h>
 
 #include <glm/glm.hpp>
@@ -42,7 +45,7 @@ namespace Shader
 	class Globals
 	{
 	private:
-		std::map<std::string, std::shared_ptr<GlobalBase>> _globals;
+		std::unordered_map<std::string, std::shared_ptr<GlobalBase>> _globals;
 
 		Globals() {};
 	public:

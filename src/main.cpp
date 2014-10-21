@@ -47,7 +47,7 @@ int main()
 		exit(EXIT_FAILURE);
 	}
 
-	Game::Game game;
+	Game::Game game(window);
 
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 	int width, height;

@@ -6,11 +6,15 @@
 #include "Ship.h"
 #include "FontRenderer.h"
 
+struct GLFWwindow;
+
 namespace Game
 {
 	class Game
 	{
 	private:
+		GLFWwindow *_window;
+
 		std::vector<Asteroid*> _asteroids;
 
 		FontRenderer _fontRenderer;
@@ -20,7 +24,7 @@ namespace Game
 		int _score;
 
 	public:
-		Game();
+		Game(GLFWwindow *window);
 
 		void update(float timeDelta);
 

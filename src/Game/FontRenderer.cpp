@@ -10,15 +10,15 @@ namespace Game
 	: _shader(Shader::Manager::getProgram("data/shader/font.glsl"))
 	{
 
-		std::vector<GLfloat> vertices = {
-			0.10f, 0.10f, // 0 top left
-			0.90f, 0.10f, // 1 top right
-			0.10f, 0.90f, // 2 bottom left
-			0.90f, 0.90f, // 3 bottom right
-			0.50f, 0.10f, // 4 middle top
-			0.50f, 0.90f, // 5 middle bottom
-			0.10f, 0.50f, // 6 middle left
-			0.90f, 0.50f //  7 middle right
+		std::vector<glm::vec2> vertices = {
+			glm::vec2(0.10f, 0.10f), // 0 top left
+			glm::vec2(0.90f, 0.10f), // 1 top right
+			glm::vec2(0.10f, 0.90f), // 2 bottom left
+			glm::vec2(0.90f, 0.90f), // 3 bottom right
+			glm::vec2(0.50f, 0.10f), // 4 middle top
+			glm::vec2(0.50f, 0.90f), // 5 middle bottom
+			glm::vec2(0.10f, 0.50f), // 6 middle left
+			glm::vec2(0.90f, 0.50f) //  7 middle right
 		};
 
 		std::vector<GLuint> elements = {

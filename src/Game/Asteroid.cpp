@@ -21,69 +21,68 @@ namespace Game
 
 			int type = dis(gen);
 
-			std::vector<GLfloat> vertices;
+			std::vector<glm::vec2> vertices;
 			switch (type)
 			{
 			default:
 			case 1:
 				vertices = {
-					0.27f, 0.08f,
-					0.82f, 0.10f,
-					0.66f, 0.30f,
-					0.82f, 0.56f,
-					0.60f, 0.81f,
-					0.54f, 0.63f,
-					0.31f, 0.76f,
-					0.10f, 0.79f,
-					0.05f, 0.40f,
-					0.38f, 0.28f
+					glm::vec2(0.27f, 0.08f),
+					glm::vec2(0.82f, 0.10f),
+					glm::vec2(0.66f, 0.30f),
+					glm::vec2(0.82f, 0.56f),
+					glm::vec2(0.60f, 0.81f),
+					glm::vec2(0.54f, 0.63f),
+					glm::vec2(0.31f, 0.76f),
+					glm::vec2(0.10f, 0.79f),
+					glm::vec2(0.05f, 0.40f),
+					glm::vec2(0.38f, 0.28f)
 				};
 				break;
 			case 2:
 				vertices = {
-					0.30f, 0.08f,
-					0.69f, 0.09f,
-					0.83f, 0.29f,
-					0.83f, 0.58f,
-					0.70f, 0.82f,
-					0.51f, 0.82f,
-					0.53f, 0.60f,
-					0.26f, 0.76f,
-					0.18f, 0.62f,
-					0.43f, 0.53f,
-					0.10f, 0.35f
+					glm::vec2(0.30f, 0.08f),
+					glm::vec2(0.69f, 0.09f),
+					glm::vec2(0.83f, 0.29f),
+					glm::vec2(0.83f, 0.58f),
+					glm::vec2(0.70f, 0.82f),
+					glm::vec2(0.51f, 0.82f),
+					glm::vec2(0.53f, 0.60f),
+					glm::vec2(0.26f, 0.76f),
+					glm::vec2(0.18f, 0.62f),
+					glm::vec2(0.43f, 0.53f),
+					glm::vec2(0.10f, 0.35f)
 				};
 				break;			
 			case 3:
 				vertices = {
-					0.27f, 0.14f,
-					0.45f, 0.28f,
-					0.77f, 0.22f,
-					0.89f, 0.38f,
-					0.65f, 0.46f,
-					0.82f, 0.59f,
-					0.70f, 0.76f,
-					0.43f, 0.71f,
-					0.32f, 0.79f,
-					0.13f, 0.64f,
-					0.25f, 0.54f,
-					0.23f, 0.45f,
-					0.08f, 0.35f
+					glm::vec2(0.27f, 0.14f),
+					glm::vec2(0.45f, 0.28f),
+					glm::vec2(0.77f, 0.22f),
+					glm::vec2(0.89f, 0.38f),
+					glm::vec2(0.65f, 0.46f),
+					glm::vec2(0.82f, 0.59f),
+					glm::vec2(0.70f, 0.76f),
+					glm::vec2(0.43f, 0.71f),
+					glm::vec2(0.32f, 0.79f),
+					glm::vec2(0.13f, 0.64f),
+					glm::vec2(0.25f, 0.54f),
+					glm::vec2(0.23f, 0.45f),
+					glm::vec2(0.08f, 0.35f)
 				};
 				break;
 			}
 
-			for (decltype(vertices)::size_type i = 0; i < vertices.size(); i+=2)
+			for (auto &v : vertices)
 			{
-				glm::vec2 v(vertices[i] - 0.5f, vertices[i + 1] - 0.5f);
+				v -= glm::vec2(0.5f);
 				v += glm::vec2(offset(gen), offset(gen));
 				v = glm::rotate(v, rotation);
-				vertices[i] = (v.x + 0.5f) * size;
-				vertices[i + 1] = (v.y + 0.5f) * size;
+				v += glm::vec2(0.5f);
+				v *= size;
 			}
 
-			std::unique_ptr<Geometry::Mesh> mesh(new Geometry::Mesh(vertices));
-			return std::move(mesh);
+			return std::unique_ptr<Geometry::Mesh>(new Geometry::Mesh(vertices));
 		}
 	}
 
@@ -97,13 +96,13 @@ namespace Game
 		std::uniform_real_distribution<> dis_x(0, 800);
 		std::uniform_real_distribution<> dis_y(0, 600);
 		std::uniform_real_distribution<> vel(30.0, 55.0);
-		std::uniform_int_distribution<> vel_sign(0, 1);
+		std::uniform_int_distribution<> velocitySign(0, 1);
 		std::uniform_real_distribution<> rotation(0, 2.f * glm::pi<float>());
 
-		float foo[] = { -1.f, 1.f };
+		float velocityLookup[] = { -1.f, 1.f };
 
 		_position = glm::vec2(dis_x(gen), dis_y(gen));
-		_velocity = glm::vec2(vel(gen) * foo[vel_sign(gen)], vel(gen) * foo[vel_sign(gen)]);
+		_velocity = glm::vec2(vel(gen) * velocityLookup[velocitySign(gen)], vel(gen) * velocityLookup[velocitySign(gen)]);
 		_rotation = rotation(gen);
 
 		_mesh = generateAsteroid(_size, _rotation);
