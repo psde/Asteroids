@@ -12,11 +12,12 @@ namespace Game
 	Ship::Ship()
 	: _shader(Shader::Manager::getProgram("data/shader/ship.glsl"))
 	{
+		_animation = 0;
 		_moving = false;
 		_size = 25.f;
 		_position = glm::vec2(400.0f - _size / 2.f, 300 - _size / 2.f);
 		_velocity = glm::vec2(0, 0);
-		_rotation = 5.0f;
+		_rotation = 0.0f;
 		_rotationDirty = true;
 
 		std::vector<glm::vec2> vertices = {
@@ -35,12 +36,12 @@ namespace Game
 		_mesh.reset(new Geometry::Mesh(vertices, elements));
 	}
 
-	void Ship::update(bool moving, float delta)
+	void Ship::update(bool moving, int rotation, float delta)
 	{
 		_moving = moving;
 
 		if (_moving)
-			_velocity += 0.1f;
+			_velocity += glm::rotate(glm::vec2(0.f, -0.15f), _rotation);
 
 		_position += _velocity * delta;
 
@@ -62,8 +63,11 @@ namespace Game
 			_position.y += 600.0f;
 		}
 
-		_rotation += 0.005f;
-		_rotationDirty = true;
+		if (rotation != 0)
+		{
+			_rotation += 0.003f * (float)rotation;
+			_rotationDirty = true;
+		}
 	}
 
 	void Ship::draw()
@@ -81,8 +85,7 @@ namespace Game
 		{
 			_shader->uniform("position") = _position + glm::vec2(800 * x, 600 * y);
 			_rotatedMesh->draw(GL_LINE_STRIP, 5, 0);
-
-			if (_moving)
+			if (_moving && (_animation++ % 50) >= 25)
 			{
 				_rotatedMesh->draw(GL_LINE_STRIP, 3, 5);
 			}

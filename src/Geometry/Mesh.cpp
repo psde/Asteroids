@@ -3,6 +3,7 @@
 #include <glm/gtx/rotate_vector.hpp>
 
 #include <iostream>
+#include <algorithm>
 
 namespace Geometry
 {
@@ -72,6 +73,21 @@ namespace Geometry
 		glBindVertexArray(_vao);
 		glDrawElements(mode, count, GL_UNSIGNED_INT, (void*)(offset * sizeof(GLuint)));
 		glBindVertexArray(0);
+	}
+
+	glm::vec4 Mesh::getBoundingBox()
+	{
+		glm::vec4 bb;
+		
+		for (auto &v : _vertices)
+		{
+			bb.x = std::min(bb.x, v.x);
+			bb.y = std::min(bb.y, v.y);
+			bb.z = std::max(bb.z, v.x);
+			bb.w = std::max(bb.w, v.y);
+		}
+
+		return bb;
 	}
 
 	std::unique_ptr<Mesh> Mesh::rotate(float rotation, glm::vec2 center)

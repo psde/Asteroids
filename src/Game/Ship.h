@@ -19,6 +19,8 @@ namespace Game
 		bool _rotationDirty;
 		bool _moving;
 
+		unsigned int _animation;
+
 		std::unique_ptr<Geometry::Mesh> _mesh;
 		std::unique_ptr<Geometry::Mesh> _rotatedMesh;
 		std::shared_ptr<Shader::Program> _shader;
@@ -28,6 +30,6 @@ namespace Game
 
 		void draw();
 
-		void update(bool moving, float delta);
+		void update(bool moving, int rotation, float delta);
 	};
 }
