@@ -28,7 +28,11 @@ namespace Game
 			asteroid->update(timeDelta);
 		}
 		
-		bool moving = _window->getGlfwKeyState(GLFW_KEY_UP) == GLFW_PRESS;
+		if (_window->getGlfwKeyState(GLFW_KEY_UP) == GLFW_PRESS)
+		{
+			_ship.accelerate();
+		}
+
 		int rotation = 0;
 		if (_window->getGlfwKeyState(GLFW_KEY_LEFT) == GLFW_PRESS)
 		{
@@ -38,7 +42,10 @@ namespace Game
 		{
 			rotation = 1;
 		}
-		_ship.update(moving, rotation, timeDelta);
+
+		_ship.rotate(rotation);
+
+		_ship.update( timeDelta);
 	}
 
 	void Game::draw()

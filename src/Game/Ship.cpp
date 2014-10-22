@@ -19,6 +19,7 @@ namespace Game
 		_size = 25.f;
 		_rotation = 0.0f;
 		_rotationDirty = true;
+		_rotating = 0;
 
 		_physicsComponent.reset(glm::vec2(400.0f - _size / 2.f, 300 - _size / 2.f), glm::vec2(0.f));
 		_physicsComponent.setMaxVelocity(500.f);
@@ -39,10 +40,19 @@ namespace Game
 		_mesh.reset(new Geometry::Mesh(vertices, elements));
 	}
 
-	void Ship::update(bool moving, int rotation, float delta)
-	{
-		_moving = moving;
 
+	void Ship::accelerate()
+	{
+		_moving = true;
+	}
+
+	void Ship::rotate(int rotation)
+	{
+		_rotating = rotation;
+	}
+
+	void Ship::update(float delta)
+	{
 		if (_moving)
 		{
 			_acceleration += 0.5 * delta;
@@ -58,9 +68,9 @@ namespace Game
 
 		_physicsComponent.update(delta);
 
-		if (rotation != 0)
+		if (_rotating != 0)
 		{
-			_rotation += 0.003f * (float)rotation;
+			_rotation += 0.003f * (float)_rotating;
 			_rotationDirty = true;
 		}
 	}
@@ -85,5 +95,8 @@ namespace Game
 				_rotatedMesh->draw(GL_LINE_STRIP, 3, 5);
 			}
 		}
+
+		_moving = false;
+		_rotating = 0;
 	}
 }

@@ -11,7 +11,7 @@
 
 namespace Game
 {
-	class Ship// : public GameObject
+	class Ship : public GameObject
 	{
 	private:
 		int _size;
@@ -22,6 +22,7 @@ namespace Game
 		float _acceleration;
 		bool _rotationDirty;
 		bool _moving;
+		int _rotating;
 		
 		std::unique_ptr<Geometry::Mesh> _mesh;
 		std::unique_ptr<Geometry::Mesh> _rotatedMesh;
@@ -30,8 +31,11 @@ namespace Game
 	public:
 		Ship();
 
-		void draw();
+		void accelerate();
+		void rotate(int rotation);
 
-		void update(bool moving, int rotation, float delta);
+		void update(float delta);
+
+		void draw();
 	};
 }
