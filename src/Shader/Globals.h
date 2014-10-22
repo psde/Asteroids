@@ -52,18 +52,14 @@ namespace Shader
 		template<class T>
 		void update(std::string name, T val)
 		{
-			auto it = _globals.find(name);
+			std::shared_ptr<GlobalBase> &entry = _globals[name];
 
-			std::shared_ptr<Global<T>> global;
-			if (it == std::end(_globals))
+			if (!entry)
 			{
-				global = std::make_shared<Global<T>>(name, val);
-				_globals[name] = global;
+				entry = std::make_shared<Global<T>>(name, val);
 			}
-			else
-			{
-				global = std::dynamic_pointer_cast<Global<T>>(it->second);
-			}
+
+			std::shared_ptr<Global<T>> global = std::dynamic_pointer_cast<Global<T>>(entry);
 			global->updateValue(val);
 		}
 
