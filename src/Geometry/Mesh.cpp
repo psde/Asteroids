@@ -48,16 +48,16 @@ namespace Geometry
 		glBindVertexArray(_vao);
 
 		glGenBuffers(1, &_vbo);
-
 		glBindBuffer(GL_ARRAY_BUFFER, _vbo);
 		glBufferData(GL_ARRAY_BUFFER, _vertices.size() * sizeof(glm::vec2), _vertices.data(), GL_STATIC_DRAW);
+
+		glEnableVertexAttribArray(0);
+		glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(GLfloat), 0);
 
 		glGenBuffers(1, &_ebo);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _ebo);
 		glBufferData(GL_ELEMENT_ARRAY_BUFFER, _indices.size() * sizeof(GLuint), _indices.data(), GL_STATIC_DRAW);
 
-		glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(GLfloat), 0);
-		glEnableVertexAttribArray(0);
 		glBindVertexArray(0);
 		_initialized = true;
 	}
