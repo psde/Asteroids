@@ -7,18 +7,21 @@
 
 #include "Ship.h"
 
+#include <GLFW/glfw3.h>
+
 namespace Game
 {
 	Ship::Ship()
 	: _shader(Shader::Manager::getProgram("data/shader/ship.glsl"))
 	{
-		_animation = 0;
+		_acceleration = 0.f;
 		_moving = false;
 		_size = 25.f;
-		_position = glm::vec2(400.0f - _size / 2.f, 300 - _size / 2.f);
-		_velocity = glm::vec2(0, 0);
 		_rotation = 0.0f;
 		_rotationDirty = true;
+
+		_physicsComponent.reset(glm::vec2(400.0f - _size / 2.f, 300 - _size / 2.f), glm::vec2(0.f));
+		_physicsComponent.setMaxVelocity(500.f);
 
 		std::vector<glm::vec2> vertices = {
 			glm::vec2(0.50f * _size, 0.05f * _size),
@@ -41,27 +44,19 @@ namespace Game
 		_moving = moving;
 
 		if (_moving)
-			_velocity += glm::rotate(glm::vec2(0.f, -0.15f), _rotation);
+		{
+			_acceleration += 0.5 * delta;
+			if (_acceleration > 0.15f)
+				_acceleration = 0.15f;
 
-		_position += _velocity * delta;
-
-		if (_position.x > 800.0f)
-		{
-			_position.x -= 800.0f;
+			_physicsComponent.applyImpulse(glm::rotate(glm::vec2(0.f, -_acceleration), _rotation));
 		}
-		if (_position.x < 0.0f)
+		else
 		{
-			_position.x += 800.0f;
+			_acceleration = 0.f;
 		}
 
-		if (_position.y > 600.0f)
-		{
-			_position.y -= 600.0f;
-		}
-		if (_position.y < 0.0f)
-		{
-			_position.y += 600.0f;
-		}
+		_physicsComponent.update(delta);
 
 		if (rotation != 0)
 		{
@@ -83,9 +78,9 @@ namespace Game
 		for (int y = -1; y < 1; ++y)
 		for (int x = -1; x < 1; ++x)
 		{
-			_shader->uniform("position") = _position + glm::vec2(800 * x, 600 * y);
+			_shader->uniform("position") = _physicsComponent.getPosition() + glm::vec2(800 * x, 600 * y);
 			_rotatedMesh->draw(GL_LINE_STRIP, 5, 0);
-			if (_moving && (_animation++ % 50) >= 25)
+			if (_moving && std::fmod(glfwGetTime(), 0.2) >= 0.1)
 			{
 				_rotatedMesh->draw(GL_LINE_STRIP, 3, 5);
 			}

@@ -86,7 +86,6 @@ namespace Game
 		}
 	}
 
-
 	Asteroid::Asteroid(int size)
 	: _size(size)
 	, _shader(Shader::Manager::getProgram("data/shader/asteroid.glsl"))
@@ -101,8 +100,10 @@ namespace Game
 
 		float velocityLookup[] = { -1.f, 1.f };
 
-		_position = glm::vec2(dis_x(gen), dis_y(gen));
-		_velocity = glm::vec2(vel(gen) * velocityLookup[velocitySign(gen)], vel(gen) * velocityLookup[velocitySign(gen)]);
+		glm::vec2 position = glm::vec2(dis_x(gen), dis_y(gen));
+		glm::vec2 velocity = glm::vec2(vel(gen) * velocityLookup[velocitySign(gen)], vel(gen) * velocityLookup[velocitySign(gen)]);
+		_physicsComponent.reset(position, velocity);
+
 		_rotation = rotation(gen);
 
 		_mesh = generateAsteroid(_size, _rotation);
@@ -111,25 +112,7 @@ namespace Game
 
 	void Asteroid::update(float delta)
 	{
-		_position += _velocity * delta;
-
-		if (_position.x > 800.0f)
-		{
-			_position.x -= 800.0f;
-		}
-		if (_position.x < 0.0f)
-		{
-			_position.x += 800.0f;
-		}
-
-		if (_position.y > 600.0f)
-		{
-			_position.y -= 600.0f;
-		}
-		if (_position.y < 0.0f)
-		{
-			_position.y += 600.0f;
-		}
+		_physicsComponent.update(delta);
 	}
 
 	void Asteroid::draw()
@@ -139,7 +122,7 @@ namespace Game
 		for (int y = -1; y < 1; ++y)
 		for (int x = -1; x < 1; ++x)
 		{
-			_shader->uniform("position") = _position + glm::vec2(800 * x, 600 * y);
+			_shader->uniform("position") = _physicsComponent.getPosition() + glm::vec2(800 * x, 600 * y);
 			_mesh->draw(GL_LINE_LOOP);
 		}
 	}

@@ -6,21 +6,23 @@
 
 #include "Geometry/Mesh.h"
 
+#include "GameObject.h"
+#include "PhysicsComponent.h"
+
 namespace Game
 {
-	class Ship
+	class Ship// : public GameObject
 	{
 	private:
 		int _size;
 
-		glm::vec2 _position;
-		glm::vec2 _velocity;
+		PhysicsComponent _physicsComponent;
+
 		float _rotation;
+		float _acceleration;
 		bool _rotationDirty;
 		bool _moving;
-
-		unsigned int _animation;
-
+		
 		std::unique_ptr<Geometry::Mesh> _mesh;
 		std::unique_ptr<Geometry::Mesh> _rotatedMesh;
 		std::shared_ptr<Shader::Program> _shader;

@@ -6,15 +6,17 @@
 
 #include "Geometry/Mesh.h"
 
+#include "GameObject.h"
+#include "PhysicsComponent.h"
+
 namespace Game
 {
-	class Asteroid
+	class Asteroid : public GameObject
 	{
 	private:
 		int _size;
 
-		glm::vec2 _position;
-		glm::vec2 _velocity;
+		PhysicsComponent _physicsComponent;
 		float _rotation;
 
 		std::unique_ptr<Geometry::Mesh> _mesh;

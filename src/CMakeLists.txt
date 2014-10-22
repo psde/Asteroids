@@ -1,11 +1,11 @@
 # Shader sources
 list(APPEND SRC_SHADER
-	Shader/Manager.h
 	Shader/Globals.h
-	Shader/Shader.h
-	Shader/Shader.cpp
+	Shader/Manager.h
 	Shader/Program.cpp
 	Shader/Program.h
+	Shader/Shader.h
+	Shader/Shader.cpp
 	Shader/UniformAssigner.h
 	Shader/UniformAssigner.cpp 
 )
@@ -29,14 +29,18 @@ SOURCE_GROUP("Window" FILES ${SRC_WINDOW})
 list(APPEND SRC_GAME
 	Game/Asteroid.h
 	Game/Asteroid.cpp
-	Game/PhysicsComponent.h
-	Game/PhysicsComponent.cpp
+	Game/ColliderComponent.h
+	Game/ColliderComponent.cpp
 	Game/FontRenderer.h
 	Game/FontRenderer.cpp
-	Game/Ship.h
-	Game/Ship.cpp
 	Game/Game.h
 	Game/Game.cpp
+	Game/GameObject.h
+	Game/GameObject.cpp
+	Game/PhysicsComponent.h
+	Game/PhysicsComponent.cpp
+	Game/Ship.h
+	Game/Ship.cpp
 )
 SOURCE_GROUP("Game" FILES ${SRC_GAME})
 
