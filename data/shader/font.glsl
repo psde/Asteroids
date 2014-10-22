@@ -5,11 +5,6 @@ uniform float size;
 
 void main()
 {
-	float right = 800;
-	float left = 0.0;
-	float bottom = 600;
-	float top = 0.0;
-
 	mat4 m = generateProjection();
 
 	mat2 scale = mat2(
