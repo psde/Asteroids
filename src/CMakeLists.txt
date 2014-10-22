@@ -18,6 +18,13 @@ list(APPEND SRC_GEOMETRY
 )
 SOURCE_GROUP("Geometry" FILES ${SRC_GEOMETRY})
 
+# Window sources
+list(APPEND SRC_WINDOW
+	Window/Window.h
+	Window/Window.cpp
+)
+SOURCE_GROUP("Window" FILES ${SRC_WINDOW})
+
 # Game sources
 list(APPEND SRC_GAME
 	Game/Asteroid.h
@@ -39,7 +46,7 @@ list(APPEND SRC_SOURCE
 )
 SOURCE_GROUP("Source" FILES ${SRC_SOURCE})
 
-list(APPEND SOURCES ${SRC_SHADER} ${SRC_GEOMETRY} ${SRC_GAME} ${SRC_SOURCE})
+list(APPEND SOURCES ${SRC_SHADER} ${SRC_GEOMETRY} ${SRC_WINDOW} ${SRC_GAME} ${SRC_SOURCE})
 
 add_definitions("-DGLEW_STATIC -DGLM_FORCE_RADIANS")
 

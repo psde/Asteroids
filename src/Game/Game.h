@@ -2,6 +2,7 @@
 
 #include <vector>
 
+#include "Window/Window.h"
 #include "Asteroid.h"
 #include "Ship.h"
 #include "FontRenderer.h"
@@ -13,7 +14,7 @@ namespace Game
 	class Game
 	{
 	private:
-		GLFWwindow *_window;
+		std::shared_ptr<Window::Window> _window;
 
 		std::vector<Asteroid*> _asteroids;
 
@@ -24,7 +25,7 @@ namespace Game
 		int _score;
 
 	public:
-		Game(GLFWwindow *window);
+		Game(std::shared_ptr<Window::Window> window);
 
 		void update(float timeDelta);
 

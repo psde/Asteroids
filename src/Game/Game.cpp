@@ -2,14 +2,13 @@
 #include <iomanip>
 #include <random>
 
-
 #include "Game.h"
 
 #include <GLFW/glfw3.h>
 
 namespace Game
 {
-	Game::Game(GLFWwindow *window)
+	Game::Game(std::shared_ptr<Window::Window> window)
 	: _window(window)
 	{
 		_score = 123456789;
@@ -29,13 +28,13 @@ namespace Game
 			asteroid->update(timeDelta);
 		}
 		
-		bool moving = glfwGetKey(_window, GLFW_KEY_UP) == GLFW_PRESS;
+		bool moving = _window->getGlfwKeyState(GLFW_KEY_UP) == GLFW_PRESS;
 		int rotation = 0;
-		if (glfwGetKey(_window, GLFW_KEY_LEFT) == GLFW_PRESS)
+		if (_window->getGlfwKeyState(GLFW_KEY_LEFT) == GLFW_PRESS)
 		{
 			rotation = -1;
 		}
-		else if(glfwGetKey(_window, GLFW_KEY_RIGHT) == GLFW_PRESS)
+		else if (_window->getGlfwKeyState(GLFW_KEY_RIGHT) == GLFW_PRESS)
 		{
 			rotation = 1;
 		}
