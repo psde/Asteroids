@@ -29,8 +29,8 @@ SOURCE_GROUP("Window" FILES ${SRC_WINDOW})
 list(APPEND SRC_GAME
 	Game/Asteroid.h
 	Game/Asteroid.cpp
-	Game/PhysicsObject.h
-	Game/PhysicsObject.cpp
+	Game/PhysicsComponent.h
+	Game/PhysicsComponent.cpp
 	Game/FontRenderer.h
 	Game/FontRenderer.cpp
 	Game/Ship.h
