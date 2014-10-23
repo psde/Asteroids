@@ -17,9 +17,10 @@ namespace Game
 			std::random_device rd;
 			std::mt19937 gen(rd());
 			std::uniform_int_distribution<> dis(1, 3);
-			std::uniform_real_distribution<> offset(-0.05, 0.05);
+			std::uniform_real_distribution<> offset(-0.025, 0.025);
 
 			int type = dis(gen);
+			//type = 4;
 
 			std::vector<glm::vec2> vertices;
 			switch (type)
@@ -53,7 +54,7 @@ namespace Game
 					glm::vec2(0.43f, 0.53f),
 					glm::vec2(0.10f, 0.35f)
 				};
-				break;			
+				break;
 			case 3:
 				vertices = {
 					glm::vec2(0.27f, 0.14f),
@@ -69,6 +70,14 @@ namespace Game
 					glm::vec2(0.25f, 0.54f),
 					glm::vec2(0.23f, 0.45f),
 					glm::vec2(0.08f, 0.35f)
+				};
+				break;
+			case 4:
+				vertices = {
+					glm::vec2(0.25f, 0.25f),
+					glm::vec2(0.75f, 0.25f),
+					glm::vec2(0.75f, 0.75f),
+					glm::vec2(0.25f, 0.75f)
 				};
 				break;
 			}
@@ -100,10 +109,10 @@ namespace Game
 
 		float velocityLookup[] = { -1.f, 1.f };
 
-		//glm::vec2 position = glm::vec2(dis_x(gen), dis_y(gen));
-		//glm::vec2 velocity = glm::vec2(vel(gen) * velocityLookup[velocitySign(gen)], vel(gen) * velocityLookup[velocitySign(gen)]);
-		glm::vec2 position = glm::vec2(400, 300);
-		glm::vec2 velocity = glm::vec2(0);
+		glm::vec2 position = glm::vec2(dis_x(gen), dis_y(gen));
+		glm::vec2 velocity = glm::vec2(vel(gen) * velocityLookup[velocitySign(gen)], vel(gen) * velocityLookup[velocitySign(gen)]);
+		//position = glm::vec2(400, 300);
+		//velocity = glm::vec2(0);
 		_physicsComponent.reset(position, velocity);
 
 		_rotation = rotation(gen);

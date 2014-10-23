@@ -13,7 +13,7 @@ namespace Game
 	: _window(window)
 	{
 		_score = 123456789;
-		for (int i = 0; i < 1; ++i)
+		for (int i = 0; i < 15; ++i)
 		{
 			std::random_device rd;
 			std::mt19937 gen(rd());
@@ -44,6 +44,10 @@ namespace Game
 			rotation = 1;
 		}
 
+		//double x, y;
+		//glfwGetCursorPos(_window->_glfwWindow, &x, &y);
+		//_ship._physicsComponent.reset(glm::vec2(x, y), glm::vec2(0));
+
 		_ship.rotate(rotation);
 
 		_ship.update(timeDelta);
@@ -67,7 +71,7 @@ namespace Game
 		_ship.draw();
 
 		std::stringstream ss;
-		ss << std::setw(12) << std::setfill('0') << _score;
+		ss << std::setw(10) << std::setfill('0') << _score;
 		std::string score = ss.str();
 		_fontRenderer.draw(glm::vec2(10, 10), score, 25.f);
 	}

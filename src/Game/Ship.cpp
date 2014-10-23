@@ -34,7 +34,7 @@ namespace Game
 
 		std::vector<GLuint> elements = {
 			1, 0, 2, 4, 3, 4, 5, 3
-		};
+		}; 
 
 		_mesh.reset(new Geometry::Mesh(vertices, elements));
 		_rotatedMesh = std::unique_ptr<Geometry::Mesh>(new Geometry::Mesh(*_mesh.get()));

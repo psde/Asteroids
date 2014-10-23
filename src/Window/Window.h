@@ -13,11 +13,12 @@ namespace Window
 	class Window
 	{
 	private:
-		GLFWwindow *_glfwWindow;
 
 		glm::vec2 _time;
 
 	public:
+		GLFWwindow *_glfwWindow;
+
 		Window(int width, int height);
 		~Window();
 

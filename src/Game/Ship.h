@@ -17,7 +17,6 @@ namespace Game
 	private:
 		int _size;
 
-		PhysicsComponent _physicsComponent;
 		ColliderComponent _colliderComponent;
 
 		float _rotation;
@@ -30,6 +29,8 @@ namespace Game
 		std::shared_ptr<Shader::Program> _shader;
 
 	public:
+		PhysicsComponent _physicsComponent;
+
 		Ship();
 
 		void accelerate();

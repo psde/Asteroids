@@ -33,5 +33,7 @@ namespace Geometry
 		glm::vec4 getBoundingBox();
 		std::unique_ptr<Mesh> rotate(float rotation, glm::vec2 center);
 		std::unique_ptr<Mesh> scale(glm::vec2 scaling);
+
+		const std::vector<glm::vec2> &vertices() const { return _vertices; }
 	};
 }
