@@ -7,6 +7,13 @@
 
 namespace Geometry
 {
+	Mesh::Mesh(const Mesh &other)
+	{
+		_vertices = other._vertices;
+		_indices = other._indices;
+		_initialized = false;
+	}
+
 	Mesh::Mesh(std::vector<glm::vec2> vertices)
 	: _vertices(vertices)
 	, _initialized(false)
@@ -99,6 +106,18 @@ namespace Geometry
 			v -= center;
 			v = glm::rotate(v, rotation);
 			v += center;
+		}
+
+		return std::unique_ptr<Mesh>(new Mesh(vertices, _indices));
+	}
+
+	std::unique_ptr<Mesh> Mesh::scale(glm::vec2 scaling)
+	{
+		auto vertices = _vertices;
+
+		for (auto &v : vertices)
+		{
+			v *= scaling;
 		}
 
 		return std::unique_ptr<Mesh>(new Mesh(vertices, _indices));

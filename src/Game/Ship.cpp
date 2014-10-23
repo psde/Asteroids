@@ -18,7 +18,6 @@ namespace Game
 		_moving = false;
 		_size = 25.f;
 		_rotation = 0.0f;
-		_rotationDirty = true;
 		_rotating = 0;
 
 		_physicsComponent.reset(glm::vec2(400.0f - _size / 2.f, 300 - _size / 2.f), glm::vec2(0.f));
@@ -38,9 +37,8 @@ namespace Game
 		};
 
 		_mesh.reset(new Geometry::Mesh(vertices, elements));
-		_colliderComponent.setRadius(_size / 2.f);
+		_rotatedMesh = std::unique_ptr<Geometry::Mesh>(new Geometry::Mesh(*_mesh.get()));
 	}
-
 
 	void Ship::accelerate()
 	{
@@ -72,20 +70,17 @@ namespace Game
 		if (_rotating != 0)
 		{
 			_rotation += 4.5f * (float)_rotating * delta;
-			_rotationDirty = true;
+			_rotatedMesh = std::move(_mesh->rotate(_rotation, glm::vec2(_size / 2.0f)));
+			_rotating = 0;
 		}
+
+		_colliderComponent.setCollisionMesh(std::unique_ptr<Geometry::Mesh>(new Geometry::Mesh(*_rotatedMesh.get())));
 
 		_colliderComponent.setPosition(_physicsComponent.getPosition());
 	}
 
 	void Ship::draw()
 	{
-		if (_rotationDirty)
-		{
-			_rotatedMesh = std::move(_mesh->rotate(_rotation, glm::vec2(_size / 2.0f)));
-			_rotationDirty = false;
-		}
-
 		_shader->use();
 
 		for (int y = -1; y < 1; ++y)
@@ -100,7 +95,6 @@ namespace Game
 		}
 
 		_moving = false;
-		_rotating = 0;
 	}
 
 	const ColliderComponent* Ship::getColliderComponent()

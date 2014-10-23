@@ -22,7 +22,6 @@ namespace Game
 
 		float _rotation;
 		float _acceleration;
-		bool _rotationDirty;
 		bool _moving;
 		int _rotating;
 		

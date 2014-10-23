@@ -100,15 +100,18 @@ namespace Game
 
 		float velocityLookup[] = { -1.f, 1.f };
 
-		glm::vec2 position = glm::vec2(dis_x(gen), dis_y(gen));
-		glm::vec2 velocity = glm::vec2(vel(gen) * velocityLookup[velocitySign(gen)], vel(gen) * velocityLookup[velocitySign(gen)]);
+		//glm::vec2 position = glm::vec2(dis_x(gen), dis_y(gen));
+		//glm::vec2 velocity = glm::vec2(vel(gen) * velocityLookup[velocitySign(gen)], vel(gen) * velocityLookup[velocitySign(gen)]);
+		glm::vec2 position = glm::vec2(400, 300);
+		glm::vec2 velocity = glm::vec2(0);
 		_physicsComponent.reset(position, velocity);
 
 		_rotation = rotation(gen);
 
 		_mesh = generateAsteroid(_size, _rotation);
 
-		_colliderComponent.setRadius(_size / 2.f);
+		std::unique_ptr<Geometry::Mesh> collision(new Geometry::Mesh(*_mesh.get()));
+		_colliderComponent.setCollisionMesh(std::move(collision));
 	}
 
 	void Asteroid::update(float delta)

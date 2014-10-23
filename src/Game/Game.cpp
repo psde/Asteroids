@@ -13,7 +13,7 @@ namespace Game
 	: _window(window)
 	{
 		_score = 123456789;
-		for (int i = 0; i < 10; ++i)
+		for (int i = 0; i < 1; ++i)
 		{
 			std::random_device rd;
 			std::mt19937 gen(rd());

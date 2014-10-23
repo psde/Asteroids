@@ -22,6 +22,7 @@ namespace Geometry
 		void initializeMesh();
 		void deleteMesh();
 	public:
+		Mesh(const Mesh &other);
 		Mesh(std::vector<glm::vec2> vertices);
 		Mesh(std::vector<glm::vec2> vertices, std::vector<GLuint> indices);
 		~Mesh();
@@ -31,5 +32,6 @@ namespace Geometry
 
 		glm::vec4 getBoundingBox();
 		std::unique_ptr<Mesh> rotate(float rotation, glm::vec2 center);
+		std::unique_ptr<Mesh> scale(glm::vec2 scaling);
 	};
 }
