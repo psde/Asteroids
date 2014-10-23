@@ -1,6 +1,7 @@
 #include <sstream>
 #include <iomanip>
 #include <random>
+#include <iostream>
 
 #include "Game.h"
 
@@ -12,7 +13,7 @@ namespace Game
 	: _window(window)
 	{
 		_score = 123456789;
-		for (int i = 0; i < 20; ++i)
+		for (int i = 0; i < 10; ++i)
 		{
 			std::random_device rd;
 			std::mt19937 gen(rd());
@@ -45,7 +46,15 @@ namespace Game
 
 		_ship.rotate(rotation);
 
-		_ship.update( timeDelta);
+		_ship.update(timeDelta);
+
+		// Check for collisions!
+		for (Asteroid* asteroid : _asteroids)
+		{
+			bool collides = asteroid->getColliderComponent()->collidesWith(_ship.getColliderComponent());
+			if (collides)
+				std::cout << "Collides" << std::endl;
+		}
 	}
 
 	void Game::draw()

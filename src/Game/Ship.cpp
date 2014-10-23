@@ -38,6 +38,7 @@ namespace Game
 		};
 
 		_mesh.reset(new Geometry::Mesh(vertices, elements));
+		_colliderComponent.setRadius(_size / 2.f);
 	}
 
 
@@ -70,9 +71,11 @@ namespace Game
 
 		if (_rotating != 0)
 		{
-			_rotation += 0.003f * (float)_rotating;
+			_rotation += 4.5f * (float)_rotating * delta;
 			_rotationDirty = true;
 		}
+
+		_colliderComponent.setPosition(_physicsComponent.getPosition());
 	}
 
 	void Ship::draw()
@@ -98,5 +101,10 @@ namespace Game
 
 		_moving = false;
 		_rotating = 0;
+	}
+
+	const ColliderComponent* Ship::getColliderComponent()
+	{
+		return &_colliderComponent;
 	}
 }

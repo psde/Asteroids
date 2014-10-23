@@ -108,11 +108,14 @@ namespace Game
 
 		_mesh = generateAsteroid(_size, _rotation);
 
+		_colliderComponent.setRadius(_size / 2.f);
 	}
 
 	void Asteroid::update(float delta)
 	{
 		_physicsComponent.update(delta);
+
+		_colliderComponent.setPosition(_physicsComponent.getPosition());
 	}
 
 	void Asteroid::draw()
@@ -125,5 +128,10 @@ namespace Game
 			_shader->uniform("position") = _physicsComponent.getPosition() + glm::vec2(800 * x, 600 * y);
 			_mesh->draw(GL_LINE_LOOP);
 		}
+	}
+
+	const ColliderComponent* Asteroid::getColliderComponent()
+	{
+		return &_colliderComponent;
 	}
 }
