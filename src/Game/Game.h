@@ -21,6 +21,7 @@ namespace Game
 		FontRenderer _fontRenderer;
 
 		Ship _ship;
+		Ship _livesRenderer;
 
 		int _lives;
 		int _score;

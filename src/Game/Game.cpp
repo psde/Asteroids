@@ -11,6 +11,7 @@ namespace Game
 {
 	Game::Game(std::shared_ptr<Window::Window> window)
 	: _window(window)
+	, _livesRenderer(20.f)
 	{
 		_lives = 5;
 		_score = 123456789;
@@ -73,6 +74,13 @@ namespace Game
 		std::stringstream ss;
 		ss << std::setw(10) << std::setfill('0') << _score;
 		std::string score = ss.str();
-		_fontRenderer.draw(glm::vec2(10, 10), score, 25.f);
+		_fontRenderer.draw(glm::vec2(10, 10), score, 20.f);
+
+		for (int i = 0; i < _lives; i++)
+		{
+			PhysicsComponent *component = const_cast<PhysicsComponent*>(_livesRenderer.getPhysicsComponent());
+			component->reset(glm::vec2(10.f + i * 20.f, 40.f), glm::vec2(0));
+			_livesRenderer.draw();
+		}
 	}
 }

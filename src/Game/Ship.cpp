@@ -11,12 +11,12 @@
 
 namespace Game
 {
-	Ship::Ship()
+	Ship::Ship(float size)
 	: _shader(Shader::Manager::getProgram("data/shader/ship.glsl"))
 	{
 		_acceleration = 0.f;
 		_moving = false;
-		_size = 25.f;
+		_size = size;
 		_rotation = 0.0f;
 		_rotating = 0;
 

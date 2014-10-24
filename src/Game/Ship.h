@@ -30,8 +30,7 @@ namespace Game
 		std::shared_ptr<Shader::Program> _shader;
 
 	public:
-
-		Ship();
+		Ship(float size = 25.f);
 
 		void accelerate();
 		void rotate(int rotation);
