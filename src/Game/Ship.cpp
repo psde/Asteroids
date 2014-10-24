@@ -101,4 +101,9 @@ namespace Game
 	{
 		return &_colliderComponent;
 	}
+
+	const PhysicsComponent* Ship::getPhysicsComponent()
+	{
+		return &_physicsComponent;
+	}
 }

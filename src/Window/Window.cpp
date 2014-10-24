@@ -63,6 +63,13 @@ namespace Window
 		return dimensions;
 	}
 
+	glm::vec2 Window::getCursorPosition()
+	{
+		double x, y;
+		glfwGetCursorPos(_glfwWindow, &x, &y);
+		return glm::vec2(x, y);
+	}
+
 	bool Window::shouldClose()
 	{
 		return glfwWindowShouldClose(_glfwWindow);

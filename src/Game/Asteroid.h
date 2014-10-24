@@ -31,6 +31,7 @@ namespace Game
 		void update(float delta);
 
 		const ColliderComponent* getColliderComponent();
+		const PhysicsComponent* getPhysicsComponent();
 	};
 
 }

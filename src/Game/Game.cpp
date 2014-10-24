@@ -12,6 +12,7 @@ namespace Game
 	Game::Game(std::shared_ptr<Window::Window> window)
 	: _window(window)
 	{
+		_lives = 5;
 		_score = 123456789;
 		for (int i = 0; i < 15; ++i)
 		{
@@ -44,9 +45,8 @@ namespace Game
 			rotation = 1;
 		}
 
-		//double x, y;
-		//glfwGetCursorPos(_window->_glfwWindow, &x, &y);
-		//_ship._physicsComponent.reset(glm::vec2(x, y), glm::vec2(0));
+		//PhysicsComponent *component = const_cast<PhysicsComponent*>(_ship.getPhysicsComponent());
+		//component->reset(_window->getCursorPosition(), glm::vec2(0));
 
 		_ship.rotate(rotation);
 

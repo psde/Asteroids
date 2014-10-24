@@ -22,6 +22,7 @@ namespace Game
 
 		Ship _ship;
 
+		int _lives;
 		int _score;
 
 	public:

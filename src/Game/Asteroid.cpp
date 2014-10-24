@@ -146,4 +146,9 @@ namespace Game
 	{
 		return &_colliderComponent;
 	}
+
+	const PhysicsComponent* Asteroid::getPhysicsComponent()
+	{
+		return &_physicsComponent;
+	}
 }
