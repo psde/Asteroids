@@ -23,6 +23,7 @@ namespace Game
 
 		std::unique_ptr<Geometry::Mesh> _mesh;
 		std::shared_ptr<Shader::Program> _shader;
+
 	public:
 		Asteroid(int size);
 
@@ -32,6 +33,12 @@ namespace Game
 
 		const ColliderComponent* getColliderComponent();
 		const PhysicsComponent* getPhysicsComponent();
+
+		static const std::vector<float> &AsteroidSizes()
+		{
+			static std::vector <float> sizes = { 15.f, 45.f, 90.f };
+			return sizes;
+		}
 	};
 
 }

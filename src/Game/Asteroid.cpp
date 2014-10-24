@@ -96,8 +96,7 @@ namespace Game
 	}
 
 	Asteroid::Asteroid(int size)
-	: _size(size)
-	, _shader(Shader::Manager::getProgram("data/shader/asteroid.glsl"))
+	: _shader(Shader::Manager::getProgram("data/shader/asteroid.glsl"))
 	{
 		std::random_device rd;
 		std::mt19937 gen(rd());
@@ -106,6 +105,9 @@ namespace Game
 		std::uniform_real_distribution<> vel(30.0, 55.0);
 		std::uniform_int_distribution<> velocitySign(0, 1);
 		std::uniform_real_distribution<> rotation(0, 2.f * glm::pi<float>());
+		std::uniform_real_distribution<> sizeOffset(0.f, 4.f);
+
+		_size = AsteroidSizes().at(size) + sizeOffset(gen);
 
 		float velocityLookup[] = { -1.f, 1.f };
 

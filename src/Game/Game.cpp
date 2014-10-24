@@ -15,12 +15,9 @@ namespace Game
 	{
 		_lives = 5;
 		_score = 123456789;
-		for (int i = 0; i < 15; ++i)
+		for (int i = 0; i < 5; ++i)
 		{
-			std::random_device rd;
-			std::mt19937 gen(rd());
-			std::uniform_int_distribution<> dis(50, 90);
-			_asteroids.push_back(new Asteroid(dis(gen)));
+			_asteroids.push_back(new Asteroid(Asteroid::AsteroidSizes().size()-1));
 		}
 	}
 
@@ -58,7 +55,9 @@ namespace Game
 		{
 			bool collides = asteroid->getColliderComponent()->collidesWith(_ship.getColliderComponent());
 			if (collides)
+			{
 				std::cout << "Collides" << std::endl;
+			}
 		}
 	}
 
