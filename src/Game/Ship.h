@@ -25,6 +25,7 @@ namespace Game
 		float _acceleration;
 		bool _moving;
 		int _rotating;
+		float _reloadTime;
 		
 		std::unique_ptr<Geometry::Mesh> _mesh;
 		std::unique_ptr<Geometry::Mesh> _rotatedMesh;

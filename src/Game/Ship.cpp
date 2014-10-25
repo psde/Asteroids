@@ -19,6 +19,7 @@ namespace Game
 		_size = size;
 		_rotation = 0.0f;
 		_rotating = 0;
+		_reloadTime = 0;
 
 		_physicsComponent.reset(glm::vec2(400.0f - _size / 2.f, 300 - _size / 2.f), glm::vec2(0.f));
 		_physicsComponent.setMaxVelocity(500.f);
@@ -56,6 +57,12 @@ namespace Game
 	const std::shared_ptr<Projectile> Ship::shoot()
 	{
 		std::shared_ptr<Projectile> projectile = nullptr;
+
+		if (_reloadTime > 0.f)
+		{
+			return projectile;
+		}
+
 		for (auto p : _projectiles)
 		{
 			if (p->isReady())
@@ -68,7 +75,9 @@ namespace Game
 		if (projectile)
 		{
 			glm::vec2 dir = glm::rotate(glm::vec2(0.f, -1), _rotation);
-			projectile->shoot(_physicsComponent.getPosition(), dir);
+			glm::vec2 position = _physicsComponent.getPosition() + glm::vec2(_size / 2.f) + (dir * (float)_size/2.f);
+			projectile->shoot(position, dir);
+			_reloadTime = 0.05f;
 		}
 
 		return projectile;
@@ -90,6 +99,12 @@ namespace Game
 		}
 
 		_physicsComponent.update(delta);
+
+
+		if (_reloadTime > 0.f)
+		{
+			_reloadTime -= delta;
+		}
 
 		for (auto p : _projectiles)
 		{
