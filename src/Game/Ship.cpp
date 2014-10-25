@@ -38,6 +38,9 @@ namespace Game
 
 		_mesh.reset(new Geometry::Mesh(vertices, elements));
 		_rotatedMesh = std::unique_ptr<Geometry::Mesh>(new Geometry::Mesh(*_mesh.get()));
+
+		for (int i = 0; i < 300; i++)
+			_projectiles.push_back(std::make_shared<Projectile>());
 	}
 
 	void Ship::accelerate()
@@ -48,6 +51,27 @@ namespace Game
 	void Ship::rotate(int rotation)
 	{
 		_rotating = rotation;
+	}
+
+	const std::shared_ptr<Projectile> Ship::shoot()
+	{
+		std::shared_ptr<Projectile> projectile = nullptr;
+		for (auto p : _projectiles)
+		{
+			if (p->isReady())
+			{
+				projectile = p;
+				break;
+			}
+		}
+
+		if (projectile)
+		{
+			glm::vec2 dir = glm::rotate(glm::vec2(0.f, -1), _rotation);
+			projectile->shoot(_physicsComponent.getPosition(), dir);
+		}
+
+		return projectile;
 	}
 
 	void Ship::update(float delta)
@@ -67,6 +91,12 @@ namespace Game
 
 		_physicsComponent.update(delta);
 
+		for (auto p : _projectiles)
+		{
+			if (!p->isReady())
+				p->update(delta);
+		}
+
 		if (_rotating != 0)
 		{
 			_rotation += 4.5f * (float)_rotating * delta;
@@ -84,14 +114,22 @@ namespace Game
 		_shader->use();
 
 		for (int y = -1; y < 1; ++y)
-		for (int x = -1; x < 1; ++x)
 		{
-			_shader->uniform("position") = _physicsComponent.getPosition() + glm::vec2(800 * x, 600 * y);
-			_rotatedMesh->draw(GL_LINE_STRIP, 5, 0);
-			if (_moving && std::fmod(glfwGetTime(), 0.2) >= 0.1)
+			for (int x = -1; x < 1; ++x)
 			{
-				_rotatedMesh->draw(GL_LINE_STRIP, 3, 5);
+				_shader->uniform("position") = _physicsComponent.getPosition() + glm::vec2(800 * x, 600 * y);
+				_rotatedMesh->draw(GL_LINE_STRIP, 5, 0);
+				if (_moving && std::fmod(glfwGetTime(), 0.2) >= 0.1)
+				{
+					_rotatedMesh->draw(GL_LINE_STRIP, 3, 5);
+				}
 			}
+		}
+
+		for (auto p : _projectiles)
+		{
+			if (!p->isReady())
+				p->draw();
 		}
 
 		_moving = false;

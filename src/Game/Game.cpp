@@ -15,7 +15,7 @@ namespace Game
 	{
 		_lives = 5;
 		_score = 123456789;
-		for (int i = 0; i < 5; ++i)
+		for (int i = 0; i < 1; ++i)
 		{
 			_asteroids.push_back(new Asteroid(Asteroid::AsteroidSizes().size()-1));
 		}
@@ -42,6 +42,12 @@ namespace Game
 		{
 			rotation = 1;
 		}
+
+		if (_window->getGlfwKeyState(GLFW_KEY_SPACE) == GLFW_PRESS)
+		{
+			_ship.shoot();
+		}
+
 
 		//PhysicsComponent *component = const_cast<PhysicsComponent*>(_ship.getPhysicsComponent());
 		//component->reset(_window->getCursorPosition(), glm::vec2(0));

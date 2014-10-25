@@ -9,6 +9,7 @@
 #include "GameObject.h"
 #include "PhysicsComponent.h"
 #include "ColliderComponent.h"
+#include "Projectile.h"
 
 namespace Game
 {
@@ -29,9 +30,12 @@ namespace Game
 		std::unique_ptr<Geometry::Mesh> _rotatedMesh;
 		std::shared_ptr<Shader::Program> _shader;
 
+		std::vector<std::shared_ptr<Projectile>> _projectiles;
+
 	public:
 		Ship(float size = 25.f);
 
+		const std::shared_ptr<Projectile> shoot();
 		void accelerate();
 		void rotate(int rotation);
 

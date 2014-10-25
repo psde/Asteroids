@@ -39,6 +39,8 @@ list(APPEND SRC_GAME
 	Game/GameObject.cpp
 	Game/PhysicsComponent.h
 	Game/PhysicsComponent.cpp
+	Game/Projectile.h
+	Game/Projectile.cpp
 	Game/Ship.h
 	Game/Ship.cpp
 )

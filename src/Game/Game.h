@@ -3,9 +3,12 @@
 #include <vector>
 
 #include "Window/Window.h"
+
+#include "FontRenderer.h"
+
 #include "Asteroid.h"
 #include "Ship.h"
-#include "FontRenderer.h"
+#include "Projectile.h"
 
 struct GLFWwindow;
 
@@ -22,7 +25,7 @@ namespace Game
 
 		Ship _ship;
 		Ship _livesRenderer;
-
+		
 		int _lives;
 		int _score;
 
