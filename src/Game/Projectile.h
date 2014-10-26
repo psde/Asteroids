@@ -16,7 +16,7 @@ namespace Game
 	{
 	private:
 		int _size;
-		bool _ready;
+		bool _launched;
 		float _time;
 
 		ColliderComponent _colliderComponent;
@@ -35,7 +35,7 @@ namespace Game
 		const ColliderComponent* getColliderComponent();
 		const PhysicsComponent* getPhysicsComponent();
 
-		bool isReady();
+		bool isLaunched();
 		void shoot(glm::vec2 position, glm::vec2 direction);
 		void reload();
 	};

@@ -86,7 +86,7 @@ namespace Game
 
 			auto projectileIterator = std::begin(_projectiles);
 			while (projectileIterator != std::end(_projectiles)) {
-				bool removeProjectile = (*projectileIterator)->isReady();
+				bool removeProjectile = !(*projectileIterator)->isLaunched();
 				bool collidesProjectile = (*asteroidIterator)->getColliderComponent()->collidesWith((*projectileIterator)->getColliderComponent());
 
 				if (collidesProjectile)

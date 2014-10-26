@@ -67,7 +67,7 @@ namespace Game
 
 		for (auto p : _projectiles)
 		{
-			if (p->isReady())
+			if (!p->isLaunched())
 			{
 				projectile = p;
 				break;
@@ -110,7 +110,7 @@ namespace Game
 
 		for (auto p : _projectiles)
 		{
-			if (!p->isReady())
+			if (p->isLaunched())
 				p->update(delta);
 		}
 
@@ -145,7 +145,7 @@ namespace Game
 
 		for (auto p : _projectiles)
 		{
-			if (!p->isReady())
+			if (p->isLaunched())
 				p->draw();
 		}
 
