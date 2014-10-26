@@ -34,7 +34,7 @@ namespace Game
 		std::vector<std::shared_ptr<Projectile>> _projectiles;
 
 	public:
-		Ship(float size = 25.f);
+		Ship(float size = 27.5f);
 
 		const std::shared_ptr<Projectile> shoot();
 		void accelerate();

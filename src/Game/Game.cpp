@@ -12,7 +12,7 @@ namespace Game
 {
 	Game::Game(std::shared_ptr<Window::Window> window)
 	: _window(window)
-	, _livesRenderer(20.f)
+	, _livesRenderer(22.5f)
 	{
 		_lives = 5;
 		_score = 0;

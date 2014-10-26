@@ -25,16 +25,18 @@ namespace Game
 		_physicsComponent.setMaxVelocity(500.f);
 
 		std::vector<glm::vec2> vertices = {
-			glm::vec2(0.50f * _size, 0.05f * _size),
-			glm::vec2(0.10f * _size, 0.90f * _size),
-			glm::vec2(0.90f * _size, 0.90f * _size),
-			glm::vec2(0.21f * _size, 0.67f * _size),
-			glm::vec2(0.79f * _size, 0.67f * _size),
-			glm::vec2(0.50f * _size, 1.00f * _size)
+			glm::vec2(0.25f * _size, 0.90f * _size), // 0
+			glm::vec2(0.50f * _size, 0.10f * _size), // 1
+			glm::vec2(0.75f * _size, 0.90f * _size), // 2
+			glm::vec2(0.70f * _size, 0.75f * _size), // 3
+			glm::vec2(0.60f * _size, 0.70f * _size), // 4
+			glm::vec2(0.40f * _size, 0.70f * _size), // 5
+			glm::vec2(0.30f * _size, 0.75f * _size), // 6
+			glm::vec2(0.50f * _size, 0.99f * _size)  // 7
 		};
 
 		std::vector<GLuint> elements = {
-			1, 0, 2, 4, 3, 4, 5, 3
+			0, 1, 2, 3, 4, 5, 6, 3, 7, 6
 		}; 
 
 		_mesh.reset(new Geometry::Mesh(vertices, elements));
@@ -133,10 +135,10 @@ namespace Game
 			for (int x = -1; x < 1; ++x)
 			{
 				_shader->uniform("position") = _physicsComponent.getPosition() + glm::vec2(800 * x, 600 * y);
-				_rotatedMesh->draw(GL_LINE_STRIP, 5, 0);
+				_rotatedMesh->draw(GL_LINE_STRIP, 7, 0);
 				if (_moving && std::fmod(glfwGetTime(), 0.2) >= 0.1)
 				{
-					_rotatedMesh->draw(GL_LINE_STRIP, 3, 5);
+					_rotatedMesh->draw(GL_LINE_STRIP, 3, 7);
 				}
 			}
 		}
