@@ -96,35 +96,55 @@ namespace Game
 	}
 
 	Asteroid::Asteroid(int size)
-	: _shader(Shader::Manager::getProgram("data/shader/asteroid.glsl"))
 	{
 		std::random_device rd;
 		std::mt19937 gen(rd());
-		std::uniform_real_distribution<> dis_x(0, 800);
-		std::uniform_real_distribution<> dis_y(0, 600);
+		std::uniform_real_distribution<> dis_x(0, 700);
+		std::uniform_real_distribution<> dis_y(0, 500);
+		std::uniform_real_distribution<> dir(-1, 1);
+		
+		glm::vec2 position = glm::vec2(dis_x(gen), dis_y(gen));
+		glm::vec2 direction = glm::vec2(dir(gen), dir(gen));
+
+		if (position.x > 400)
+			position.x += 100;
+
+		if (position.y > 300)
+			position.y += 100;
+
+		init(size, position, direction);
+	}
+
+	Asteroid::Asteroid(int size, glm::vec2 position, glm::vec2 direction)
+	{
+		init(size, position, direction);
+	}
+
+	void Asteroid::init(int size, glm::vec2 position, glm::vec2 direction)
+	{
+		std::random_device rd;
+		std::mt19937 gen(rd());
 		std::uniform_real_distribution<> vel(30.0, 55.0);
-		std::uniform_int_distribution<> velocitySign(0, 1);
+		std::exponential_distribution<> vel2(50);
 		std::uniform_real_distribution<> rotation(0, 2.f * glm::pi<float>());
 		std::uniform_real_distribution<> sizeOffset(0.f, 4.f);
 
-		_size = AsteroidSizes().at(size) + sizeOffset(gen);
-
-		float velocityLookup[] = { -1.f, 1.f };
-
-		glm::vec2 position = glm::vec2(dis_x(gen), dis_y(gen));
-		glm::vec2 velocity = glm::vec2(vel(gen) * velocityLookup[velocitySign(gen)], vel(gen) * velocityLookup[velocitySign(gen)]);
-		//position = glm::vec2(400, 300);
-		//velocity = glm::vec2(0);
-		_physicsComponent.reset(position, velocity);
-
+		_size = size;
+		_shader = Shader::Manager::getProgram("data/shader/asteroid.glsl");
 		_rotation = rotation(gen);
 
-		_mesh = generateAsteroid(_size, _rotation);
+		glm::vec2 velocity = direction * glm::vec2(vel2(gen) + 30.f);
+
+		velocity *= (Asteroid::AsteroidSizes().size() - size);
+
+		_physicsComponent.reset(position, velocity);
+
+		_mesh = generateAsteroid(AsteroidSizes().at(_size) + sizeOffset(gen), _rotation);
 
 		std::unique_ptr<Geometry::Mesh> collision(new Geometry::Mesh(*_mesh.get()));
 		_colliderComponent.setCollisionMesh(std::move(collision));
 	}
-
+	
 	void Asteroid::update(float delta)
 	{
 		_physicsComponent.update(delta);
@@ -142,6 +162,11 @@ namespace Game
 			_shader->uniform("position") = _physicsComponent.getPosition() + glm::vec2(800 * x, 600 * y);
 			_mesh->draw(GL_LINE_LOOP);
 		}
+	}
+
+	int Asteroid::getAsteroidSize()
+	{
+		return _size;
 	}
 
 	const ColliderComponent* Asteroid::getColliderComponent()

@@ -14,6 +14,13 @@ namespace Game
 {
 	class Asteroid : public GameObject
 	{
+	public:
+		static const std::vector<float> &AsteroidSizes()
+		{
+			static std::vector <float> sizes = { 15.f, 45.f, 95.f };
+			return sizes;
+		}
+
 	private:
 		int _size;
 
@@ -23,9 +30,11 @@ namespace Game
 
 		std::unique_ptr<Geometry::Mesh> _mesh;
 		std::shared_ptr<Shader::Program> _shader;
-
+		
+		void init(int size, glm::vec2 position, glm::vec2 direction);
 	public:
 		Asteroid(int size);
+		Asteroid(int size, glm::vec2 position, glm::vec2 direction);
 
 		void draw();
 
@@ -34,11 +43,7 @@ namespace Game
 		const ColliderComponent* getColliderComponent();
 		const PhysicsComponent* getPhysicsComponent();
 
-		static const std::vector<float> &AsteroidSizes()
-		{
-			static std::vector <float> sizes = { 15.f, 45.f, 90.f };
-			return sizes;
-		}
+		int getAsteroidSize();
 	};
 
 }

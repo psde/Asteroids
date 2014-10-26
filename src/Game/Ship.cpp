@@ -40,7 +40,7 @@ namespace Game
 		_mesh.reset(new Geometry::Mesh(vertices, elements));
 		_rotatedMesh = std::unique_ptr<Geometry::Mesh>(new Geometry::Mesh(*_mesh.get()));
 
-		for (int i = 0; i < 300; i++)
+		for (int i = 0; i < 4; i++)
 			_projectiles.push_back(std::make_shared<Projectile>());
 	}
 
@@ -77,7 +77,7 @@ namespace Game
 			glm::vec2 dir = glm::rotate(glm::vec2(0.f, -1), _rotation);
 			glm::vec2 position = _physicsComponent.getPosition() + glm::vec2(_size / 2.f) + (dir * (float)_size/2.f);
 			projectile->shoot(position, dir);
-			_reloadTime = 0.05f;
+			_reloadTime = 0.25f;
 		}
 
 		return projectile;

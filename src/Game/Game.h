@@ -20,6 +20,7 @@ namespace Game
 		std::shared_ptr<Window::Window> _window;
 
 		std::vector<Asteroid*> _asteroids;
+		std::vector<std::shared_ptr<Projectile>> _projectiles;
 
 		FontRenderer _fontRenderer;
 
@@ -28,6 +29,8 @@ namespace Game
 		
 		int _lives;
 		int _score;
+
+		void destroyAsteroid(Asteroid *asteroid);
 
 	public:
 		Game(std::shared_ptr<Window::Window> window);

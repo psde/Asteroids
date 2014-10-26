@@ -5,6 +5,7 @@
 
 #include "Game.h"
 
+#include <glm/gtx/rotate_vector.hpp>
 #include <GLFW/glfw3.h>
 
 namespace Game
@@ -14,11 +15,30 @@ namespace Game
 	, _livesRenderer(20.f)
 	{
 		_lives = 5;
-		_score = 123456789;
-		for (int i = 0; i < 1; ++i)
+		_score = 0;
+		for (int i = 0; i < 10; ++i)
 		{
 			_asteroids.push_back(new Asteroid(Asteroid::AsteroidSizes().size()-1));
 		}
+	}
+
+
+	void Game::destroyAsteroid(Asteroid *asteroid)
+	{
+		int size = asteroid->getAsteroidSize();
+		_score += (Asteroid::AsteroidSizes().size() - size) * 100;
+
+		if (size != 0)
+		{
+			glm::vec2 pos = asteroid->getPhysicsComponent()->getPosition();
+			glm::vec2 dir = glm::normalize(asteroid->getPhysicsComponent()->getVelocity());
+
+			dir = glm::rotate(dir, 0.5f * glm::pi<float>());
+			size--;
+			_asteroids.push_back(new Asteroid(size, pos, dir));
+			_asteroids.push_back(new Asteroid(size, pos, -dir));
+		}
+
 	}
 
 	void Game::update(float timeDelta)
@@ -45,25 +65,70 @@ namespace Game
 
 		if (_window->getGlfwKeyState(GLFW_KEY_SPACE) == GLFW_PRESS)
 		{
-			_ship.shoot();
-		}
+			auto projectile = _ship.shoot();
 
+			if (projectile)
+				_projectiles.push_back(projectile);
+		}
 
 		//PhysicsComponent *component = const_cast<PhysicsComponent*>(_ship.getPhysicsComponent());
 		//component->reset(_window->getCursorPosition(), glm::vec2(0));
 
 		_ship.rotate(rotation);
-
 		_ship.update(timeDelta);
 
-		// Check for collisions!
-		for (Asteroid* asteroid : _asteroids)
-		{
-			bool collides = asteroid->getColliderComponent()->collidesWith(_ship.getColliderComponent());
+
+		std::vector<Asteroid*> destroyedAsteroids;
+
+		auto asteroidIterator = std::begin(_asteroids);
+		while (asteroidIterator != std::end(_asteroids)) {
+			bool removeAsteroid = false;
+
+			auto projectileIterator = std::begin(_projectiles);
+			while (projectileIterator != std::end(_projectiles)) {
+				bool removeProjectile = (*projectileIterator)->isReady();
+				bool collidesProjectile = (*asteroidIterator)->getColliderComponent()->collidesWith((*projectileIterator)->getColliderComponent());
+
+				if (collidesProjectile)
+				{
+					(*projectileIterator)->reload();
+					removeProjectile = true;
+					removeAsteroid = true;
+				}
+
+				if (removeProjectile)
+				{
+					projectileIterator = _projectiles.erase(projectileIterator);
+				}
+				else
+				{
+
+					++projectileIterator;
+				}
+			}
+
+			bool collides = (*asteroidIterator)->getColliderComponent()->collidesWith(_ship.getColliderComponent());
 			if (collides)
 			{
-				std::cout << "Collides" << std::endl;
+				PhysicsComponent *component = const_cast<PhysicsComponent*>(_ship.getPhysicsComponent());
+				component->reset(glm::vec2(400, 300), glm::vec2(0));
+				_lives--;
 			}
+
+			if (removeAsteroid)
+			{
+				destroyedAsteroids.push_back(*asteroidIterator);
+				asteroidIterator = _asteroids.erase(asteroidIterator);
+			}
+			else
+			{
+				++asteroidIterator;
+			}
+		}
+
+		for (Asteroid* asteroid : destroyedAsteroids)
+		{
+			destroyAsteroid(asteroid);
 		}
 	}
 

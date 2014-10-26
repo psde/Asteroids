@@ -21,8 +21,8 @@ namespace Game
 		void update(float timeDelta);
 		void applyImpulse(glm::vec2 impulseVector);
 
-		glm::vec2 getPosition() { return _position; }
-		glm::vec2 getVelocity() { return _velocity; }
+		const glm::vec2 getPosition() const { return _position; }
+		const glm::vec2 getVelocity() const { return _velocity; }
 	};
 
 }

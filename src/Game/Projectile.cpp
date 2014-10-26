@@ -15,11 +15,10 @@ namespace Game
 	: _shader(Shader::Manager::getProgram("data/shader/ship.glsl"))
 	{
 		_physicsComponent.reset(glm::vec2(300, 150), glm::vec2(0.f));
-		_physicsComponent.setMaxVelocity(500.f);
 
 		_ready = true;
 
-		float size = 2.f;
+		float size = 0.75f;
 		
 		int steps = 6;
 		float r = 0.f;
@@ -79,8 +78,8 @@ namespace Game
 	void Projectile::shoot(glm::vec2 position, glm::vec2 direction)
 	{
 		_ready = false;
-		_time = 2.5f;
-		_physicsComponent.reset(position, direction * 150.f);
+		_time = 3.f;
+		_physicsComponent.reset(position, direction * 175.f);
 	}
 
 	void Projectile::reload()
