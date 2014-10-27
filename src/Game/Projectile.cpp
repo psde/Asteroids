@@ -79,7 +79,7 @@ namespace Game
 	{
 		_launched = true;
 		_time = 3.f;
-		_physicsComponent.reset(position, direction * 175.f);
+		_physicsComponent.reset(position, direction * 275.f);
 	}
 
 	void Projectile::reload()
