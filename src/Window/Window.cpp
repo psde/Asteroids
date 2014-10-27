@@ -25,7 +25,6 @@ namespace Window
 		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 		glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 		glfwWindowHint(GLFW_SAMPLES, 8);
-		glfwSwapInterval(0);
 
 		_glfwWindow = glfwCreateWindow(width, height, "Asteroids!", nullptr, nullptr);
 		if (!_glfwWindow)
@@ -33,7 +32,7 @@ namespace Window
 			glfwTerminate();
 			exit(EXIT_FAILURE);
 		}
-		
+
 		glfwMakeContextCurrent(_glfwWindow);
 
 		glewExperimental = GL_TRUE;
