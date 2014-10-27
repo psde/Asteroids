@@ -22,7 +22,6 @@ namespace Game
 		PhysicsComponent _physicsComponent;
 
 		float _rotation;
-		float _acceleration;
 		bool _moving;
 		int _rotating;
 		float _reloadTime;

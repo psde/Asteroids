@@ -14,7 +14,6 @@ namespace Game
 	Ship::Ship(float size)
 	: _shader(Shader::Manager::getProgram("data/shader/ship.glsl"))
 	{
-		_acceleration = 0.f;
 		_moving = false;
 		_size = size;
 		_rotation = 0.0f;
@@ -22,7 +21,7 @@ namespace Game
 		_reloadTime = 0;
 
 		_physicsComponent.reset(glm::vec2(400.0f - _size / 2.f, 300 - _size / 2.f), glm::vec2(0.f));
-		_physicsComponent.setMaxVelocity(500.f);
+		_physicsComponent.setTerminalVelocity(225.f);
 
 		std::vector<glm::vec2> vertices = {
 			glm::vec2(0.25f * _size, 0.90f * _size), // 0
@@ -42,7 +41,7 @@ namespace Game
 		_mesh.reset(new Geometry::Mesh(vertices, elements));
 		_rotatedMesh = std::unique_ptr<Geometry::Mesh>(new Geometry::Mesh(*_mesh.get()));
 
-		for (int i = 0; i < 400; i++)
+		for (int i = 0; i < 5; i++)
 			_projectiles.push_back(std::make_shared<Projectile>());
 	}
 
@@ -58,13 +57,12 @@ namespace Game
 
 	const std::shared_ptr<Projectile> Ship::shoot()
 	{
-		std::shared_ptr<Projectile> projectile = nullptr;
-
 		if (_reloadTime > 0.f)
 		{
-			return projectile;
+			return nullptr;
 		}
 
+		std::shared_ptr<Projectile> projectile = nullptr;
 		for (auto p : _projectiles)
 		{
 			if (!p->isLaunched())
@@ -89,12 +87,12 @@ namespace Game
 	{
 		if (_moving)
 		{
-			_acceleration += 0.5f * delta;
-			_physicsComponent.applyImpulse(glm::rotate(glm::vec2(0.f, -_acceleration), _rotation));
+			float acceleration = 175.f;
+			_physicsComponent.setAcceleration(glm::rotate(glm::vec2(0.f, -acceleration), _rotation));
 		}
 		else
 		{
-			_acceleration = 0.f;
+			_physicsComponent.setAcceleration(glm::vec2(0.f, 0.f));
 		}
 
 		_physicsComponent.update(delta);
@@ -133,7 +131,7 @@ namespace Game
 			{
 				_shader->uniform("position") = _physicsComponent.getPosition() + glm::vec2(800 * x, 600 * y);
 				_rotatedMesh->draw(GL_LINE_STRIP, 7, 0);
-				if (_moving && std::fmod(glfwGetTime(), 0.2) >= 0.1)
+				if (glm::length(_physicsComponent.getAcceleration()) > 0.f && std::fmod(glfwGetTime(), 0.2) >= 0.1)
 				{
 					_rotatedMesh->draw(GL_LINE_STRIP, 3, 7);
 				}
