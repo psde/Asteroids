@@ -12,6 +12,7 @@ namespace Geometry
 		_vertices = other._vertices;
 		_indices = other._indices;
 		_initialized = false;
+		createBoundingBox();
 	}
 
 	Mesh::Mesh(std::vector<glm::vec2> vertices)
@@ -22,6 +23,7 @@ namespace Geometry
 		{
 			_indices.push_back(i);
 		}
+		createBoundingBox();
 	}
 
 	Mesh::Mesh(std::vector<glm::vec2> vertices, std::vector<GLuint> indices)
@@ -29,6 +31,7 @@ namespace Geometry
 	, _indices(indices)
 	, _initialized(false)
 	{
+		createBoundingBox();
 	}
 
 	Mesh::~Mesh()
@@ -66,7 +69,20 @@ namespace Geometry
 		glBufferData(GL_ELEMENT_ARRAY_BUFFER, _indices.size() * sizeof(GLuint), _indices.data(), GL_STATIC_DRAW);
 
 		glBindVertexArray(0);
+
 		_initialized = true;
+	}
+
+	void Mesh::createBoundingBox()
+	{
+		// Create bounding box
+		for (auto &v : _vertices)
+		{
+			_boundingBox.x = std::min(_boundingBox.x, v.x);
+			_boundingBox.y = std::min(_boundingBox.y, v.y);
+			_boundingBox.z = std::max(_boundingBox.z, v.x);
+			_boundingBox.w = std::max(_boundingBox.w, v.y);
+		}
 	}
 
 	void Mesh::draw(GLenum mode)
@@ -84,17 +100,7 @@ namespace Geometry
 
 	glm::vec4 Mesh::getBoundingBox()
 	{
-		glm::vec4 bb;
-		
-		for (auto &v : _vertices)
-		{
-			bb.x = std::min(bb.x, v.x);
-			bb.y = std::min(bb.y, v.y);
-			bb.z = std::max(bb.z, v.x);
-			bb.w = std::max(bb.w, v.y);
-		}
-
-		return bb;
+		return _boundingBox;
 	}
 
 	std::unique_ptr<Mesh> Mesh::rotate(float rotation, glm::vec2 center)

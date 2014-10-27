@@ -19,8 +19,11 @@ namespace Geometry
 		std::vector<glm::vec2> _vertices;
 		std::vector<GLuint> _indices;
 
+		glm::vec4 _boundingBox;
+
 		void initializeMesh();
 		void deleteMesh();
+		void createBoundingBox();
 	public:
 		Mesh(const Mesh &other);
 		Mesh(std::vector<glm::vec2> vertices);
