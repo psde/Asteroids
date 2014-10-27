@@ -83,6 +83,9 @@ namespace Window
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		_time.y = _time.x;
 		_time.x = glfwGetTime();
+
+		if (getGlfwKeyState(GLFW_KEY_ESCAPE) == GLFW_PRESS)
+			glfwSetWindowShouldClose(_glfwWindow, GL_TRUE);
 	}
 
 	float Window::getTimeDelta()
