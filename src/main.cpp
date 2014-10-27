@@ -26,17 +26,19 @@ int main()
 	double acc_frametime = 0.0;
 	int frames = 0;
 	double accumulator = 0;
-	const double dt = 0.005;
+	const double dt = 0.001;
 	while (!window->shouldClose())
 	{
 		double time = glfwGetTime();
 		double timeDelta = window->getTimeDelta();
+		int physicSteps = 0;
 
 		accumulator += timeDelta;
 		while(accumulator > dt)
 		{
 			game.update(dt);
 			accumulator -= dt;
+			physicSteps++;
 		}
 
 		Shader::Globals::globals().update<float>("time", time);
@@ -44,14 +46,11 @@ int main()
 
 		game.draw();
 
-		//if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-		//	glfwSetWindowShouldClose(window, GL_TRUE);
-
 		acc_frametime += timeDelta;
 		frames++;
 		if (time > last_frametime + frametime_max)
 		{
-			std::cout << "Frametime: " << (acc_frametime / (double)frames) * 1000.0f << "ms" << std::endl;
+			std::cout << "Frametime: " << (acc_frametime / (double)frames) * 1000.0f << "ms (" << frames << " frames, " << physicSteps << " physics frames)" << std::endl;
 			last_frametime = time;
 			acc_frametime = 0.0f;
 			frames = 0;
