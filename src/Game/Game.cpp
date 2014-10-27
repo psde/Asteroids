@@ -113,6 +113,7 @@ namespace Game
 				PhysicsComponent *component = const_cast<PhysicsComponent*>(_ship.getPhysicsComponent());
 				component->reset(glm::vec2(400, 300), glm::vec2(0));
 				_lives--;
+				removeAsteroid = true;
 			}
 
 			if (removeAsteroid)

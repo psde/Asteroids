@@ -1,4 +1,5 @@
 #include <iostream>
+#include <algorithm>
 
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
@@ -24,11 +25,19 @@ int main()
 	const double frametime_max = 0.1;
 	double acc_frametime = 0.0;
 	int frames = 0;
+	double accumulator = 0;
+	const double dt = 0.005;
 	while (!window->shouldClose())
 	{
 		double time = glfwGetTime();
 		double timeDelta = window->getTimeDelta();
-		game.update(timeDelta);
+
+		accumulator += dt;
+		while(accumulator > dt)
+		{
+			game.update(dt);
+			accumulator -= dt;
+		}
 
 		Shader::Globals::globals().update<float>("time", time);
 		Shader::Globals::globals().update<glm::vec2>("windowDimensions", window->getWindowDimensions());

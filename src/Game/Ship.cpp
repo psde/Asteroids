@@ -42,7 +42,7 @@ namespace Game
 		_mesh.reset(new Geometry::Mesh(vertices, elements));
 		_rotatedMesh = std::unique_ptr<Geometry::Mesh>(new Geometry::Mesh(*_mesh.get()));
 
-		for (int i = 0; i < 4; i++)
+		for (int i = 0; i < 400; i++)
 			_projectiles.push_back(std::make_shared<Projectile>());
 	}
 
@@ -89,10 +89,7 @@ namespace Game
 	{
 		if (_moving)
 		{
-			_acceleration += 0.5 * delta;
-			if (_acceleration > 0.15f)
-				_acceleration = 0.15f;
-
+			_acceleration += 0.5f * delta;
 			_physicsComponent.applyImpulse(glm::rotate(glm::vec2(0.f, -_acceleration), _rotation));
 		}
 		else

@@ -18,7 +18,7 @@ namespace Game
 
 		_launched = false;
 
-		float size = 0.75f;
+		float size = 1.25f;
 		
 		int steps = 6;
 		float r = 0.f;
