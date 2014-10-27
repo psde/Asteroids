@@ -32,7 +32,7 @@ int main()
 		double time = glfwGetTime();
 		double timeDelta = window->getTimeDelta();
 
-		accumulator += dt;
+		accumulator += timeDelta;
 		while(accumulator > dt)
 		{
 			game.update(dt);
