@@ -33,12 +33,12 @@ namespace Game
 
 	void Game::loadLevel()
 	{
+		_ship.reset();
 		_asteroids.clear();
-		for (int i = 0; i < 2 + _level; ++i)
+		for (int i = 0; i < 0 + _level; ++i)
 		{
 			_asteroids.push_back(new Asteroid(Asteroid::AsteroidSizes().size()-1));
 		}
-		_ship.reset();
 	}
 
 	void Game::destroyAsteroid(Asteroid *asteroid)
@@ -187,7 +187,7 @@ namespace Game
 					bool removeProjectile = !(*projectileIterator)->isLaunched();
 					bool collidesProjectile = (*asteroidIterator)->getColliderComponent()->collidesWith((*projectileIterator)->getColliderComponent());
 
-					if (collidesProjectile)
+					if (collidesProjectile && (*projectileIterator)->isLaunched())
 					{
 						(*projectileIterator)->reload();
 						removeProjectile = true;
@@ -248,7 +248,8 @@ namespace Game
 
 		for (auto p : _projectiles)
 		{
-			p->draw();
+			if (p->isLaunched())
+				p->draw();
 		}
 
 		_emitter.draw();
