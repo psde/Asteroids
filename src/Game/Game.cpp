@@ -23,7 +23,7 @@ namespace Game
 
 	void Game::reset()
 	{
-		_lives = 3;
+		_lives = 0;
 		_score = 0;
 		_level = 0;
 		_state = Game::LevelTransition;
@@ -166,9 +166,14 @@ namespace Game
 		{
 			_emitter.update(timeDelta);
 
-			for (Asteroid* asteroid : _asteroids)
+			for (auto asteroid : _asteroids)
 			{
 				asteroid->update(timeDelta);
+			}
+
+			for (auto p : _projectiles)
+			{
+				p->update(timeDelta);
 			}
 
 			std::vector<Asteroid*> destroyedAsteroids;
@@ -240,6 +245,11 @@ namespace Game
 
 		if (_state != Game::Dead && _state != Game::WaitingForRespawn && _state != Game::GameOver)
 			_ship.draw();
+
+		for (auto p : _projectiles)
+		{
+			p->draw();
+		}
 
 		_emitter.draw();
 

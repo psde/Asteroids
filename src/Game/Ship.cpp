@@ -132,12 +132,6 @@ namespace Game
 			_invicibility -= delta;
 		}
 
-		for (auto p : _projectiles)
-		{
-			if (p->isLaunched())
-				p->update(delta);
-		}
-
 		if (_rotating != 0)
 		{
 			_rotation += 4.5f * (float)_rotating * delta;
@@ -167,13 +161,7 @@ namespace Game
 				}
 			}
 		}
-
-		for (auto p : _projectiles)
-		{
-			if (p->isLaunched())
-				p->draw();
-		}
-
+		
 		_moving = false;
 	}
 
