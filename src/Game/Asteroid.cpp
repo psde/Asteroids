@@ -99,18 +99,18 @@ namespace Game
 	{
 		std::random_device rd;
 		std::mt19937 gen(rd());
-		std::uniform_real_distribution<> dis_x(0, 700);
-		std::uniform_real_distribution<> dis_y(0, 500);
+		std::uniform_real_distribution<> dis_x(0, 600);
+		std::uniform_real_distribution<> dis_y(0, 400);
 		std::uniform_real_distribution<> dir(-1, 1);
 		
 		glm::vec2 position = glm::vec2(dis_x(gen), dis_y(gen));
 		glm::vec2 direction = glm::vec2(dir(gen), dir(gen));
 
-		if (position.x > 400)
-			position.x += 100;
+		if (position.x > 350)
+			position.x += 150;
 
-		if (position.y > 300)
-			position.y += 100;
+		if (position.y > 250)
+			position.y += 150;
 
 		init(size, position, direction);
 	}
