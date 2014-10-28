@@ -16,13 +16,18 @@ namespace Game
 
 	bool ColliderComponent::collidesWithAABB(const ColliderComponent *other) const
 	{
-		glm::vec4 a = _mesh->getBoundingBox() + glm::vec4(_position, _position);
-		glm::vec4 b = other->_mesh->getBoundingBox() + glm::vec4(other->_position, other->_position);
+		for (int y = -1; y < 1; ++y)
+		{
+			for (int x = -1; x < 1; ++x)
+			{
+				glm::vec4 a = _mesh->getBoundingBox() + glm::vec4(_position + glm::vec2(800 * x, 600 * y), _position + glm::vec2(800 * x, 600 * y));
+				glm::vec4 b = other->_mesh->getBoundingBox() + glm::vec4(other->_position, other->_position);
 
-		if (a.z < b.x || a.x > b.z) return false;
-		if (a.w < b.y || a.y > b.w) return false;
+				if (a.z >= b.x && a.x <= b.z && a.w >= b.y && a.y <= b.w) return true;
+			}
+		}
 
-		return true;
+		return false;
 	}
 
 	bool ColliderComponent::isIntersecting(glm::vec2 a, glm::vec2 b, glm::vec2 c, glm::vec2 d) const
@@ -43,17 +48,30 @@ namespace Game
 	{
 		if (collidesWithAABB(other) == false)
 			return false;
+		
+		auto myVertices = _mesh->vertices();
+		auto otherVertices = other->_mesh->vertices();
 
-		int numVertsA = _mesh->vertices().size();
-		int numVertsB = other->_mesh->vertices().size();
+		for (auto a1 = std::begin(myVertices); a1 != std::end(myVertices); a1++) {
+			auto a2 = a1 + 1;
+			if (a2 == std::end(myVertices))
+				a2 = std::begin(myVertices);
 
-		for (int a1 = 0; a1 < numVertsA; a1++) {
-			int a2 = (a1 + 1) % numVertsA;
-			for (int b1 = 0; b1 < numVertsB; b1++) {
-				int b2 = (b1 + 1) % numVertsB;
-				if (isIntersecting(_mesh->vertices().at(a1) + _position, _mesh->vertices().at(a2) + _position,
-					other->_mesh->vertices().at(b1) + other->_position, other->_mesh->vertices().at(b2) + other->_position))
-					return true;
+			for (auto b1 = std::begin(otherVertices); b1 != std::end(otherVertices); b1++) {
+				auto b2 = b1 + 1;
+				if (b2 == std::end(otherVertices))
+					b2 = std::begin(otherVertices);
+
+				for (int y = -1; y < 1; ++y)
+				{
+					for (int x = -1; x < 1; ++x)
+					{
+						if (isIntersecting(*a1 + _position + glm::vec2(800 * x, 600 * y), *a2 + _position + glm::vec2(800 * x, 600 * y), *b1 + other->_position, *b2 + other->_position))
+						{
+							return true;
+						}
+					}
+				}
 			}
 		}
 		return false;

@@ -15,10 +15,6 @@ namespace Game
 		, _livesRenderer(22.5f)
 	{
 		reset();
-
-		//auto a = _asteroids.at(0);
-		//PhysicsComponent *component = const_cast<PhysicsComponent*>(a->getPhysicsComponent());
-		//component->reset(glm::vec2(-50, 400), glm::vec2(0));
 	}
 
 	void Game::reset()
@@ -38,6 +34,13 @@ namespace Game
 		for (int i = 0; i < 0 + _level; ++i)
 		{
 			_asteroids.push_back(new Asteroid(Asteroid::AsteroidSizes().size() - 1));
+		}
+
+		if (_asteroids.size() > 0)
+		{
+			//auto a = _asteroids.at(0);
+			//PhysicsComponent *component = const_cast<PhysicsComponent*>(a->getPhysicsComponent());
+			//component->reset(glm::vec2(790, 400), glm::vec2(0));
 		}
 	}
 
@@ -155,7 +158,7 @@ namespace Game
 		}
 
 		//PhysicsComponent *component = const_cast<PhysicsComponent*>(_ship.getPhysicsComponent());
-		//component->reset(_window->getCursorPosition(), glm::vec2(0));
+		//component->reset(_window->getCursorPosition() - glm::vec2(10), glm::vec2(0));
 
 		if (_state != Game::GameOver && _state != Game::WaitingForRespawn && _state != Game::WaitingForStart)
 		{
