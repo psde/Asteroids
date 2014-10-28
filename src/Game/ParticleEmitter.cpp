@@ -7,10 +7,9 @@
 namespace Game
 {
 	Particle::Particle(glm::vec2 position, glm::vec2 direction)
-	: _shader(Shader::Manager::getProgram("data/shader/ship.glsl"))
+	: _shader(Shader::Manager::getProgram("data/shader/particle.glsl"))
 	{
 		_physicsComponent.reset(position, direction * 10.f);
-
 
 		std::random_device rd;
 		std::mt19937 gen(rd());
@@ -42,6 +41,7 @@ namespace Game
 	{
 		_shader->use();
 
+		_shader->uniform("remainingTime") = _remainingTime;
 		for (int y = -1; y < 1; ++y)
 		{
 			for (int x = -1; x < 1; ++x)
@@ -97,9 +97,12 @@ namespace Game
 
 	void ParticleEmitter::draw()
 	{
+		glEnable(GL_BLEND); 
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		for(auto p : _particles)
 		{
 			p->draw();
 		}
+		glDisable(GL_BLEND);
 	}
 }
