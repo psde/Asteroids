@@ -35,7 +35,6 @@ list(APPEND SRC_GAME
 	Game/Game.h
 	Game/Game.cpp
 	Game/GameObject.h
-	Game/GameObject.cpp
 	Game/ParticleEmitter.h
 	Game/ParticleEmitter.cpp
 	Game/PhysicsComponent.h
