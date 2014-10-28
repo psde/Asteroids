@@ -15,7 +15,7 @@ namespace Geometry
 		GLuint _vao, _vbo, _ebo;
 
 		bool _initialized;
-		
+
 		std::vector<glm::vec2> _vertices;
 		std::vector<GLuint> _indices;
 
@@ -29,7 +29,7 @@ namespace Geometry
 		Mesh(std::vector<glm::vec2> vertices);
 		Mesh(std::vector<glm::vec2> vertices, std::vector<GLuint> indices);
 		~Mesh();
-		
+
 		void draw(GLenum mode);
 		void draw(GLenum mode, int count, int offset);
 

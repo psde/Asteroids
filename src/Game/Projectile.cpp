@@ -10,14 +10,14 @@
 namespace Game
 {
 	Projectile::Projectile()
-	: _shader(Shader::Program::getProgram("data/shader/ship.glsl"))
+		: _shader(Shader::Program::getProgram("data/shader/ship.glsl"))
 	{
 		_physicsComponent.reset(glm::vec2(300, 150), glm::vec2(0.f));
 
 		_launched = false;
 
 		float size = 1.25f;
-		
+
 		int steps = 6;
 		float r = 0.f;
 		std::vector<glm::vec2> vertices;
@@ -26,7 +26,7 @@ namespace Game
 			r += ((2.f * glm::pi<float>()) / (float)steps);
 			vertices.push_back(glm::vec2(sin(r), cos(r)) * size);
 		}
-		
+
 		_mesh.reset(new Geometry::Mesh(vertices));
 		_colliderComponent.setCollisionMesh(std::unique_ptr<Geometry::Mesh>(new Geometry::Mesh(*_mesh.get())));
 	}

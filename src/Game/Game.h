@@ -38,7 +38,7 @@ namespace Game
 
 		Ship _ship;
 		Ship _livesRenderer;
-		
+
 		int _lives;
 		int _level;
 		int _score;

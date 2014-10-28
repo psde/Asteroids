@@ -30,7 +30,7 @@ namespace Game
 
 		std::unique_ptr<Geometry::Mesh> _mesh;
 		std::shared_ptr<Shader::Program> _shader;
-		
+
 		void init(int size, glm::vec2 position, glm::vec2 direction);
 	public:
 		Asteroid(int size);

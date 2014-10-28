@@ -18,7 +18,7 @@ namespace Game
 	private:
 		ColliderComponent _colliderComponent;
 		PhysicsComponent _physicsComponent;
-		
+
 		std::unique_ptr<Geometry::Mesh> _mesh;
 		std::unique_ptr<Geometry::Mesh> _rotatedMesh;
 		std::shared_ptr<Shader::Program> _shader;

@@ -20,7 +20,7 @@ int main()
 {
 	std::shared_ptr<Window::Window> window(new Window::Window(800, 600));
 	Game::Game game(window);
-	
+
 	double last_frametime = 0;
 	const double frametime_max = 0.1;
 	double acc_frametime = 0.0;
@@ -34,7 +34,7 @@ int main()
 		int physicSteps = 0;
 
 		accumulator += timeDelta;
-		while(accumulator > dt)
+		while (accumulator > dt)
 		{
 			game.update(dt);
 			accumulator -= dt;

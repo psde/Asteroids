@@ -8,7 +8,7 @@
 
 namespace Game
 {
-	namespace 
+	namespace
 	{
 		std::unique_ptr<Geometry::Mesh> generateAsteroid(float size, float rotation)
 		{
@@ -100,7 +100,7 @@ namespace Game
 		std::uniform_real_distribution<> dis_x(0, 600);
 		std::uniform_real_distribution<> dis_y(0, 400);
 		std::uniform_real_distribution<> dir(-1, 1);
-		
+
 		glm::vec2 position = glm::vec2(dis_x(gen), dis_y(gen));
 		glm::vec2 direction = glm::vec2(dir(gen), dir(gen));
 
@@ -142,7 +142,7 @@ namespace Game
 		std::unique_ptr<Geometry::Mesh> collision(new Geometry::Mesh(*_mesh.get()));
 		_colliderComponent.setCollisionMesh(std::move(collision));
 	}
-	
+
 	void Asteroid::update(float delta)
 	{
 		_physicsComponent.update(delta);
@@ -155,10 +155,12 @@ namespace Game
 		_shader->use();
 
 		for (int y = -1; y < 1; ++y)
-		for (int x = -1; x < 1; ++x)
 		{
-			_shader->uniform("position") = _physicsComponent.getPosition() + glm::vec2(800 * x, 600 * y);
-			_mesh->draw(GL_LINE_LOOP);
+			for (int x = -1; x < 1; ++x)
+			{
+				_shader->uniform("position") = _physicsComponent.getPosition() + glm::vec2(800 * x, 600 * y);
+				_mesh->draw(GL_LINE_LOOP);
+			}
 		}
 	}
 

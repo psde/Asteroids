@@ -26,7 +26,6 @@ namespace Shader
 		return false;
 	}
 
-
 	std::string Shader::loadShaderfile(std::string filename)
 	{
 		std::ifstream stream(filename);

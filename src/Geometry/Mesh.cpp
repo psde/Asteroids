@@ -8,15 +8,15 @@
 namespace Geometry
 {
 	Mesh::Mesh(const Mesh &other)
-	: _initialized(false)
-	, _vertices(other._vertices)
-	, _indices(other._indices)
-	, _boundingBox(other._boundingBox)
+		: _initialized(false)
+		, _vertices(other._vertices)
+		, _indices(other._indices)
+		, _boundingBox(other._boundingBox)
 	{ }
 
 	Mesh::Mesh(std::vector<glm::vec2> vertices)
-	: _initialized(false)
-	, _vertices(vertices)
+		: _initialized(false)
+		, _vertices(vertices)
 	{
 		for (decltype(vertices)::size_type i = 0; i < vertices.size(); ++i)
 		{
@@ -26,9 +26,9 @@ namespace Geometry
 	}
 
 	Mesh::Mesh(std::vector<glm::vec2> vertices, std::vector<GLuint> indices)
-	: _initialized(false)
-	, _vertices(vertices)
-	, _indices(indices)
+		: _initialized(false)
+		, _vertices(vertices)
+		, _indices(indices)
 	{
 		createBoundingBox();
 	}

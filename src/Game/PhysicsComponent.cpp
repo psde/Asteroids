@@ -5,8 +5,8 @@
 namespace Game
 {
 	PhysicsComponent::PhysicsComponent()
-	: _acceleration(glm::vec2(0.f))
-	, _terminalVelocity(0.f)
+		: _acceleration(glm::vec2(0.f))
+		, _terminalVelocity(0.f)
 	{
 
 	}
@@ -66,7 +66,7 @@ namespace Game
 	}
 
 	void PhysicsComponent::update(float timeDelta)
-	{		
+	{
 		integrate(_state, timeDelta);
 
 		if (_terminalVelocity > 0.f && (std::abs(_state.velocity.x) > _terminalVelocity || std::abs(_state.velocity.y) > _terminalVelocity))

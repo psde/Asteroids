@@ -10,13 +10,13 @@
 namespace Game
 {
 	Ship::Ship(float size)
-	: _shader(Shader::Program::getProgram("data/shader/ship.glsl"))
-	, _size(size)
-	, _rotation(0.f)
-	, _moving(false)
-	, _rotating(0)
-	, _reloadTime(0.f)
-	, _invicibility(0.f)
+		: _shader(Shader::Program::getProgram("data/shader/ship.glsl"))
+		, _size(size)
+		, _rotation(0.f)
+		, _moving(false)
+		, _rotating(0)
+		, _reloadTime(0.f)
+		, _invicibility(0.f)
 	{
 		_physicsComponent.setTerminalVelocity(225.f);
 
@@ -33,7 +33,7 @@ namespace Game
 
 		std::vector<GLuint> elements = {
 			0, 1, 2, 3, 4, 5, 6, 3, 7, 6
-		}; 
+		};
 
 		_mesh.reset(new Geometry::Mesh(vertices, elements));
 		_rotatedMesh = std::unique_ptr<Geometry::Mesh>(new Geometry::Mesh(*_mesh.get()));
@@ -52,7 +52,7 @@ namespace Game
 		_invicibility = 0.f;
 		//_rotation = 0.f;
 
-		for(auto p : _projectiles)
+		for (auto p : _projectiles)
 		{
 			p->reload();
 		}
@@ -62,7 +62,7 @@ namespace Game
 	{
 		_invicibility = 2.5f;
 	}
-	
+
 	bool Ship::isInvincible()
 	{
 		return _invicibility > 0.f;
@@ -98,7 +98,7 @@ namespace Game
 		if (projectile)
 		{
 			glm::vec2 dir = glm::rotate(glm::vec2(0.f, -1), _rotation);
-			glm::vec2 position = _physicsComponent.getPosition() + glm::vec2(_size / 2.f) + (dir * (float)_size/2.f);
+			glm::vec2 position = _physicsComponent.getPosition() + glm::vec2(_size / 2.f) + (dir * (float)_size / 2.f);
 			projectile->shoot(position, dir);
 			_reloadTime = 0.20f;
 		}
@@ -148,8 +148,8 @@ namespace Game
 		_shader->use();
 
 		if (!(isInvincible() && std::fmod(glfwGetTime(), 0.1) >= 0.05))
-		for (int y = -1; y < 1; ++y)
-		{
+			for (int y = -1; y < 1; ++y)
+			{
 			for (int x = -1; x < 1; ++x)
 			{
 				_shader->uniform("position") = _physicsComponent.getPosition() + glm::vec2(800 * x, 600 * y);
@@ -159,8 +159,8 @@ namespace Game
 					_rotatedMesh->draw(GL_LINE_STRIP, 3, 7);
 				}
 			}
-		}
-		
+			}
+
 		_moving = false;
 	}
 

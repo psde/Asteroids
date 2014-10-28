@@ -5,7 +5,7 @@
 namespace Game
 {
 	Particle::Particle(glm::vec2 position, glm::vec2 direction)
-	: _shader(Shader::Program::getProgram("data/shader/particle.glsl"))
+		: _shader(Shader::Program::getProgram("data/shader/particle.glsl"))
 	{
 		_physicsComponent.reset(position, direction * 10.f);
 
@@ -15,7 +15,7 @@ namespace Game
 
 		_remainingTime = 2.f + offset(gen);
 		float size = 0.25f + offset(gen);
-		
+
 		int steps = 6;
 		float r = 0.f;
 		std::vector<glm::vec2> vertices;
@@ -24,7 +24,7 @@ namespace Game
 			r += ((2.f * glm::pi<float>()) / (float)steps);
 			vertices.push_back(glm::vec2(sin(r), cos(r)) * size);
 		}
-		
+
 		_mesh.reset(new Geometry::Mesh(vertices));
 	}
 
@@ -63,7 +63,7 @@ namespace Game
 		std::uniform_real_distribution<> offset(-radius, radius);
 		std::uniform_real_distribution<> foo(0.f, 1.f);
 
-		for(int i = 0; i < count; i++)
+		for (int i = 0; i < count; i++)
 		{
 			glm::vec2 pos = position + glm::vec2(offset(gen), offset(gen));
 
@@ -82,7 +82,7 @@ namespace Game
 			auto particle = *particleIterator;
 			particle->update(timeDelta);
 
-			if(particle->isDead())
+			if (particle->isDead())
 			{
 				particleIterator = _particles.erase(particleIterator);
 			}
@@ -95,9 +95,9 @@ namespace Game
 
 	void ParticleEmitter::draw()
 	{
-		glEnable(GL_BLEND); 
+		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-		for(auto p : _particles)
+		for (auto p : _particles)
 		{
 			p->draw();
 		}

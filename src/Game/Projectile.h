@@ -26,7 +26,7 @@ namespace Game
 
 	public:
 		Projectile();
-		
+
 		void update(float delta);
 
 		void draw();

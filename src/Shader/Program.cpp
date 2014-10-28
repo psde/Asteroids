@@ -8,7 +8,7 @@
 namespace Shader
 {
 	Program::Program(std::string universalShader)
-	: _linked(false)
+		: _linked(false)
 	{
 		_shaderProgram = glCreateProgram();
 		addUniversalShader(universalShader);
@@ -79,7 +79,7 @@ namespace Shader
 
 		return true;
 	}
-	
+
 	void Program::link()
 	{
 		if (_linked == false)

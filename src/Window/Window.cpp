@@ -12,7 +12,7 @@ namespace Window
 	}
 
 	Window::Window(int width, int height)
-	: _time(0.0f)
+		: _time(0.0f)
 	{
 		glfwSetErrorCallback(error_callback);
 
@@ -44,7 +44,7 @@ namespace Window
 		}
 
 		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-		
+
 		glm::ivec2 dimensions(getWindowDimensions());
 		glViewport(0, 0, dimensions.x, dimensions.y);
 	}

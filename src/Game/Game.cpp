@@ -11,8 +11,8 @@
 namespace Game
 {
 	Game::Game(std::shared_ptr<Window::Window> window)
-	: _window(window)
-	, _livesRenderer(22.5f)
+		: _window(window)
+		, _livesRenderer(22.5f)
 	{
 		reset();
 
@@ -37,7 +37,7 @@ namespace Game
 		_asteroids.clear();
 		for (int i = 0; i < 0 + _level; ++i)
 		{
-			_asteroids.push_back(new Asteroid(Asteroid::AsteroidSizes().size()-1));
+			_asteroids.push_back(new Asteroid(Asteroid::AsteroidSizes().size() - 1));
 		}
 	}
 
@@ -61,7 +61,7 @@ namespace Game
 			_asteroids.push_back(new Asteroid(size, pos, -dir));
 		}
 	}
-	
+
 	void Game::updateState(float timeDelta)
 	{
 		_stateTime -= timeDelta;
@@ -187,11 +187,14 @@ namespace Game
 					bool removeProjectile = !(*projectileIterator)->isLaunched();
 					bool collidesProjectile = (*asteroidIterator)->getColliderComponent()->collidesWith((*projectileIterator)->getColliderComponent());
 
-					if (collidesProjectile && (*projectileIterator)->isLaunched())
+					if (collidesProjectile)
 					{
-						(*projectileIterator)->reload();
 						removeProjectile = true;
-						removeAsteroid = true;
+
+						if ((*projectileIterator)->isLaunched())
+							removeAsteroid = true;
+
+						(*projectileIterator)->reload();
 					}
 
 					if (removeProjectile)
