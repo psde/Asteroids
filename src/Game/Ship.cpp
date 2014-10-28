@@ -49,6 +49,7 @@ namespace Game
 	void Ship::reset()
 	{
 		_physicsComponent.reset(glm::vec2(400.0f - _size / 2.f, 300 - _size / 2.f), glm::vec2(0.f));
+		_physicsComponent.setAcceleration(glm::vec2(0.f, 0.f));
 		_moving = false;
 		_invicibility = 0.f;
 		//_rotation = 0.f;
