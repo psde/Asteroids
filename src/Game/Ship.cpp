@@ -13,13 +13,13 @@ namespace Game
 {
 	Ship::Ship(float size)
 	: _shader(Shader::Manager::getProgram("data/shader/ship.glsl"))
+	, _size(size)
+	, _rotation(0.f)
+	, _moving(false)
+	, _rotating(0)
+	, _reloadTime(0.f)
+	, _invicibility(0.f)
 	{
-		_moving = false;
-		_size = size;
-		_rotation = 0.0f;
-		_rotating = 0;
-		_reloadTime = 0;
-
 		_physicsComponent.setTerminalVelocity(225.f);
 
 		std::vector<glm::vec2> vertices = {
