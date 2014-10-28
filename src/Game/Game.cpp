@@ -14,22 +14,27 @@ namespace Game
 	: _window(window)
 	, _livesRenderer(22.5f)
 	{
-		_lives = 5;
-		_score = 0;
-		_level = 1;
-		_state = Game::LevelTransition;
-
-		loadLevel();
+		reset();
 
 		//auto a = _asteroids.at(0);
 		//PhysicsComponent *component = const_cast<PhysicsComponent*>(a->getPhysicsComponent());
 		//component->reset(glm::vec2(-50, 400), glm::vec2(0));
 	}
 
+	void Game::reset()
+	{
+		_lives = 3;
+		_score = 0;
+		_level = 0;
+		_state = Game::LevelTransition;
+
+		loadLevel();
+	}
+
 	void Game::loadLevel()
 	{
 		_asteroids.clear();
-		for (int i = 0; i < _level; ++i)
+		for (int i = 0; i < 3 + _level; ++i)
 		{
 			_asteroids.push_back(new Asteroid(Asteroid::AsteroidSizes().size()-1));
 		}
@@ -55,105 +60,174 @@ namespace Game
 			_asteroids.push_back(new Asteroid(size, pos, dir));
 			_asteroids.push_back(new Asteroid(size, pos, -dir));
 		}
-
-		if(_asteroids.size() == 0)
+	}
+	
+	void Game::updateState(float timeDelta)
+	{
+		_stateTime -= timeDelta;
+		if (_state == Game::WaitingForStart || _state == Game::WaitingForRespawn)
 		{
-			_level++;
-			loadLevel();
+			if (_stateTime <= 0.f)
+			{
+				if (_state == Game::WaitingForRespawn)
+				{
+					_ship.reset();
+					_ship.makeInvincible();
+				}
+				_state = Game::Playing;
+			}
+		}
+		else if (_state == Game::LevelTransition)
+		{
+			if (_stateTime <= 0.f)
+			{
+				_state = Game::WaitingForStart;
+				_stateTime = 2.f;
+				_level++;
+				loadLevel();
+			}
+		}
+		else if (_state == Game::Playing)
+		{
+			if (_asteroids.size() == 0)
+			{
+				_state = Game::LevelTransition;
+				_stateTime = 2.f;
+			}
+		}
+		else if (_state == Game::Dead)
+		{
+			if (_lives <= 0)
+			{
+				_state = Game::GameOver;
+			}
+			else
+			{
+				_lives--;
+				_state = Game::WaitingForRespawn;
+				_stateTime = 2.f;
+			}
+		}
+		else if (_state == Game::GameOver)
+		{
+			if (_window->getGlfwKeyState(GLFW_KEY_ENTER) == GLFW_PRESS || _window->getGlfwKeyState(GLFW_KEY_KP_ENTER) == GLFW_PRESS)
+			{
+				reset();
+			}
 		}
 	}
 
 	void Game::update(float timeDelta)
 	{
-		for (Asteroid* asteroid : _asteroids)
+		// Cheats!
+		if (_window->getGlfwKeyState(GLFW_KEY_DELETE) == GLFW_PRESS)
 		{
-			asteroid->update(timeDelta);
-		}
-		
-		if (_window->getGlfwKeyState(GLFW_KEY_UP) == GLFW_PRESS)
-		{
-			_ship.accelerate();
+			_lives = 3;
+			_asteroids.clear();
 		}
 
-		int rotation = 0;
-		if (_window->getGlfwKeyState(GLFW_KEY_LEFT) == GLFW_PRESS)
+		updateState(timeDelta);
+		if (_state == Game::Playing || _state == Game::LevelTransition)
 		{
-			rotation = -1;
-		}
-		else if (_window->getGlfwKeyState(GLFW_KEY_RIGHT) == GLFW_PRESS)
-		{
-			rotation = 1;
-		}
+			if (_window->getGlfwKeyState(GLFW_KEY_UP) == GLFW_PRESS)
+			{
+				_ship.accelerate();
+			}
 
-		if (_window->getGlfwKeyState(GLFW_KEY_SPACE) == GLFW_PRESS)
-		{
-			auto projectile = _ship.shoot();
+			int rotation = 0;
+			if (_window->getGlfwKeyState(GLFW_KEY_LEFT) == GLFW_PRESS)
+			{
+				rotation = -1;
+			}
+			else if (_window->getGlfwKeyState(GLFW_KEY_RIGHT) == GLFW_PRESS)
+			{
+				rotation = 1;
+			}
 
-			if (projectile)
-				_projectiles.push_back(projectile);
+			if (_window->getGlfwKeyState(GLFW_KEY_SPACE) == GLFW_PRESS)
+			{
+				auto projectile = _ship.shoot();
+
+				if (projectile)
+					_projectiles.push_back(projectile);
+			}
+			_ship.rotate(rotation);
 		}
 
 		//PhysicsComponent *component = const_cast<PhysicsComponent*>(_ship.getPhysicsComponent());
 		//component->reset(_window->getCursorPosition(), glm::vec2(0));
 
-		_ship.rotate(rotation);
-		_ship.update(timeDelta);
+		if (_state != Game::GameOver && _state != Game::WaitingForRespawn && _state != Game::WaitingForStart)
+		{
+			_ship.update(timeDelta);
+		}
 
-		_emitter.update(timeDelta);
+		if (_state != Game::WaitingForStart)
+		{
+			_emitter.update(timeDelta);
 
+			for (Asteroid* asteroid : _asteroids)
+			{
+				asteroid->update(timeDelta);
+			}
 
-		std::vector<Asteroid*> destroyedAsteroids;
+			std::vector<Asteroid*> destroyedAsteroids;
 
-		auto asteroidIterator = std::begin(_asteroids);
-		while (asteroidIterator != std::end(_asteroids)) {
-			bool removeAsteroid = false;
+			auto asteroidIterator = std::begin(_asteroids);
+			while (asteroidIterator != std::end(_asteroids)) {
+				bool removeAsteroid = false;
 
-			auto projectileIterator = std::begin(_projectiles);
-			while (projectileIterator != std::end(_projectiles)) {
-				bool removeProjectile = !(*projectileIterator)->isLaunched();
-				bool collidesProjectile = (*asteroidIterator)->getColliderComponent()->collidesWith((*projectileIterator)->getColliderComponent());
+				auto projectileIterator = std::begin(_projectiles);
+				while (projectileIterator != std::end(_projectiles)) {
+					bool removeProjectile = !(*projectileIterator)->isLaunched();
+					bool collidesProjectile = (*asteroidIterator)->getColliderComponent()->collidesWith((*projectileIterator)->getColliderComponent());
 
-				if (collidesProjectile)
+					if (collidesProjectile)
+					{
+						(*projectileIterator)->reload();
+						removeProjectile = true;
+						removeAsteroid = true;
+					}
+
+					if (removeProjectile)
+					{
+						projectileIterator = _projectiles.erase(projectileIterator);
+					}
+					else
+					{
+						++projectileIterator;
+					}
+				}
+
+				bool shipCollides = false;
+				if (_state == Game::Playing)
+					shipCollides = (*asteroidIterator)->getColliderComponent()->collidesWith(_ship.getColliderComponent());
+
+				if (shipCollides)
 				{
-					(*projectileIterator)->reload();
-					removeProjectile = true;
+					if (_ship.isInvincible() == false)
+					{
+						_state = Game::Dead;
+					}
 					removeAsteroid = true;
 				}
 
-				if (removeProjectile)
+				if (removeAsteroid)
 				{
-					projectileIterator = _projectiles.erase(projectileIterator);
+					destroyedAsteroids.push_back(*asteroidIterator);
+					asteroidIterator = _asteroids.erase(asteroidIterator);
 				}
 				else
 				{
-
-					++projectileIterator;
+					++asteroidIterator;
 				}
 			}
 
-			bool collides = (*asteroidIterator)->getColliderComponent()->collidesWith(_ship.getColliderComponent());
-			if (collides)
+			for (Asteroid* asteroid : destroyedAsteroids)
 			{
-				PhysicsComponent *component = const_cast<PhysicsComponent*>(_ship.getPhysicsComponent());
-				component->reset(glm::vec2(400, 300), glm::vec2(0));
-				_lives--;
-				removeAsteroid = true;
+				destroyAsteroid(asteroid);
 			}
 
-			if (removeAsteroid)
-			{
-				destroyedAsteroids.push_back(*asteroidIterator);
-				asteroidIterator = _asteroids.erase(asteroidIterator);
-			}
-			else
-			{
-				++asteroidIterator;
-			}
-		}
-
-		for (Asteroid* asteroid : destroyedAsteroids)
-		{
-			destroyAsteroid(asteroid);
 		}
 	}
 
@@ -164,24 +238,44 @@ namespace Game
 			asteroid->draw();
 		}
 
-		_ship.draw();
+		if (_state != Game::Dead && _state != Game::WaitingForRespawn && _state != Game::GameOver)
+			_ship.draw();
+
 		_emitter.draw();
 
-		std::stringstream scoress;
-		scoress << "SCORE " << std::setw(10) << std::setfill('0') << _score;
-		std::string score = scoress.str();
-		_fontRenderer.draw(glm::vec2(10, 10), score, 17.f);
 
-		std::stringstream levelss;
-		levelss << "LEVEL " << std::setw(2) << std::setfill('0') << _level;
-		std::string level = levelss.str();
-		_fontRenderer.draw(glm::vec2(660, 10), level, 17.f);
-
-		for (int i = 0; i < _lives; i++)
+		if (_state == Game::GameOver)
 		{
-			PhysicsComponent *component = const_cast<PhysicsComponent*>(_livesRenderer.getPhysicsComponent());
-			component->reset(glm::vec2(10.f + i * 20.f, 40.f), glm::vec2(0));
-			_livesRenderer.draw();
+			_fontRenderer.draw(glm::vec2(220, 260), "GAME OVER", 40.f);
+			_fontRenderer.draw(glm::vec2(210, 330), "PRESS RETURN TO PLAY AGAIN", 15.f);
+		}
+		else if (_state == Game::WaitingForStart)
+		{
+			_fontRenderer.draw(glm::vec2(310, 240), "GET READY", 20.f);
+		}		
+		else if (_state == Game::LevelTransition)
+		{
+			_fontRenderer.draw(glm::vec2(280, 240), "CONGRATULATIONS", 20.f);
+		}
+		else
+		{
+			_fontRenderer.draw(glm::vec2(10, 35), "LIVES", 17.f);
+			for (int i = 0; i < _lives; i++)
+			{
+				PhysicsComponent *component = const_cast<PhysicsComponent*>(_livesRenderer.getPhysicsComponent());
+				component->reset(glm::vec2(110.f + i * 15.f, 32.f), glm::vec2(0));
+				_livesRenderer.draw();
+			}
+
+			std::stringstream scoress;
+			scoress << "SCORE " << std::setw(10) << std::setfill('0') << _score;
+			std::string score = scoress.str();
+			_fontRenderer.draw(glm::vec2(10, 10), score, 17.f);
+
+			std::stringstream levelss;
+			levelss << "LEVEL " << std::setw(2) << std::setfill('0') << _level;
+			std::string level = levelss.str();
+			_fontRenderer.draw(glm::vec2(660, 10), level, 17.f);
 		}
 	}
 }

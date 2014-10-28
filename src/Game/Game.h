@@ -22,6 +22,7 @@ namespace Game
 			GameOver = 0,
 			WaitingForStart,
 			Playing,
+			Dead,
 			WaitingForRespawn,
 			LevelTransition
 		};
@@ -44,9 +45,12 @@ namespace Game
 
 
 		GameState _state;
+		float _stateTime;
 
 		void destroyAsteroid(Asteroid *asteroid);
 		void loadLevel();
+		void updateState(float timeDelta);
+		void reset();
 
 	public:
 		Game(std::shared_ptr<Window::Window> window);

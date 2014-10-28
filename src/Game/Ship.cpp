@@ -49,11 +49,24 @@ namespace Game
 	void Ship::reset()
 	{
 		_physicsComponent.reset(glm::vec2(400.0f - _size / 2.f, 300 - _size / 2.f), glm::vec2(0.f));
+		_moving = false;
+		_invicibility = 0.f;
+		//_rotation = 0.f;
 
 		for(auto p : _projectiles)
 		{
 			p->reload();
 		}
+	}
+
+	void Ship::makeInvincible()
+	{
+		_invicibility = 2.f;
+	}
+	
+	bool Ship::isInvincible()
+	{
+		return _invicibility > 0.f;
 	}
 
 	void Ship::accelerate()
@@ -114,6 +127,11 @@ namespace Game
 			_reloadTime -= delta;
 		}
 
+		if (_invicibility > 0.f)
+		{
+			_invicibility -= delta;
+		}
+
 		for (auto p : _projectiles)
 		{
 			if (p->isLaunched())
@@ -136,6 +154,7 @@ namespace Game
 	{
 		_shader->use();
 
+		if (!(isInvincible() && std::fmod(glfwGetTime(), 0.1) >= 0.05))
 		for (int y = -1; y < 1; ++y)
 		{
 			for (int x = -1; x < 1; ++x)

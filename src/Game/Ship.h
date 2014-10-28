@@ -41,6 +41,7 @@ namespace Game
 
 		void reset();
 		void makeInvincible();
+		bool isInvincible();
 
 		void update(float delta);
 		void draw();
