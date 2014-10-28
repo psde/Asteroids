@@ -55,12 +55,11 @@ namespace Window
 		glfwTerminate();
 	}
 
-	glm::ivec2 Window::getWindowDimensions()
+	glm::vec2 Window::getWindowDimensions()
 	{
-		glm::ivec2 dimensions;
-		glfwGetWindowSize(_glfwWindow, &dimensions.x, &dimensions.y);
-		//float ratio; = width / (float)height;
-		return dimensions;
+		int x, y;
+		glfwGetWindowSize(_glfwWindow, &x, &y);
+		return glm::vec2(x, y);
 	}
 
 	glm::vec2 Window::getCursorPosition()

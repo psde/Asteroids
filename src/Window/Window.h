@@ -21,7 +21,7 @@ namespace Window
 		Window(int width, int height);
 		~Window();
 
-		glm::ivec2 getWindowDimensions();
+		glm::vec2 getWindowDimensions();
 		glm::vec2 getCursorPosition();
 		bool shouldClose();
 
