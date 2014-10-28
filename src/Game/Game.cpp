@@ -13,6 +13,7 @@ namespace Game
 	Game::Game(std::shared_ptr<Window::Window> window)
 		: _window(window)
 		, _livesRenderer(22.5f)
+		, _stateTime(0.f)
 	{
 		reset();
 	}
