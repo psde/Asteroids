@@ -5,8 +5,8 @@
 namespace Game
 {
 	PhysicsComponent::PhysicsComponent()
-	:  _terminalVelocity(0.f)
-	, _acceleration(glm::vec2(0.f))
+	: _acceleration(glm::vec2(0.f))
+	, _terminalVelocity(0.f)
 	{
 
 	}

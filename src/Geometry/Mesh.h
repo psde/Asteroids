@@ -15,7 +15,7 @@ namespace Geometry
 		GLuint _vao, _vbo, _ebo;
 
 		bool _initialized;
-
+		
 		std::vector<glm::vec2> _vertices;
 		std::vector<GLuint> _indices;
 

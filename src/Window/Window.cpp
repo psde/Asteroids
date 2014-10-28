@@ -71,7 +71,7 @@ namespace Window
 
 	bool Window::shouldClose()
 	{
-		return glfwWindowShouldClose(_glfwWindow);
+		return (glfwWindowShouldClose(_glfwWindow) != 0);
 	}
 
 	void Window::finishFrame()

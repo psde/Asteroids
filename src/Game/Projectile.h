@@ -15,7 +15,6 @@ namespace Game
 	class Projectile : public GameObject
 	{
 	private:
-		int _size;
 		bool _launched;
 		float _time;
 
