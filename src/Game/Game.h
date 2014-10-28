@@ -31,9 +31,11 @@ namespace Game
 		Ship _livesRenderer;
 		
 		int _lives;
+		int _level;
 		int _score;
 
 		void destroyAsteroid(Asteroid *asteroid);
+		void loadLevel();
 
 	public:
 		Game(std::shared_ptr<Window::Window> window);

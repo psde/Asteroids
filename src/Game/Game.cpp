@@ -16,12 +16,23 @@ namespace Game
 	{
 		_lives = 5;
 		_score = 0;
-		for (int i = 0; i < 10; ++i)
+		_level = 1;
+
+		loadLevel();
+
+		//auto a = _asteroids.at(0);
+		//PhysicsComponent *component = const_cast<PhysicsComponent*>(a->getPhysicsComponent());
+		//component->reset(glm::vec2(-50, 400), glm::vec2(0));
+	}
+
+	void Game::loadLevel()
+	{
+		for (int i = 0; i < _level; ++i)
 		{
 			_asteroids.push_back(new Asteroid(Asteroid::AsteroidSizes().size()-1));
 		}
+		_ship.reset();
 	}
-
 
 	void Game::destroyAsteroid(Asteroid *asteroid)
 	{
@@ -43,6 +54,11 @@ namespace Game
 			_asteroids.push_back(new Asteroid(size, pos, -dir));
 		}
 
+		if(_asteroids.size() == 0)
+		{
+			_level++;
+			loadLevel();
+		}
 	}
 
 	void Game::update(float timeDelta)
@@ -149,10 +165,15 @@ namespace Game
 		_ship.draw();
 		_emitter.draw();
 
-		std::stringstream ss;
-		ss << std::setw(10) << std::setfill('0') << _score;
-		std::string score = ss.str();
+		std::stringstream scoress;
+		scoress << std::setw(10) << std::setfill('0') << _score;
+		std::string score = scoress.str();
 		_fontRenderer.draw(glm::vec2(10, 10), score, 20.f);
+
+		std::stringstream levelss;
+		levelss << std::setw(2) << std::setfill('0') << _level;
+		std::string level = levelss.str();
+		_fontRenderer.draw(glm::vec2(750, 10), level, 20.f);
 
 		for (int i = 0; i < _lives; i++)
 		{

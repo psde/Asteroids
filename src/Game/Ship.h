@@ -35,6 +35,7 @@ namespace Game
 	public:
 		Ship(float size = 27.5f);
 
+		void reset();
 		const std::shared_ptr<Projectile> shoot();
 		void accelerate();
 		void rotate(int rotation);

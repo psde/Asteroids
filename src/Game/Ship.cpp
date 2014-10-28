@@ -20,7 +20,6 @@ namespace Game
 		_rotating = 0;
 		_reloadTime = 0;
 
-		_physicsComponent.reset(glm::vec2(400.0f - _size / 2.f, 300 - _size / 2.f), glm::vec2(0.f));
 		_physicsComponent.setTerminalVelocity(225.f);
 
 		std::vector<glm::vec2> vertices = {
@@ -43,6 +42,18 @@ namespace Game
 
 		for (int i = 0; i < 5; i++)
 			_projectiles.push_back(std::make_shared<Projectile>());
+
+		reset();
+	}
+
+	void Ship::reset()
+	{
+		_physicsComponent.reset(glm::vec2(400.0f - _size / 2.f, 300 - _size / 2.f), glm::vec2(0.f));
+
+		for(auto p : _projectiles)
+		{
+			p->reload();
+		}
 	}
 
 	void Ship::accelerate()
