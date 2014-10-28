@@ -9,6 +9,7 @@
 #include "Asteroid.h"
 #include "Ship.h"
 #include "Projectile.h"
+#include "ParticleEmitter.h"
 
 struct GLFWwindow;
 
@@ -21,6 +22,8 @@ namespace Game
 
 		std::vector<Asteroid*> _asteroids;
 		std::vector<std::shared_ptr<Projectile>> _projectiles;
+
+		ParticleEmitter _emitter;
 
 		FontRenderer _fontRenderer;
 

@@ -26,11 +26,15 @@ namespace Game
 	void Game::destroyAsteroid(Asteroid *asteroid)
 	{
 		int size = asteroid->getAsteroidSize();
+		float asteroidSize = Asteroid::AsteroidSizes().at(size);
+		glm::vec2 pos = asteroid->getPhysicsComponent()->getPosition();
+
 		_score += (Asteroid::AsteroidSizes().size() - size) * 100;
+
+		_emitter.emitParticles(pos + (asteroidSize / 2.f), asteroidSize / 2.f, asteroidSize);
 
 		if (size != 0)
 		{
-			glm::vec2 pos = asteroid->getPhysicsComponent()->getPosition();
 			glm::vec2 dir = glm::normalize(asteroid->getPhysicsComponent()->getVelocity());
 
 			dir = glm::rotate(dir, 0.5f * glm::pi<float>());
@@ -76,6 +80,8 @@ namespace Game
 
 		_ship.rotate(rotation);
 		_ship.update(timeDelta);
+
+		_emitter.update(timeDelta);
 
 
 		std::vector<Asteroid*> destroyedAsteroids;
@@ -141,6 +147,7 @@ namespace Game
 		}
 
 		_ship.draw();
+		_emitter.draw();
 
 		std::stringstream ss;
 		ss << std::setw(10) << std::setfill('0') << _score;
