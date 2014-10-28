@@ -17,6 +17,7 @@ namespace Game
 		_lives = 5;
 		_score = 0;
 		_level = 1;
+		_state = Game::LevelTransition;
 
 		loadLevel();
 
@@ -27,6 +28,7 @@ namespace Game
 
 	void Game::loadLevel()
 	{
+		_asteroids.clear();
 		for (int i = 0; i < _level; ++i)
 		{
 			_asteroids.push_back(new Asteroid(Asteroid::AsteroidSizes().size()-1));

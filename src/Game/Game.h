@@ -18,6 +18,14 @@ namespace Game
 	class Game
 	{
 	private:
+		enum GameState {
+			GameOver = 0,
+			WaitingForStart,
+			Playing,
+			WaitingForRespawn,
+			LevelTransition
+		};
+
 		std::shared_ptr<Window::Window> _window;
 
 		std::vector<Asteroid*> _asteroids;
@@ -33,6 +41,9 @@ namespace Game
 		int _lives;
 		int _level;
 		int _score;
+
+
+		GameState _state;
 
 		void destroyAsteroid(Asteroid *asteroid);
 		void loadLevel();
