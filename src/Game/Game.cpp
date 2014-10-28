@@ -34,7 +34,7 @@ namespace Game
 	void Game::loadLevel()
 	{
 		_asteroids.clear();
-		for (int i = 0; i < 3 + _level; ++i)
+		for (int i = 0; i < 2 + _level; ++i)
 		{
 			_asteroids.push_back(new Asteroid(Asteroid::AsteroidSizes().size()-1));
 		}
@@ -259,16 +259,17 @@ namespace Game
 			_fontRenderer.draw(glm::vec2(220, 260), "GAME OVER", 40.f);
 			_fontRenderer.draw(glm::vec2(210, 330), "PRESS RETURN TO PLAY AGAIN", 15.f);
 		}
-		else if (_state == Game::WaitingForStart)
-		{
-			_fontRenderer.draw(glm::vec2(310, 240), "GET READY", 20.f);
-		}		
-		else if (_state == Game::LevelTransition)
-		{
-			_fontRenderer.draw(glm::vec2(280, 240), "CONGRATULATIONS", 20.f);
-		}
 		else
 		{
+			if (_state == Game::WaitingForStart)
+			{
+				_fontRenderer.draw(glm::vec2(310, 240), "GET READY", 20.f);
+			}
+			else if (_state == Game::LevelTransition)
+			{
+				_fontRenderer.draw(glm::vec2(280, 240), "CONGRATULATIONS", 20.f);
+			}
+
 			_fontRenderer.draw(glm::vec2(10, 35), "LIVES", 17.f);
 			for (int i = 0; i < _lives; i++)
 			{
