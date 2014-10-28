@@ -19,7 +19,7 @@ namespace Game
 
 	void Game::reset()
 	{
-		_lives = 0;
+		_lives = 3;
 		_score = 0;
 		_level = 0;
 		_state = Game::LevelTransition;
@@ -219,6 +219,7 @@ namespace Game
 					if (_ship.isInvincible() == false)
 					{
 						_state = Game::Dead;
+						_emitter.emitParticles(_ship.getPhysicsComponent()->getPosition() + 12.5f, 5, 5);
 					}
 					removeAsteroid = true;
 				}
@@ -286,7 +287,7 @@ namespace Game
 			}
 
 			std::stringstream scoress;
-			scoress << "SCORE " << std::setw(10) << std::setfill('0') << _score;
+			scoress << "SCORE " << std::setw(5) << std::setfill('0') << _score;
 			std::string score = scoress.str();
 			_fontRenderer.draw(glm::vec2(10, 10), score, 17.f);
 

@@ -11,10 +11,11 @@ namespace Game
 
 		std::random_device rd;
 		std::mt19937 gen(rd());
-		std::uniform_real_distribution<> offset(0.f, 0.5f);
+		std::uniform_real_distribution<> size(0.25f, 0.75f);
+		std::uniform_real_distribution<> time(2.2f, 3.75f);
 
-		_remainingTime = 2.f + offset(gen);
-		float size = 0.25f + offset(gen);
+		_remainingTime = time(gen);
+		float particleSize = size(gen);
 
 		int steps = 6;
 		float r = 0.f;
@@ -22,7 +23,7 @@ namespace Game
 		for (int i = 0; i <= steps; i++)
 		{
 			r += ((2.f * glm::pi<float>()) / (float)steps);
-			vertices.push_back(glm::vec2(sin(r), cos(r)) * size);
+			vertices.push_back(glm::vec2(sin(r), cos(r)) * particleSize);
 		}
 
 		_mesh.reset(new Geometry::Mesh(vertices));
