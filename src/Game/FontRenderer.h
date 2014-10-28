@@ -19,8 +19,6 @@ namespace Game
 		std::map<char, std::pair<int, int>> _characterLookup;
 
 		std::shared_ptr<Shader::Program> _shader;
-
-		void addCharacter(char c, int size);
 	public:
 		FontRenderer();
 

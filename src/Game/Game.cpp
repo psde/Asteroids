@@ -166,14 +166,14 @@ namespace Game
 		_emitter.draw();
 
 		std::stringstream scoress;
-		scoress << std::setw(10) << std::setfill('0') << _score;
+		scoress << "SCORE " << std::setw(10) << std::setfill('0') << _score;
 		std::string score = scoress.str();
-		_fontRenderer.draw(glm::vec2(10, 10), score, 20.f);
+		_fontRenderer.draw(glm::vec2(10, 10), score, 17.f);
 
 		std::stringstream levelss;
-		levelss << std::setw(2) << std::setfill('0') << _level;
+		levelss << "LEVEL " << std::setw(2) << std::setfill('0') << _level;
 		std::string level = levelss.str();
-		_fontRenderer.draw(glm::vec2(750, 10), level, 20.f);
+		_fontRenderer.draw(glm::vec2(660, 10), level, 17.f);
 
 		for (int i = 0; i < _lives; i++)
 		{
