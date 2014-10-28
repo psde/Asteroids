@@ -8,8 +8,8 @@
 namespace Shader
 {
 	Program::Program(std::string universalShader)
+	: _linked(false)
 	{
-		_linked = false;
 		_shaderProgram = glCreateProgram();
 		addUniversalShader(universalShader);
 	}
@@ -150,5 +150,23 @@ namespace Shader
 		}
 
 		return UniformAssigner(location);
+	}
+
+	std::shared_ptr<Program> Program::getProgram(std::string universalFile)
+	{
+		static std::map<std::string, std::shared_ptr<Program>> programs;
+
+		auto it = programs.find(universalFile);
+		std::shared_ptr<Program> program;
+		if (it == std::end(programs))
+		{
+			program.reset(new Program(universalFile));
+			programs[universalFile] = program;
+		}
+		else
+		{
+			program = it->second;
+		}
+		return program;
 	}
 }

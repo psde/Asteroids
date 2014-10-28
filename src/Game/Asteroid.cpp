@@ -4,8 +4,6 @@
 #include <memory>
 #include <glm/gtx/rotate_vector.hpp>
 
-#include "Shader/Manager.h"
-
 #include "Asteroid.h"
 
 namespace Game
@@ -130,7 +128,7 @@ namespace Game
 		std::uniform_real_distribution<> sizeOffset(0.f, 4.f);
 
 		_size = size;
-		_shader = Shader::Manager::getProgram("data/shader/asteroid.glsl");
+		_shader = Shader::Program::getProgram("data/shader/asteroid.glsl");
 		_rotation = rotation(gen);
 
 		glm::vec2 velocity = direction * glm::vec2(vel2(gen) + 30.f);

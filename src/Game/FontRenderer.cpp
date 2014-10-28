@@ -1,7 +1,5 @@
 #include <iostream>
 
-#include "Shader/Manager.h"
-
 #include "FontRenderer.h"
 
 namespace Game
@@ -18,7 +16,7 @@ namespace Game
 	}
 
 	FontRenderer::FontRenderer()
-	: _shader(Shader::Manager::getProgram("data/shader/font.glsl"))
+	: _shader(Shader::Program::getProgram("data/shader/font.glsl"))
 	{
 
 		std::vector<glm::vec2> vertices;

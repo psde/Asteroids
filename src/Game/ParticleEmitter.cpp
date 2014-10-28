@@ -2,12 +2,10 @@
 
 #include "ParticleEmitter.h"
 
-#include "Shader/Manager.h"
-
 namespace Game
 {
 	Particle::Particle(glm::vec2 position, glm::vec2 direction)
-	: _shader(Shader::Manager::getProgram("data/shader/particle.glsl"))
+	: _shader(Shader::Program::getProgram("data/shader/particle.glsl"))
 	{
 		_physicsComponent.reset(position, direction * 10.f);
 

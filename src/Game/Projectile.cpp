@@ -3,8 +3,6 @@
 
 #include <glm/gtx/rotate_vector.hpp>
 
-#include "Shader/Manager.h"
-
 #include "Projectile.h"
 
 #include <GLFW/glfw3.h>
@@ -12,7 +10,7 @@
 namespace Game
 {
 	Projectile::Projectile()
-	: _shader(Shader::Manager::getProgram("data/shader/ship.glsl"))
+	: _shader(Shader::Program::getProgram("data/shader/ship.glsl"))
 	{
 		_physicsComponent.reset(glm::vec2(300, 150), glm::vec2(0.f));
 

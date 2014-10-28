@@ -49,5 +49,7 @@ namespace Shader
 		UniformAssigner uniform(const std::string& uniformName);
 		
 		UniformAssigner operator[](const std::string& uniformName);
+
+		static std::shared_ptr<Program> getProgram(std::string universalFile);
 	};
 }
