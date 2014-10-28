@@ -82,7 +82,7 @@ namespace Game
 			if (_stateTime <= 0.f)
 			{
 				_state = Game::WaitingForStart;
-				_stateTime = 2.f;
+				_stateTime = 1.f;
 				_level++;
 				loadLevel();
 			}
@@ -267,7 +267,7 @@ namespace Game
 			}
 			else if (_state == Game::LevelTransition)
 			{
-				_fontRenderer.draw(glm::vec2(280, 240), "CONGRATULATIONS", 20.f);
+				_fontRenderer.draw(glm::vec2(260, 240), "CONGRATULATIONS", 20.f);
 			}
 
 			_fontRenderer.draw(glm::vec2(10, 35), "LIVES", 17.f);

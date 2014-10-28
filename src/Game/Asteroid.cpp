@@ -106,11 +106,11 @@ namespace Game
 		glm::vec2 position = glm::vec2(dis_x(gen), dis_y(gen));
 		glm::vec2 direction = glm::vec2(dir(gen), dir(gen));
 
-		if (position.x > 350)
-			position.x += 150;
+		if (position.x > 300)
+			position.x += 200;
 
-		if (position.y > 250)
-			position.y += 150;
+		if (position.y > 200)
+			position.y += 200;
 
 		init(size, position, direction);
 	}
