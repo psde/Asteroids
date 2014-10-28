@@ -84,7 +84,7 @@ namespace Game
 			{
 				v -= glm::vec2(0.5f);
 				v += glm::vec2(offset(gen), offset(gen));
-				v = glm::rotate(v, rotation);
+				//v = glm::rotate(v, rotation);
 				v += glm::vec2(0.5f);
 				v *= size;
 			}
@@ -137,7 +137,9 @@ namespace Game
 
 		_physicsComponent.reset(position, velocity);
 
-		_mesh = generateAsteroid(AsteroidSizes().at(_size) + sizeOffset(gen), _rotation);
+		_meshSize = AsteroidSizes().at(_size) + sizeOffset(gen);
+		_mesh = generateAsteroid(_meshSize, _rotation);
+		_rotatedMesh = std::unique_ptr<Geometry::Mesh>(new Geometry::Mesh(*_mesh.get()));
 
 		std::unique_ptr<Geometry::Mesh> collision(new Geometry::Mesh(*_mesh.get()));
 		_colliderComponent.setCollisionMesh(std::move(collision));
@@ -148,6 +150,10 @@ namespace Game
 		_physicsComponent.update(delta);
 
 		_colliderComponent.setPosition(_physicsComponent.getPosition());
+
+		//_rotation += 1.5f * delta;
+		_rotatedMesh = std::move(_mesh->rotate(_rotation, glm::vec2(_meshSize / 2.0f)));
+		_colliderComponent.setCollisionMesh(std::unique_ptr<Geometry::Mesh>(new Geometry::Mesh(*_rotatedMesh.get())));
 	}
 
 	void Asteroid::draw()
@@ -159,7 +165,7 @@ namespace Game
 			for (int x = -1; x < 1; ++x)
 			{
 				_shader->uniform("position") = _physicsComponent.getPosition() + glm::vec2(800 * x, 600 * y);
-				_mesh->draw(GL_LINE_LOOP);
+				_rotatedMesh->draw(GL_LINE_LOOP);
 			}
 		}
 	}

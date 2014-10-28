@@ -31,7 +31,7 @@ namespace Game
 	{
 		_ship.reset();
 		_asteroids.clear();
-		for (int i = 0; i < 0 + _level; ++i)
+		for (int i = 0; i < 2 + _level; ++i)
 		{
 			_asteroids.push_back(new Asteroid(Asteroid::AsteroidSizes().size() - 1));
 		}
