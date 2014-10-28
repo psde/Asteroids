@@ -10,7 +10,6 @@
 #include "UniformAssigner.h"
 #include "Shader.h"
 
-
 namespace Shader
 {
 	class Globals;

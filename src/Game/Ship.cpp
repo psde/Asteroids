@@ -3,8 +3,6 @@
 
 #include <glm/gtx/rotate_vector.hpp>
 
-#include "Shader/Manager.h"
-
 #include "Ship.h"
 
 #include <GLFW/glfw3.h>
@@ -12,7 +10,7 @@
 namespace Game
 {
 	Ship::Ship(float size)
-	: _shader(Shader::Manager::getProgram("data/shader/ship.glsl"))
+	: _shader(Shader::Program::getProgram("data/shader/ship.glsl"))
 	, _size(size)
 	, _rotation(0.f)
 	, _moving(false)
@@ -62,7 +60,7 @@ namespace Game
 
 	void Ship::makeInvincible()
 	{
-		_invicibility = 2.f;
+		_invicibility = 2.5f;
 	}
 	
 	bool Ship::isInvincible()
@@ -102,7 +100,7 @@ namespace Game
 			glm::vec2 dir = glm::rotate(glm::vec2(0.f, -1), _rotation);
 			glm::vec2 position = _physicsComponent.getPosition() + glm::vec2(_size / 2.f) + (dir * (float)_size/2.f);
 			projectile->shoot(position, dir);
-			_reloadTime = 0.25f;
+			_reloadTime = 0.20f;
 		}
 
 		return projectile;
