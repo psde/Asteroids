@@ -30,7 +30,6 @@ namespace Game
 		float _rotation;
 
 		std::unique_ptr<Geometry::Mesh> _mesh;
-		std::unique_ptr<Geometry::Mesh> _rotatedMesh;
 		std::shared_ptr<Shader::Program> _shader;
 
 		void init(int size, glm::vec2 position, glm::vec2 direction);
