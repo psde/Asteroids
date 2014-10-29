@@ -1,62 +1,62 @@
-#include "PhysicsComponent.h"
+#include "PhysicsRungeKutta.h"
 
 #include <iostream>
 
-namespace Game
+namespace Components
 {
-	PhysicsComponent::PhysicsComponent()
+	PhysicsRungeKutta::PhysicsRungeKutta()
 		: _acceleration(glm::vec2(0.f))
 		, _terminalVelocity(0.f)
 	{
 
 	}
 
-	PhysicsComponent::~PhysicsComponent()
+	PhysicsRungeKutta::~PhysicsRungeKutta()
 	{
 
 	}
 
-	void PhysicsComponent::reset(glm::vec2 position, glm::vec2 velocity)
+	void PhysicsRungeKutta::reset(glm::vec2 position, glm::vec2 velocity)
 	{
 		_state.position = position;
 		_state.velocity = velocity;
 	}
 
-	void PhysicsComponent::setAcceleration(glm::vec2 acceleration)
+	void PhysicsRungeKutta::setAcceleration(glm::vec2 acceleration)
 	{
 		_acceleration = acceleration;
 	}
 
-	glm::vec2 PhysicsComponent::acceleration(const PhysicsComponent::State &state)
+	glm::vec2 PhysicsRungeKutta::acceleration(const State &state)
 	{
 		return _acceleration;
 	}
 
-	PhysicsComponent::State PhysicsComponent::evaluate(const State &initial)
+	PhysicsRungeKutta::State PhysicsRungeKutta::evaluate(const State &initial)
 	{
-		PhysicsComponent::State output;
+		State output;
 		output.position = initial.velocity;
 		output.velocity = acceleration(initial);
 		return output;
 	}
 
-	PhysicsComponent::State PhysicsComponent::evaluate(const State &initial, float dt, const State &d)
+	PhysicsRungeKutta::State PhysicsRungeKutta::evaluate(const State &initial, float dt, const State &d)
 	{
-		PhysicsComponent::State state;
+		State state;
 		state.position = initial.position + d.position*dt;
 		state.velocity = initial.velocity + d.velocity*dt;
-		PhysicsComponent::State output;
+		State output;
 		output.position = state.velocity;
 		output.velocity = acceleration(state);
 		return output;
 	}
 
-	void PhysicsComponent::integrate(State &state, float dt)
+	void PhysicsRungeKutta::integrate(State &state, float dt)
 	{
-		PhysicsComponent::State a = evaluate(state);
-		PhysicsComponent::State b = evaluate(state, dt*0.5f, a);
-		PhysicsComponent::State c = evaluate(state, dt*0.5f, b);
-		PhysicsComponent::State d = evaluate(state, dt, c);
+		State a = evaluate(state);
+		State b = evaluate(state, dt*0.5f, a);
+		State c = evaluate(state, dt*0.5f, b);
+		State d = evaluate(state, dt, c);
 
 		const glm::vec2 dxdt = 1.0f / 6.0f * (a.position + 2.0f*(b.position + c.position) + d.position);
 		const glm::vec2 dvdt = 1.0f / 6.0f * (a.velocity + 2.0f*(b.velocity + c.velocity) + d.velocity);
@@ -65,7 +65,7 @@ namespace Game
 		state.velocity = state.velocity + dvdt*dt;
 	}
 
-	void PhysicsComponent::update(float timeDelta)
+	void PhysicsRungeKutta::update(float timeDelta)
 	{
 		integrate(_state, timeDelta);
 

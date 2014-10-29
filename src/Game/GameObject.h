@@ -1,9 +1,13 @@
 #pragma once
 
-namespace Game
+namespace Components
 {
 	class ColliderComponent;
 	class PhysicsComponent;
+}
+
+namespace Game
+{
 
 	class GameObject
 	{
@@ -11,7 +15,7 @@ namespace Game
 		virtual ~GameObject() {};
 		virtual void update(float timeDelta) = 0;
 		virtual void draw() = 0;
-		virtual const ColliderComponent* getColliderComponent() = 0;
-		virtual const PhysicsComponent* getPhysicsComponent() = 0;
+		virtual const Components::ColliderComponent* getColliderComponent() = 0;
+		virtual const Components::PhysicsComponent* getPhysicsComponent() = 0;
 	};
 }

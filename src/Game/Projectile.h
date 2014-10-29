@@ -7,8 +7,8 @@
 #include "Geometry/Mesh.h"
 
 #include "GameObject.h"
-#include "PhysicsComponent.h"
-#include "ColliderComponent.h"
+#include "Components/PhysicsEuler.h"
+#include "Components/ColliderComponent.h"
 
 namespace Game
 {
@@ -18,8 +18,8 @@ namespace Game
 		bool _launched;
 		float _time;
 
-		ColliderComponent _colliderComponent;
-		PhysicsComponent _physicsComponent;
+		Components::ColliderComponent _colliderComponent;
+		Components::PhysicsEuler _physicsComponent;
 
 		std::unique_ptr<Geometry::Mesh> _mesh;
 		std::shared_ptr<Shader::Program> _shader;
@@ -31,8 +31,8 @@ namespace Game
 
 		void draw();
 
-		const ColliderComponent* getColliderComponent();
-		const PhysicsComponent* getPhysicsComponent();
+		const Components::ColliderComponent* getColliderComponent();
+		const Components::PhysicsComponent* getPhysicsComponent();
 
 		bool isLaunched();
 		void shoot(glm::vec2 position, glm::vec2 direction);

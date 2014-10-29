@@ -285,7 +285,7 @@ namespace Game
 			_fontRenderer.draw(glm::vec2(10, 35), "LIVES", 17.f);
 			for (int i = 0; i < _lives; i++)
 			{
-				PhysicsComponent *component = const_cast<PhysicsComponent*>(_livesRenderer.getPhysicsComponent());
+				Components::PhysicsComponent *component = const_cast<Components::PhysicsComponent*>(_livesRenderer.getPhysicsComponent());
 				component->reset(glm::vec2(110.f + i * 15.f, 32.f), glm::vec2(0));
 				_livesRenderer.draw();
 			}

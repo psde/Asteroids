@@ -28,8 +28,6 @@ SOURCE_GROUP("Window" FILES ${SRC_WINDOW})
 list(APPEND SRC_GAME
 	Game/Asteroid.h
 	Game/Asteroid.cpp
-	Game/ColliderComponent.h
-	Game/ColliderComponent.cpp
 	Game/FontRenderer.h
 	Game/FontRenderer.cpp
 	Game/Game.h
@@ -37,8 +35,6 @@ list(APPEND SRC_GAME
 	Game/GameObject.h
 	Game/ParticleEmitter.h
 	Game/ParticleEmitter.cpp
-	Game/PhysicsComponent.h
-	Game/PhysicsComponent.cpp
 	Game/Projectile.h
 	Game/Projectile.cpp
 	Game/Ship.h
@@ -46,13 +42,26 @@ list(APPEND SRC_GAME
 )
 SOURCE_GROUP("Game" FILES ${SRC_GAME})
 
+# Components sources
+list(APPEND SRC_COMPONENTS
+	Components/ColliderComponent.h
+	Components/ColliderComponent.cpp
+	Components/PhysicsComponent.h
+	Components/PhysicsComponent.cpp
+	Components/PhysicsRungeKutta.h
+	Components/PhysicsRungeKutta.cpp
+	Components/PhysicsEuler.h
+	Components/PhysicsEuler.cpp
+)
+SOURCE_GROUP("Components" FILES ${SRC_COMPONENTS})
+
 # Source files
 list(APPEND SRC_SOURCE
 	main.cpp
 )
 SOURCE_GROUP("Source" FILES ${SRC_SOURCE})
 
-list(APPEND SOURCES ${SRC_SHADER} ${SRC_GEOMETRY} ${SRC_WINDOW} ${SRC_GAME} ${SRC_SOURCE})
+list(APPEND SOURCES ${SRC_SHADER} ${SRC_GEOMETRY} ${SRC_WINDOW} ${SRC_GAME} ${SRC_COMPONENTS} ${SRC_SOURCE})
 
 add_definitions("-DGLEW_STATIC -DGLM_FORCE_RADIANS")
 

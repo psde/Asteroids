@@ -7,8 +7,8 @@
 #include "Geometry/Mesh.h"
 
 #include "GameObject.h"
-#include "PhysicsComponent.h"
-#include "ColliderComponent.h"
+#include "Components/PhysicsRungeKutta.h"
+#include "Components/ColliderComponent.h"
 #include "Projectile.h"
 
 namespace Game
@@ -16,8 +16,8 @@ namespace Game
 	class Ship : public GameObject
 	{
 	private:
-		ColliderComponent _colliderComponent;
-		PhysicsComponent _physicsComponent;
+		Components::ColliderComponent _colliderComponent;
+		Components::PhysicsRungeKutta _physicsComponent;
 
 		std::unique_ptr<Geometry::Mesh> _mesh;
 		std::unique_ptr<Geometry::Mesh> _rotatedMesh;
@@ -46,7 +46,7 @@ namespace Game
 		void update(float delta);
 		void draw();
 
-		const ColliderComponent* getColliderComponent();
-		const PhysicsComponent* getPhysicsComponent();
+		const Components::ColliderComponent* getColliderComponent();
+		const Components::PhysicsComponent* getPhysicsComponent();
 	};
 }

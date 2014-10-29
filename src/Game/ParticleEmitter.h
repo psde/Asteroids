@@ -7,7 +7,8 @@
 
 #include "Geometry/Mesh.h"
 
-#include "PhysicsComponent.h"
+#include "Components/PhysicsEuler.h"
+
 #include "GameObject.h"
 
 namespace Game
@@ -15,7 +16,7 @@ namespace Game
 	class Particle : public GameObject
 	{
 	private:
-		PhysicsComponent _physicsComponent;
+		Components::PhysicsEuler _physicsComponent;
 		float _remainingTime;
 		float _particleSize;
 		std::shared_ptr<Shader::Program> _shader;
@@ -26,8 +27,8 @@ namespace Game
 
 		void update(float timeDelta);
 		void draw();
-		const ColliderComponent* getColliderComponent() { return nullptr; }
-		const PhysicsComponent* getPhysicsComponent() { return &_physicsComponent; }
+		const Components::ColliderComponent* getColliderComponent() { return nullptr; }
+		const Components::PhysicsComponent* getPhysicsComponent() { return &_physicsComponent; }
 
 		bool isDead() { return _remainingTime <= 0.f; }
 	};
@@ -46,7 +47,7 @@ namespace Game
 
 		void update(float timeDelta);
 		void draw();
-		const ColliderComponent* getColliderComponent() { return nullptr; }
-		const PhysicsComponent* getPhysicsComponent() { return nullptr; }
+		const Components::ColliderComponent* getColliderComponent() { return nullptr; }
+		const Components::PhysicsComponent* getPhysicsComponent() { return nullptr; }
 	};
 }

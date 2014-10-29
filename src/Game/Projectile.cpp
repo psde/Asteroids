@@ -28,7 +28,7 @@ namespace Game
 		}
 
 		_mesh.reset(new Geometry::Mesh(vertices));
-		_colliderComponent.setCollisionMesh(std::unique_ptr<Geometry::Mesh>(new Geometry::Mesh(*_mesh.get())));
+		_colliderComponent.setCollisionMesh(_mesh.get());
 	}
 
 	void Projectile::update(float delta)
@@ -58,12 +58,12 @@ namespace Game
 		}
 	}
 
-	const ColliderComponent* Projectile::getColliderComponent()
+	const Components::ColliderComponent* Projectile::getColliderComponent()
 	{
 		return &_colliderComponent;
 	}
 
-	const PhysicsComponent* Projectile::getPhysicsComponent()
+	const Components::PhysicsComponent* Projectile::getPhysicsComponent()
 	{
 		return &_physicsComponent;
 	}

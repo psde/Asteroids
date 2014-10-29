@@ -142,7 +142,7 @@ namespace Game
 		_mesh = std::move(_mesh->rotate(_rotation, glm::vec2(_meshSize / 2.0f)));
 
 		std::unique_ptr<Geometry::Mesh> collision(new Geometry::Mesh(*_mesh.get()));
-		_colliderComponent.setCollisionMesh(std::move(collision));
+		_colliderComponent.setCollisionMesh(_mesh.get());
 	}
 
 	void Asteroid::update(float delta)
@@ -171,12 +171,12 @@ namespace Game
 		return _size;
 	}
 
-	const ColliderComponent* Asteroid::getColliderComponent()
+	const Components::ColliderComponent* Asteroid::getColliderComponent()
 	{
 		return &_colliderComponent;
 	}
 
-	const PhysicsComponent* Asteroid::getPhysicsComponent()
+	const Components::PhysicsComponent* Asteroid::getPhysicsComponent()
 	{
 		return &_physicsComponent;
 	}

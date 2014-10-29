@@ -7,8 +7,8 @@
 #include "Geometry/Mesh.h"
 
 #include "GameObject.h"
-#include "PhysicsComponent.h"
-#include "ColliderComponent.h"
+#include "Components/PhysicsEuler.h"
+#include "Components/ColliderComponent.h"
 
 namespace Game
 {
@@ -25,8 +25,8 @@ namespace Game
 		int _size;
 		float _meshSize;
 
-		PhysicsComponent _physicsComponent;
-		ColliderComponent _colliderComponent;
+		Components::PhysicsEuler _physicsComponent;
+		Components::ColliderComponent _colliderComponent;
 		float _rotation;
 
 		std::unique_ptr<Geometry::Mesh> _mesh;
@@ -41,8 +41,8 @@ namespace Game
 
 		void update(float delta);
 
-		const ColliderComponent* getColliderComponent();
-		const PhysicsComponent* getPhysicsComponent();
+		const Components::ColliderComponent* getColliderComponent();
+		const Components::PhysicsComponent* getPhysicsComponent();
 
 		int getAsteroidSize();
 	};

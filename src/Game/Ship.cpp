@@ -138,7 +138,7 @@ namespace Game
 			_rotating = 0;
 		}
 
-		_colliderComponent.setCollisionMesh(std::unique_ptr<Geometry::Mesh>(new Geometry::Mesh(*_rotatedMesh.get())));
+		_colliderComponent.setCollisionMesh(_rotatedMesh.get());
 
 		_colliderComponent.setPosition(_physicsComponent.getPosition());
 	}
@@ -164,12 +164,12 @@ namespace Game
 		_moving = false;
 	}
 
-	const ColliderComponent* Ship::getColliderComponent()
+	const Components::ColliderComponent* Ship::getColliderComponent()
 	{
 		return &_colliderComponent;
 	}
 
-	const PhysicsComponent* Ship::getPhysicsComponent()
+	const Components::PhysicsComponent* Ship::getPhysicsComponent()
 	{
 		return &_physicsComponent;
 	}

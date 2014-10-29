@@ -4,12 +4,12 @@
 
 #include "Geometry/Mesh.h"
 
-namespace Game
+namespace Components
 {
 	class ColliderComponent
 	{
 	private:
-		std::unique_ptr<Geometry::Mesh> _mesh;
+		Geometry::Mesh* _mesh;
 		glm::vec2 _position;
 
 		bool collidesWithAABB(const ColliderComponent *other) const;
@@ -19,7 +19,7 @@ namespace Game
 	public:
 		ColliderComponent();
 
-		void setCollisionMesh(std::unique_ptr<Geometry::Mesh> mesh);
+		void setCollisionMesh(Geometry::Mesh* mesh);
 		void setPosition(glm::vec2 pos) { _position = pos; }
 
 		bool collidesWith(const ColliderComponent *other) const;

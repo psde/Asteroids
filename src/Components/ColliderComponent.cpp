@@ -3,15 +3,15 @@
 #include <cmath>
 #include <iostream>
 
-namespace Game
+namespace Components
 {
 	ColliderComponent::ColliderComponent()
 	{
 	}
 
-	void ColliderComponent::setCollisionMesh(std::unique_ptr<Geometry::Mesh> mesh)
+	void ColliderComponent::setCollisionMesh(Geometry::Mesh* mesh)
 	{
-		_mesh = std::move(mesh);
+		_mesh = mesh;
 	}
 
 	bool ColliderComponent::collidesWithAABB(const ColliderComponent *other) const

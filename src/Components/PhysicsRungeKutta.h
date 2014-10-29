@@ -2,9 +2,11 @@
 
 #include <glm/glm.hpp>
 
-namespace Game
+#include "PhysicsComponent.h"
+
+namespace Components
 {
-	class PhysicsComponent
+	class PhysicsRungeKutta : public PhysicsComponent
 	{
 	private:
 		struct State {
@@ -19,15 +21,14 @@ namespace Game
 		glm::vec2 _acceleration;
 		float _terminalVelocity;
 
-
 		glm::vec2 acceleration(const State &state);
 		State evaluate(const State &initial);
 		State evaluate(const State &initial, float dt, const State &d);
 		void integrate(State &state, float dt);
 
 	public:
-		PhysicsComponent();
-		~PhysicsComponent();
+		PhysicsRungeKutta();
+		~PhysicsRungeKutta();
 
 		void reset(glm::vec2 position, glm::vec2 velocity);
 		void setTerminalVelocity(float max) { _terminalVelocity = max; }
