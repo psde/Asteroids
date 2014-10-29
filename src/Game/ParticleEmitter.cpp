@@ -4,8 +4,9 @@
 
 namespace Game
 {
-	Particle::Particle(glm::vec2 position, glm::vec2 direction)
+	Particle::Particle(std::shared_ptr<Geometry::Mesh> mesh, glm::vec2 position, glm::vec2 direction)
 		: _shader(Shader::Program::getProgram("data/shader/particle.glsl"))
+		, _mesh(mesh)
 	{
 		_physicsComponent.reset(position, direction * 10.f);
 
@@ -15,18 +16,7 @@ namespace Game
 		std::uniform_real_distribution<> time(2.2f, 3.75f);
 
 		_remainingTime = time(gen);
-		float particleSize = size(gen);
-
-		int steps = 6;
-		float r = 0.f;
-		std::vector<glm::vec2> vertices;
-		for (int i = 0; i <= steps; i++)
-		{
-			r += ((2.f * glm::pi<float>()) / (float)steps);
-			vertices.push_back(glm::vec2(sin(r), cos(r)) * particleSize);
-		}
-
-		_mesh.reset(new Geometry::Mesh(vertices));
+		_particleSize = size(gen);
 	}
 
 	void Particle::update(float timeDelta)
@@ -41,14 +31,23 @@ namespace Game
 		_shader->use();
 
 		_shader->uniform("remainingTime") = _remainingTime;
+		_shader->uniform("particleSize") = _particleSize;
 		_shader->uniform("position") = _physicsComponent.getPosition();
 		_mesh->draw(GL_LINE_STRIP);
 	}
 
-
 	ParticleEmitter::ParticleEmitter()
 	{
+		int steps = 6;
+		float r = 0.f;
+		std::vector<glm::vec2> vertices;
+		for (int i = 0; i <= steps; i++)
+		{
+			r += ((2.f * glm::pi<float>()) / (float)steps);
+			vertices.push_back(glm::vec2(sin(r), cos(r)));
+		}
 
+		_mesh.reset(new Geometry::Mesh(vertices));
 	}
 
 	void ParticleEmitter::emitParticles(glm::vec2 position, float radius, int count)
@@ -66,8 +65,17 @@ namespace Game
 			pos = position + glm::vec2(offset(gen) * cos(t), offset(gen) * sin(t));
 
 			glm::vec2 dir = glm::normalize(pos - position);
-			_particles.push_back(new Particle(pos, dir));
+			_particles.push_back(new Particle(_mesh, pos, dir));
 		}
+	}
+
+	void ParticleEmitter::reset()
+	{
+		for(auto p : _particles)
+		{
+			delete p;
+		}
+		_particles.clear();
 	}
 
 	void ParticleEmitter::update(float timeDelta)
@@ -79,6 +87,7 @@ namespace Game
 
 			if (particle->isDead())
 			{
+				delete particle;
 				particleIterator = _particles.erase(particleIterator);
 			}
 			else

@@ -17,11 +17,12 @@ namespace Game
 	private:
 		PhysicsComponent _physicsComponent;
 		float _remainingTime;
-		std::unique_ptr<Geometry::Mesh> _mesh;
+		float _particleSize;
 		std::shared_ptr<Shader::Program> _shader;
+		std::shared_ptr<Geometry::Mesh> _mesh;
 
 	public:
-		Particle(glm::vec2 position, glm::vec2 direction);
+		Particle(std::shared_ptr<Geometry::Mesh> mesh, glm::vec2 position, glm::vec2 direction);
 
 		void update(float timeDelta);
 		void draw();
@@ -35,11 +36,13 @@ namespace Game
 	{
 	private:
 		std::vector<Particle*> _particles;
+		std::shared_ptr<Geometry::Mesh> _mesh;
 
 	public:
 		ParticleEmitter();
 
 		void emitParticles(glm::vec2 position, float radius, int count);
+		void reset();
 
 		void update(float timeDelta);
 		void draw();

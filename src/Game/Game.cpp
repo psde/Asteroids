@@ -32,6 +32,7 @@ namespace Game
 	{
 		_ship.reset();
 		_asteroids.clear();
+		_emitter.reset();
 		for (int i = 0; i < 2 + _level; ++i)
 		{
 			_asteroids.push_back(new Asteroid(Asteroid::AsteroidSizes().size() - 1));
@@ -153,7 +154,9 @@ namespace Game
 				auto projectile = _ship.shoot();
 
 				if (projectile)
+				{
 					_projectiles.push_back(projectile);
+				}
 			}
 			_ship.rotate(rotation);
 		}
