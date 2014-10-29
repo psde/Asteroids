@@ -12,6 +12,7 @@
 
 namespace Game
 {
+	// Implements the projectiles which can be launched from the ship
 	class Projectile : public GameObject
 	{
 	private:
@@ -27,15 +28,25 @@ namespace Game
 	public:
 		Projectile();
 
+		// Advances the projectile simulation by the given time step
 		void update(float delta);
 
+		// Draws the projectile at the current position
 		void draw();
 
+		// See GameObject
 		const Components::ColliderComponent* getColliderComponent();
+
+		// See GameObject
 		const Components::PhysicsComponent* getPhysicsComponent();
 
+		// Returns true if the projectile is currently in flight 
 		bool isLaunched();
+
+		// Launches the projectile from the given position in the given direction
 		void shoot(glm::vec2 position, glm::vec2 direction);
+
+		// Reloads the projectile, allowing it to be fired again
 		void reload();
 	};
 }

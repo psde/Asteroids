@@ -11,11 +11,6 @@
 #include "Game/Game.h"
 #include "Shader/Globals.h"
 
-static void error_callback(int error, const char* description)
-{
-	std::cout << "Error: " << error << " " << description << std::endl;
-}
-
 int main()
 {
 	std::shared_ptr<Window::Window> window(new Window::Window(800, 600));
@@ -23,39 +18,47 @@ int main()
 
 	double last_frametime = 0;
 	const double frametime_max = 0.1;
-	double acc_frametime = 0.0;
+	double accumulatedDrawingTime = 0.0;
 	int frames = 0;
-	double accumulator = 0;
-	const double dt = 0.001;
+
+	// Physics simulation
+	double accumulatedPhysicsTime = 0;
+	const double physicsTimeStep = 0.001;
+	int physicSteps = 0;
+	const int maxPhysicsStepsPerFrame = 30;
+
 	while (!window->shouldClose())
 	{
-		double time = glfwGetTime();
+		double currentTime = glfwGetTime();
 		double timeDelta = window->getTimeDelta();
-		int physicSteps = 0;
 
-		accumulator += timeDelta;
-		while (accumulator > dt)
+		// Perform physics simulation steps
+		physicSteps = 0;
+		accumulatedPhysicsTime += timeDelta;
+		while (accumulatedPhysicsTime > physicsTimeStep)
 		{
-			game.update(dt);
-			accumulator -= dt;
+			game.update(physicsTimeStep);
+			accumulatedPhysicsTime -= physicsTimeStep;
 			physicSteps++;
 
-			if (physicSteps >= 30)
+			// Do not freeze the game when physics simulation can't keep up
+			// but instead slow the game down
+			if (physicSteps >= maxPhysicsStepsPerFrame)
 				break;
 		}
 
-		Shader::Globals::globals().update<float>("time", time);
+		Shader::Globals::globals().update<float>("time", currentTime);
 		Shader::Globals::globals().update<glm::vec2>("windowDimensions", window->getWindowDimensions());
 
 		game.draw();
 
-		acc_frametime += timeDelta;
+		accumulatedDrawingTime += timeDelta;
 		frames++;
-		if (time > last_frametime + frametime_max)
+		if (currentTime > last_frametime + frametime_max)
 		{
-			std::cout << "Frametime: " << (acc_frametime / (double)frames) * 1000.0f << "ms (" << frames << " frames, " << physicSteps << " physics frames)" << std::endl;
-			last_frametime = time;
-			acc_frametime = 0.0f;
+			std::cout << "time/frame: " << (accumulatedDrawingTime / (double)frames) * 1000.0f << "ms (" << frames << " frames, " << physicSteps << " physic steps)" << std::endl;
+			last_frametime = currentTime;
+			accumulatedDrawingTime = 0.0f;
 			frames = 0;
 		}
 

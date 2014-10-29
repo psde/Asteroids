@@ -5,7 +5,7 @@
 namespace Components
 {
 	PhysicsRungeKutta::PhysicsRungeKutta()
-		: _acceleration(glm::vec2(0.f))
+		: _acceleration(0.f)
 		, _terminalVelocity(0.f)
 	{
 

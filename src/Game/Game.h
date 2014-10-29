@@ -15,6 +15,7 @@ struct GLFWwindow;
 
 namespace Game
 {
+	// Implements game play simulation.
 	class Game
 	{
 	private:

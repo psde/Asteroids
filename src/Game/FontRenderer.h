@@ -10,6 +10,10 @@
 
 namespace Game
 {
+	// Implements a vector font renderer, which can draw a string at any size.
+	// Currently only the characters 'A' to 'Z' and '0' to '9' are supported.
+	// As each FontRenderer creates its own unique mesh, most applications only
+	// need one instance.
 	class FontRenderer
 	{
 	private:
@@ -20,8 +24,10 @@ namespace Game
 
 		std::shared_ptr<Shader::Program> _shader;
 	public:
+		// Constructor
 		FontRenderer();
 
+		// Renders a given string at a given position with a given size
 		void draw(glm::vec2 position, std::string text, float size);
 	};
 

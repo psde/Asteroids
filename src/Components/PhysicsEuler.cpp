@@ -5,7 +5,9 @@
 namespace Components
 {
 	PhysicsEuler::PhysicsEuler()
-		: _acceleration(glm::vec2(0.f))
+		: _position(0.f)
+		, _velocity(0.f)
+		, _acceleration(0.f)
 		, _terminalVelocity(0.f)
 	{
 
