@@ -39,6 +39,9 @@ int main()
 			game.update(dt);
 			accumulator -= dt;
 			physicSteps++;
+
+			if (physicSteps >= 30)
+				break;
 		}
 
 		Shader::Globals::globals().update<float>("time", time);
