@@ -69,28 +69,7 @@ namespace Components
 	{
 		integrate(_state, timeDelta);
 
-		if (_terminalVelocity > 0.f && (std::abs(_state.velocity.x) > _terminalVelocity || std::abs(_state.velocity.y) > _terminalVelocity))
-		{
-			_state.velocity = glm::normalize(_state.velocity) * std::fmin(glm::length(_state.velocity), _terminalVelocity);
-		}
-
-		// Perform wrap-around
-		while (_state.position.x > 800.0f)
-		{
-			_state.position.x -= 800.0f;
-		}
-		while (_state.position.x < 0.0f)
-		{
-			_state.position.x += 800.0f;
-		}
-
-		while (_state.position.y > 600.0f)
-		{
-			_state.position.y -= 600.0f;
-		}
-		while (_state.position.y < 0.0f)
-		{
-			_state.position.y += 600.0f;
-		}
+		applyTerminalVelocity(_state.velocity);
+		performWrapAround(_state.position);
 	}
 }

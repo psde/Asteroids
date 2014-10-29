@@ -32,28 +32,7 @@ namespace Components
 		_position += _velocity * timeDelta;
 		_velocity += _acceleration * timeDelta;
 
-		if (_terminalVelocity > 0.f && (std::abs(_velocity.x) > _terminalVelocity || std::abs(_velocity.y) > _terminalVelocity))
-		{
-			_velocity = glm::normalize(_velocity) * std::fmin(glm::length(_velocity), _terminalVelocity);
-		}
-
-		// Perform wrap-around
-		while (_position.x > 800.0f)
-		{
-			_position.x -= 800.0f;
-		}
-		while (_position.x < 0.0f)
-		{
-			_position.x += 800.0f;
-		}
-
-		while (_position.y > 600.0f)
-		{
-			_position.y -= 600.0f;
-		}
-		while (_position.y < 0.0f)
-		{
-			_position.y += 600.0f;
-		}
+		applyTerminalVelocity(_velocity);
+		performWrapAround(_position);
 	}
 }

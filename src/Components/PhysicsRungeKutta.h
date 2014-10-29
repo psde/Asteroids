@@ -31,7 +31,9 @@ namespace Components
 		~PhysicsRungeKutta();
 
 		void reset(glm::vec2 position, glm::vec2 velocity);
+
 		void setTerminalVelocity(float max) { _terminalVelocity = max; }
+		virtual float getTerminalVelocity() { return _terminalVelocity; }
 
 		void update(float timeDelta);
 		void setAcceleration(glm::vec2 acceleration);
