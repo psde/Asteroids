@@ -38,6 +38,9 @@ namespace Game
 
 	ParticleEmitter::ParticleEmitter()
 	{
+		// Preload shader so it does not happen mid-game
+		auto shader = Shader::Program::getProgram("data/shader/particle.glsl");
+
 		int steps = 6;
 		float r = 0.f;
 		std::vector<glm::vec2> vertices;
