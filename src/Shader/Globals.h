@@ -12,35 +12,32 @@
 
 namespace Shader
 {
-	namespace
+	class GlobalBase
 	{
-		class GlobalBase
+	public:
+		virtual void update(Program *program) = 0;
+	};
+
+	template<class T>
+	class Global : public GlobalBase
+	{
+	private:
+		std::string _name;
+		T _val;
+
+	public:
+		Global(std::string name, T val) : _name(name), _val(val) { }
+
+		void updateValue(T val)
 		{
-		public:
-			virtual void update(Program *program) = 0;
-		};
+			_val = val;
+		}
 
-		template<class T>
-		class Global : public GlobalBase
+		void update(Program *program)
 		{
-		private:
-			std::string _name;
-			T _val;
-
-		public:
-			Global(std::string name, T val) : _name(name), _val(val) { }
-
-			void updateValue(T val)
-			{
-				_val = val;
-			}
-
-			void update(Program *program)
-			{
-				(*program)[_name] = _val;
-			}
-		};
-	}
+			(*program)[_name] = _val;
+		}
+	};
 
 	class Globals
 	{

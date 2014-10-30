@@ -27,7 +27,7 @@ namespace Components
 		_acceleration = acceleration;
 	}
 
-	glm::vec2 PhysicsRungeKutta::acceleration(const State &state)
+	glm::vec2 PhysicsRungeKutta::acceleration(const State &/*state*/)
 	{
 		return _acceleration;
 	}

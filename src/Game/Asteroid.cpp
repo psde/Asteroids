@@ -10,7 +10,7 @@ namespace Game
 {
 	namespace
 	{
-		std::unique_ptr<Geometry::Mesh> generateAsteroid(float size, float rotation)
+		std::unique_ptr<Geometry::Mesh> generateAsteroid(float size)
 		{
 			std::random_device rd;
 			std::mt19937 gen(rd());
@@ -139,7 +139,7 @@ namespace Game
 		_physicsComponent.reset(position, velocity);
 
 		_meshSize = AsteroidSizes().at(_size) + sizeOffset(gen);
-		_mesh = generateAsteroid(_meshSize, _rotation);
+		_mesh = generateAsteroid(_meshSize);
 		_mesh = std::move(_mesh->rotate(_rotation, glm::vec2(_meshSize / 2.0f)));
 
 		std::unique_ptr<Geometry::Mesh> collision(new Geometry::Mesh(*_mesh.get()));
