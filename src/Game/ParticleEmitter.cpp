@@ -41,7 +41,7 @@ namespace Game
 		// Preload shader so it does not happen mid-game
 		auto shader = Shader::Program::getProgram("data/shader/particle.glsl");
 
-		int steps = 6;
+		int steps = 12;
 		float r = 0.f;
 		std::vector<glm::vec2> vertices;
 		for (int i = 0; i <= steps; i++)

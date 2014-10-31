@@ -48,10 +48,12 @@ namespace Game
 		GameState _state;
 		float _stateTime;
 
-		void destroyAsteroid(Asteroid *asteroid);
+		void destroyAsteroid(Asteroid *asteroid, bool addToScore);
 		void loadLevel();
 		void updateState(float timeDelta);
 		void reset();
+
+		void resolveCollisions();
 
 	public:
 		Game(std::shared_ptr<Window::Window> window);

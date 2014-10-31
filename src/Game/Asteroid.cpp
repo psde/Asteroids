@@ -18,7 +18,6 @@ namespace Game
 			std::uniform_real_distribution<> offset(-0.025, 0.025);
 
 			int type = dis(gen);
-			//type = 4;
 
 			std::vector<glm::vec2> vertices;
 			switch (type)
