@@ -35,7 +35,7 @@ int main()
 		// Perform physics simulation steps
 		physicSteps = 0;
 		accumulatedPhysicsTime += timeDelta;
-		while (accumulatedPhysicsTime > physicsTimeStep)
+		while (accumulatedPhysicsTime >= physicsTimeStep)
 		{
 			game.update(physicsTimeStep);
 			accumulatedPhysicsTime -= physicsTimeStep;
