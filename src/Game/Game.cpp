@@ -35,7 +35,7 @@ namespace Game
 		_emitter.reset();
 		for (int i = 0; i < 2 + _level; ++i)
 		{
-			_asteroids.push_back(new Asteroid(Asteroid::AsteroidSizes().size() - 1));
+			_asteroids.push_back(new Asteroid());
 		}
 
 		if (_asteroids.size() > 0)
@@ -52,11 +52,17 @@ namespace Game
 		float asteroidSize = Asteroid::AsteroidSizes().at(size);
 		glm::vec2 pos = asteroid->getPhysicsComponent()->getPosition();
 
+		// Add to score if needed
 		if(addToScore)
 			_score += (Asteroid::AsteroidSizes().size() - size) * 100;
 
+		// Emitt particle cloud
 		_emitter.emitParticles(pos + (asteroidSize / 2.f), asteroidSize / 2.f, asteroidSize);
 
+		// Flag asteroid as destroyed
+		asteroid->destroy();
+
+		// If the asteroid is not the smallest one yet, spawn two new ones
 		if (size != 0)
 		{
 			glm::vec2 dir = glm::normalize(asteroid->getPhysicsComponent()->getVelocity());
@@ -124,71 +130,72 @@ namespace Game
 
 	void Game::resolveCollisions()
 	{
-		std::vector<std::pair<Asteroid*, bool>> destroyedAsteroids;
+		for (auto asteroid : _asteroids)
+		{
+			// If the asteroid is destroyed, we do not need to consider it
+			if(asteroid->isDestroyed())
+				continue;
 
-		auto asteroidIterator = std::begin(_asteroids);
-		while (asteroidIterator != std::end(_asteroids)) {
-			bool removeAsteroid = false;
+			// Resolve Asteroid -> Projectiles collisions
+			for(auto projectile : _projectiles)
+			{
+				// If the projectile is not launched, we do not need to consider it
+				if(projectile->isLaunched() == false)
+					continue;
 
-			auto projectileIterator = std::begin(_projectiles);
-			while (projectileIterator != std::end(_projectiles)) {
-				bool removeProjectile = !(*projectileIterator)->isLaunched();
-				bool collidesProjectile = (*asteroidIterator)->getColliderComponent()->collidesWith((*projectileIterator)->getColliderComponent());
-
-				if (collidesProjectile)
+				bool collides = projectile->collidesWith(*asteroid);
+				if(collides)
 				{
-					removeProjectile = true;
+					// Destroy asteroid, add score if projectile is friendly
+					destroyAsteroid(asteroid, projectile->isFriendly());
 
-					if ((*projectileIterator)->isLaunched())
-						removeAsteroid = true;
+					projectile->reload();
 
-					(*projectileIterator)->reload();
-				}
-
-				if (removeProjectile)
-				{
-					projectileIterator = _projectiles.erase(projectileIterator);
-				}
-				else
-				{
-					++projectileIterator;
+					// The asteroid was destroyed, none of the oter projectiles can harm it
+					break;
 				}
 			}
 
-			bool shipCollides = false;
-			if (_state == Game::Playing)
-				shipCollides = (*asteroidIterator)->getColliderComponent()->collidesWith(_ship.getColliderComponent());
+			// Did a projectile destroy it?
+			if(asteroid->isDestroyed())
+				continue;
 
-			if (shipCollides)
+			// Resolve Asteroid -> Ship collision
+			if(_ship.collidesWith(*asteroid))
 			{
-				if (_ship.isInvincible() == false)
-				{
-					_state = Game::Dead;
-					_emitter.emitParticles(_ship.getPhysicsComponent()->getPosition() + 12.5f, 5, 5);
-				}
-				removeAsteroid = true;
-			}
+				// Player is dead, set state and release particle cloud
+				_state = Game::Dead;
+				_emitter.emitParticles(_ship.getPhysicsComponent()->getPosition() + 12.5f, 5, 5);
 
-			if (removeAsteroid)
-			{
-				bool score = true;
-				if(shipCollides)
-				{
-					score = false;
-				}
-
-				destroyedAsteroids.push_back(std::pair<Asteroid*, bool>(*asteroidIterator, score));
-				asteroidIterator = _asteroids.erase(asteroidIterator);
-			}
-			else
-			{
-				++asteroidIterator;
+				// Destroy asteroid and don't add to score
+				destroyAsteroid(asteroid, false);
 			}
 		}
 
-		for (auto asteroid : destroyedAsteroids)
+		// Delete non-launched projectiles
+		for (auto projectile = std::begin(_projectiles); projectile != std::end(_projectiles); )
 		{
-			destroyAsteroid(asteroid.first, asteroid.second);
+			if ((*projectile)->isLaunched())
+			{
+				++projectile;
+			}
+			else
+			{
+				projectile = _projectiles.erase(projectile);
+			}
+		}
+
+		// Delete destroyed asteroids
+		for (auto asteroid = std::begin(_asteroids); asteroid != std::end(_asteroids); )
+		{
+			if ((*asteroid)->isDestroyed())
+			{
+				asteroid = _asteroids.erase(asteroid);
+			}
+			else
+			{
+				++asteroid;
+			}
 		}
 	}
 

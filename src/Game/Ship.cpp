@@ -88,7 +88,7 @@ namespace Game
 		std::shared_ptr<Projectile> projectile = nullptr;
 		for (auto p : _projectiles)
 		{
-			if (!p->isLaunched())
+			if (p->isLaunched() == false)
 			{
 				projectile = p;
 				break;

@@ -11,10 +11,11 @@ namespace Game
 {
 	Projectile::Projectile()
 		: _shader(Shader::Program::getProgram("data/shader/ship.glsl"))
+		, _launched(false)
+		, _time(0.f)
+		, _friendly(true)
 	{
-		_physicsComponent.reset(glm::vec2(300, 150), glm::vec2(0.f));
-
-		_launched = false;
+		_physicsComponent.reset(glm::vec2(0.f), glm::vec2(0.f));
 
 		float size = 1.15f;
 
@@ -33,6 +34,9 @@ namespace Game
 
 	void Projectile::update(float delta)
 	{
+		if(isLaunched() == false)
+			return;
+
 		_time -= delta;
 		_physicsComponent.update(delta);
 
@@ -83,5 +87,6 @@ namespace Game
 	void Projectile::reload()
 	{
 		_launched = false;
+		_physicsComponent.reset(glm::vec2(0.f), glm::vec2(0.f));
 	}
 }

@@ -26,5 +26,7 @@ namespace Game
 
 		// Returns a const pointer to the game objects PhysicsComponent, if any. nullptr if none.
 		virtual const Components::PhysicsComponent* getPhysicsComponent() = 0;
+
+		bool collidesWith(GameObject& other);
 	};
 }

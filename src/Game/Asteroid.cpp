@@ -92,6 +92,10 @@ namespace Game
 		}
 	}
 
+	Asteroid::Asteroid()
+		: Asteroid(Asteroid::AsteroidSizes().size() - 1)
+	{}
+
 	Asteroid::Asteroid(int size)
 	{
 		std::random_device rd;
@@ -127,6 +131,7 @@ namespace Game
 		std::uniform_real_distribution<> rotation(0, 2.f * glm::pi<float>());
 		std::uniform_real_distribution<> sizeOffset(0.f, 4.f);
 
+		_destroyed = false;
 		_size = size;
 		_shader = Shader::Program::getProgram("data/shader/asteroid.glsl");
 		_rotation = rotation(gen);

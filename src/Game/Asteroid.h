@@ -19,6 +19,7 @@ namespace Game
 	private:
 		int _size;
 		float _meshSize;
+		bool _destroyed;
 
 		Components::PhysicsEuler _physicsComponent;
 		Components::ColliderComponent _colliderComponent;
@@ -29,6 +30,10 @@ namespace Game
 
 		void init(int size, glm::vec2 position, glm::vec2 direction);
 	public:
+		// Creates an asteroid with a random position and random velocity, 
+		// and with maximum size.
+		Asteroid();
+
 		// Creates an asteroid with a random position and random velocity, 
 		// and with a size which is determined by the given size index
 		Asteroid(int size);
@@ -52,6 +57,9 @@ namespace Game
 
 		// Returns the current asteroid size index
 		int getAsteroidSize();
+
+		void destroy() { _destroyed = true; }
+		bool isDestroyed() { return _destroyed; }
 
 		// Returns a vector<float> containt all possible asteroid sizes, 
 		// accessible with the size index
