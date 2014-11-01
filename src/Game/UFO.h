@@ -28,8 +28,10 @@ namespace Game
 
 		std::vector<std::shared_ptr<Projectile>> _projectiles;
 
+		float _movementTimeRemaining;
+
 	public:
-		UFO(float size = 100.f);
+		UFO(float size = 50.f);
 
 		const std::shared_ptr<Projectile> shoot();
 

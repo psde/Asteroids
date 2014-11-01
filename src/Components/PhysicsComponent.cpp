@@ -1,5 +1,6 @@
 #include "PhysicsComponent.h"
 
+#include <cmath>
 #include <iostream>
 
 namespace Components

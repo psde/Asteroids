@@ -15,7 +15,9 @@ namespace Game
 		, _reloadTime(0.f)
 	{
 		_physicsComponent.setTerminalVelocity(225.f);
-		_physicsComponent.reset(glm::vec2(200, 200), glm::vec2(0.f));
+
+		_physicsComponent.reset(glm::vec2(200, 200), glm::vec2(10.f));
+		_movementTimeRemaining = 0.f;
 
 		std::vector<glm::vec2> vertices = {
 			glm::vec2(0.10f * _size, 0.50f * _size),
@@ -24,14 +26,11 @@ namespace Game
 			glm::vec2(0.90f * _size, 0.50f * _size),
 			glm::vec2(0.10f * _size, 0.50f * _size),
 			glm::vec2(0.30f * _size, 0.35f * _size),
-
 			glm::vec2(0.40f * _size, 0.35f * _size),
 			glm::vec2(0.42f * _size, 0.15f * _size),
 			glm::vec2(0.58f * _size, 0.15f * _size),
 			glm::vec2(0.60f * _size, 0.35f * _size),
 			glm::vec2(0.30f * _size, 0.35f * _size),
-
-
 			glm::vec2(0.70f * _size, 0.35f * _size),
 			glm::vec2(0.90f * _size, 0.50f * _size)
 		};
@@ -74,6 +73,20 @@ namespace Game
 	void UFO::update(float delta)
 	{
 		_physicsComponent.update(delta);
+
+		_movementTimeRemaining -= delta;
+		if(_movementTimeRemaining <= 0.f)
+		{
+			std::random_device rd;
+			std::mt19937 gen(rd());
+			std::uniform_real_distribution<> rotation(-0.75f, 0.75f);
+
+			glm::vec2 oldDirection = glm::normalize(_physicsComponent.getPosition());
+			glm::vec2 direction = glm::rotate(glm::vec2(0.f, 1.f), std::atan2(oldDirection.x, oldDirection.y) + (float)rotation(gen));
+
+			_physicsComponent.reset(_physicsComponent.getPosition(), direction * 150.f);
+			_movementTimeRemaining = 2.f;
+		}
 
 		if (_reloadTime > 0.f)
 		{
