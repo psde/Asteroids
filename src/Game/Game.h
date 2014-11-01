@@ -8,6 +8,7 @@
 
 #include "Asteroid.h"
 #include "Ship.h"
+#include "UFO.h"
 #include "Projectile.h"
 #include "ParticleEmitter.h"
 
@@ -32,6 +33,7 @@ namespace Game
 
 		std::vector<Asteroid*> _asteroids;
 		std::vector<std::shared_ptr<Projectile>> _projectiles;
+		std::unique_ptr<UFO> _ufo;
 
 		ParticleEmitter _emitter;
 

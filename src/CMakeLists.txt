@@ -40,6 +40,8 @@ list(APPEND SRC_GAME
 	Game/Projectile.cpp
 	Game/Ship.h
 	Game/Ship.cpp
+	Game/UFO.h
+	Game/UFO.cpp
 )
 SOURCE_GROUP("Game" FILES ${SRC_GAME})
 

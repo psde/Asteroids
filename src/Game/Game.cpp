@@ -44,6 +44,8 @@ namespace Game
 			//PhysicsComponent *component = const_cast<PhysicsComponent*>(a->getPhysicsComponent());
 			//component->reset(glm::vec2(790, 400), glm::vec2(0));
 		}
+
+		_ufo.reset(new UFO());
 	}
 
 	void Game::destroyAsteroid(Asteroid *asteroid, bool addToScore)
@@ -130,6 +132,7 @@ namespace Game
 
 	void Game::resolveCollisions()
 	{
+		// Resolve Asteroids -> Everything collisions
 		for (auto asteroid : _asteroids)
 		{
 			// If the asteroid is destroyed, we do not need to consider it
@@ -259,6 +262,10 @@ namespace Game
 			{
 				p->update(timeDelta);
 			}
+
+			if(_ufo)
+				_ufo->update(timeDelta);
+
 			resolveCollisions();
 		}
 	}
@@ -269,6 +276,9 @@ namespace Game
 		{
 			asteroid->draw();
 		}
+
+		if(_ufo)
+			_ufo->draw();
 
 		if (_state != Game::Dead && _state != Game::WaitingForRespawn && _state != Game::GameOver)
 			_ship.draw();
