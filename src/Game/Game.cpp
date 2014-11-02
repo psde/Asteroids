@@ -132,6 +132,8 @@ namespace Game
 
 	void Game::resolveCollisions()
 	{
+		std::vector<std::pair<Asteroid*, bool>> destroyedAsteroids;
+
 		// Resolve Asteroids -> Everything collisions
 		for (auto asteroid : _asteroids)
 		{
@@ -150,7 +152,7 @@ namespace Game
 				if(collides)
 				{
 					// Destroy asteroid, add score if projectile is friendly
-					destroyAsteroid(asteroid, projectile->isFriendly());
+					destroyedAsteroids.push_back({ asteroid, projectile->isFriendly() });
 
 					projectile->reload();
 
@@ -171,8 +173,13 @@ namespace Game
 				_emitter.emitParticles(_ship.getPhysicsComponent()->getPosition() + 12.5f, 5, 5);
 
 				// Destroy asteroid and don't add to score
-				destroyAsteroid(asteroid, false);
+				destroyedAsteroids.push_back({ asteroid, false });
 			}
+		}
+
+		for (auto a : destroyedAsteroids)
+		{
+			destroyAsteroid(a.first, a.second);
 		}
 
 		// Delete non-launched projectiles
