@@ -52,14 +52,14 @@ namespace Game
 	{
 		int size = asteroid->getAsteroidSize();
 		float asteroidSize = Asteroid::AsteroidSizes().at(size);
-		glm::vec2 pos = asteroid->getPhysicsComponent()->getPosition();
+		glm::vec2 pos = asteroid->getPhysicsComponent()->getPosition() + (asteroidSize / 2.f);
 
 		// Add to score if needed
 		if(addToScore)
 			_score += (Asteroid::AsteroidSizes().size() - size) * 100;
 
 		// Emitt particle cloud
-		_emitter.emitParticles(pos + (asteroidSize / 2.f), asteroidSize / 2.f, asteroidSize);
+		_emitter.emitParticles(pos, asteroidSize / 2.f, asteroidSize);
 
 		// Flag asteroid as destroyed
 		asteroid->destroy();
@@ -67,10 +67,11 @@ namespace Game
 		// If the asteroid is not the smallest one yet, spawn two new ones
 		if (size != 0)
 		{
+			size--;
+			pos -= Asteroid::AsteroidSizes().at(size) / 2.f;
 			glm::vec2 dir = glm::normalize(asteroid->getPhysicsComponent()->getVelocity());
 
 			dir = glm::rotate(dir, 0.5f * glm::pi<float>());
-			size--;
 			_asteroids.push_back(new Asteroid(size, pos, dir));
 			_asteroids.push_back(new Asteroid(size, pos, -dir));
 		}
