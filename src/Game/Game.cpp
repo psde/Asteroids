@@ -68,12 +68,13 @@ namespace Game
 		if (size != 0)
 		{
 			size--;
-			pos -= Asteroid::AsteroidSizes().at(size) / 2.f;
+			asteroidSize = Asteroid::AsteroidSizes().at(size);
+			pos -= asteroidSize / 2.f;
 			glm::vec2 dir = glm::normalize(asteroid->getPhysicsComponent()->getVelocity());
 
 			dir = glm::rotate(dir, 0.5f * glm::pi<float>());
-			_asteroids.push_back(new Asteroid(size, pos, dir));
-			_asteroids.push_back(new Asteroid(size, pos, -dir));
+			_asteroids.push_back(new Asteroid(size, pos + (dir * asteroidSize / 2.f), dir));
+			_asteroids.push_back(new Asteroid(size, pos + (-dir * asteroidSize / 2.f), -dir));
 		}
 	}
 
@@ -135,6 +136,29 @@ namespace Game
 	{
 		std::vector<std::pair<Asteroid*, bool>> destroyedAsteroids;
 
+		// Resolve Asteroids -> Asteroids collisions
+		/*for (auto asteroidA : _asteroids)
+		{
+			if(asteroidA->isDestroyed())
+				continue;
+
+			for (auto asteroidB : _asteroids)
+			{
+				if(asteroidB->isDestroyed() || asteroidA == asteroidB)
+					continue;
+
+				bool collides = asteroidA->collidesWith(*asteroidB);
+
+				if(collides)
+				{
+					asteroidA->destroy();
+					destroyedAsteroids.push_back({ asteroidA, false });
+					asteroidB->destroy();
+					destroyedAsteroids.push_back({ asteroidB, false });
+				}
+			}
+		}*/
+
 		// Resolve Asteroids -> Everything collisions
 		for (auto asteroid : _asteroids)
 		{
@@ -153,6 +177,7 @@ namespace Game
 				if(collides)
 				{
 					// Destroy asteroid, add score if projectile is friendly
+					asteroid->destroy();
 					destroyedAsteroids.push_back({ asteroid, projectile->isFriendly() });
 
 					projectile->reload();
@@ -174,6 +199,7 @@ namespace Game
 				_emitter.emitParticles(_ship.getPhysicsComponent()->getPosition() + 12.5f, 5, 5);
 
 				// Destroy asteroid and don't add to score
+				asteroid->destroy();
 				destroyedAsteroids.push_back({ asteroid, false });
 			}
 		}
