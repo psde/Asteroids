@@ -41,8 +41,8 @@ namespace Game
 		if (_asteroids.size() > 0)
 		{
 			//auto a = _asteroids.at(0);
-			//PhysicsComponent *component = const_cast<PhysicsComponent*>(a->getPhysicsComponent());
-			//component->reset(glm::vec2(790, 400), glm::vec2(0));
+			//Components::PhysicsComponent *component = const_cast<Components::PhysicsComponent*>(a->getPhysicsComponent());
+			//component->reset(glm::vec2(400, 580), glm::vec2(0));
 		}
 
 		_ufo.reset(new UFO());
@@ -249,7 +249,7 @@ namespace Game
 			_ship.rotate(rotation);
 		}
 
-		//PhysicsComponent *component = const_cast<PhysicsComponent*>(_ship.getPhysicsComponent());
+		//Components::PhysicsComponent *component = const_cast<Components::PhysicsComponent*>(_ship.getPhysicsComponent());
 		//component->reset(_window->getCursorPosition() - glm::vec2(10), glm::vec2(0));
 
 		if (_state != Game::GameOver && _state != Game::WaitingForRespawn && _state != Game::WaitingForStart)

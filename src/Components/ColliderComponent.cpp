@@ -16,9 +16,9 @@ namespace Components
 
 	bool ColliderComponent::collidesWithAABB(const ColliderComponent *other) const
 	{
-		for (int y = -1; y < 1; ++y)
+		for (int y = -1; y <= 1; ++y)
 		{
-			for (int x = -1; x < 1; ++x)
+			for (int x = -1; x <= 1; ++x)
 			{
 				glm::vec4 a = _mesh->getBoundingBox() + glm::vec4(_position + glm::vec2(800 * x, 600 * y), _position + glm::vec2(800 * x, 600 * y));
 				glm::vec4 b = other->_mesh->getBoundingBox() + glm::vec4(other->_position, other->_position);
@@ -49,6 +49,8 @@ namespace Components
 		if (collidesWithAABB(other) == false)
 			return false;
 		
+		//std::cout << "AABB" << std::endl;
+
 		auto myVertices = _mesh->vertices();
 		auto otherVertices = other->_mesh->vertices();
 
@@ -62,9 +64,9 @@ namespace Components
 				if (b2 == std::end(otherVertices))
 					b2 = std::begin(otherVertices);
 
-				for (int y = -1; y < 1; ++y)
+				for (int y = -1; y <= 1; ++y)
 				{
-					for (int x = -1; x < 1; ++x)
+					for (int x = -1; x <= 1; ++x)
 					{
 						if (isIntersecting(*a1 + _position + glm::vec2(800 * x, 600 * y), *a2 + _position + glm::vec2(800 * x, 600 * y), *b1 + other->_position, *b2 + other->_position))
 						{

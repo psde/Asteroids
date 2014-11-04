@@ -52,9 +52,9 @@ namespace Game
 	{
 		_shader->use();
 
-		for (int y = -1; y < 1; ++y)
+		for (int y = -1; y <= 1; ++y)
 		{
-			for (int x = -1; x < 1; ++x)
+			for (int x = -1; x <= 1; ++x)
 			{
 				_shader->uniform("position") = _physicsComponent.getPosition() + glm::vec2(800 * x, 600 * y);
 				_mesh->draw(GL_LINE_STRIP);
