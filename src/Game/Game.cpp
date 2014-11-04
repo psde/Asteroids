@@ -297,8 +297,16 @@ namespace Game
 				p->update(timeDelta);
 			}
 
-			if(_ufo)
+			if (_ufo)
+			{
 				_ufo->update(timeDelta);
+				auto projectile = _ufo->shoot();
+
+				if (projectile)
+				{
+					_projectiles.push_back(projectile);
+				}
+			}
 
 			resolveCollisions();
 		}

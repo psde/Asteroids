@@ -21,13 +21,14 @@ namespace Game
 
 		bool _launched;
 		float _time;
+		float _lifetime;
 		bool _friendly;
 
 		Components::ColliderComponent _colliderComponent;
 		Components::PhysicsEuler _physicsComponent;
 
 	public:
-		Projectile();
+		Projectile(float lifetime, bool friendly);
 
 		// Advances the projectile simulation by the given time step
 		void update(float delta);

@@ -39,7 +39,7 @@ namespace Game
 		_colliderComponent.setCollisionMesh(_mesh.get());
 
 		for (int i = 0; i < 1; i++)
-			_projectiles.push_back(std::make_shared<Projectile>());
+			_projectiles.push_back(std::make_shared<Projectile>(1.5f, false));
 	}
 
 	const std::shared_ptr<Projectile> UFO::shoot()
@@ -61,10 +61,15 @@ namespace Game
 
 		if (projectile)
 		{
-			glm::vec2 dir = glm::rotate(glm::vec2(0.f, -1), 0.f);
+			std::random_device rd;
+			std::mt19937 gen(rd());
+			std::uniform_real_distribution<> rotation(-1.75f, 1.75f);
+
+			glm::vec2 norm = glm::normalize(_physicsComponent.getVelocity());
+			glm::vec2 dir = glm::rotate(glm::vec2(1.f, 0.f), std::atan2(norm.x, norm.y) + (float)rotation(gen));
 			glm::vec2 position = _physicsComponent.getPosition() + glm::vec2(_size / 2.f) + (dir * (float)_size / 2.f);
 			projectile->shoot(position, dir);
-			_reloadTime = 0.20f;
+			_reloadTime = 2.f;
 		}
 
 		return projectile;
@@ -79,10 +84,10 @@ namespace Game
 		{
 			std::random_device rd;
 			std::mt19937 gen(rd());
-			std::uniform_real_distribution<> rotation(-0.75f, 0.75f);
+			std::uniform_real_distribution<> rotation(-0.25f, 0.25f);
 
-			glm::vec2 oldDirection = glm::normalize(_physicsComponent.getPosition());
-			glm::vec2 direction = glm::rotate(glm::vec2(0.f, 1.f), std::atan2(oldDirection.x, oldDirection.y) + (float)rotation(gen));
+			glm::vec2 norm = glm::normalize(_physicsComponent.getVelocity());
+			glm::vec2 direction = glm::rotate(glm::vec2(1.f, 0.f), std::atan2(norm.x, norm.y) + (float)rotation(gen));
 
 			_physicsComponent.reset(_physicsComponent.getPosition(), direction * 150.f);
 			_movementTimeRemaining = 2.f;

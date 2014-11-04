@@ -39,7 +39,7 @@ namespace Game
 		_rotatedMesh = std::unique_ptr<Geometry::Mesh>(new Geometry::Mesh(*_mesh.get()));
 
 		for (int i = 0; i < 5; i++)
-			_projectiles.push_back(std::make_shared<Projectile>());
+			_projectiles.push_back(std::make_shared<Projectile>(2.f, true));
 
 		reset();
 	}

@@ -9,11 +9,12 @@
 
 namespace Game
 {
-	Projectile::Projectile()
+	Projectile::Projectile(float lifetime, bool friendly)
 		: _shader(Shader::Program::getProgram("data/shader/ship.glsl"))
 		, _launched(false)
 		, _time(0.f)
-		, _friendly(true)
+		, _lifetime(lifetime)
+		, _friendly(friendly)
 	{
 		_physicsComponent.reset(glm::vec2(0.f), glm::vec2(0.f));
 
@@ -80,7 +81,7 @@ namespace Game
 	void Projectile::shoot(glm::vec2 position, glm::vec2 direction)
 	{
 		_launched = true;
-		_time = 3.f;
+		_time = _lifetime;
 		_physicsComponent.reset(position, direction * 275.f);
 	}
 
