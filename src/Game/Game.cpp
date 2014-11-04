@@ -5,7 +5,9 @@
 
 #include "Game.h"
 
-#include <glm/gtx/rotate_vector.hpp>
+//#include <glm/gtx/rotate_vector.hpp>
+#include "Math/Math.h"
+
 #include <GLFW/glfw3.h>
 
 namespace Game

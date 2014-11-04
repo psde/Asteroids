@@ -4,8 +4,9 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
+//#include <glm/gtc/matrix_transform.hpp>
+//#include <glm/glm.hpp>
+#include "Math/Math.h"
 
 #include "Window/Window.h"
 #include "Game/Game.h"

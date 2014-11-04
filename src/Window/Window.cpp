@@ -45,7 +45,7 @@ namespace Window
 
 		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
-		glm::ivec2 dimensions(getWindowDimensions());
+		glm::vec2 dimensions(getWindowDimensions());
 		glViewport(0, 0, dimensions.x, dimensions.y);
 	}
 

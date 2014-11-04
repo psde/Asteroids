@@ -1,6 +1,7 @@
 #pragma once
 
-#include <glm/glm.hpp>
+//#include <glm/glm.hpp>
+#include "Math/Math.h"
 
 #include "Geometry/Mesh.h"
 

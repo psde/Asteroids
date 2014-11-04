@@ -3,7 +3,8 @@
 #include <map>
 #include <string>
 
-#include <glm/glm.hpp>
+//#include <glm/glm.hpp>
+#include "Math/Math.h"
 
 #include "Shader/Program.h"
 #include "Geometry/Mesh.h"
