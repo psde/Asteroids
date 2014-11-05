@@ -5,22 +5,22 @@ namespace glm
 	class vec2
 	{
 	public:
-		union {
-			float x;
-			float y;
-		};
+		float x;
+		float y;
 
 		vec2()
 			: vec2(0.f)
 		{ }
 
-		vec2(float v)
-			: vec2(v, v)
+		template<class T>
+		vec2(T v)
+			: vec2(static_cast<float>(v), static_cast<float>(v))
 		{ }
 
-		vec2(float x, float y)
-			: x(x)
-			, y(y)
+		template<class T1, class T2>
+		vec2(T1 x, T2 y)
+			: x(static_cast<float>(x))
+			, y(static_cast<float>(y))
 		{ }
 
 		vec2 operator-() const {
@@ -97,7 +97,7 @@ namespace glm
 		return vec2(s + v.x, s + v.y);
 	}	
 	
-	vec2 operator+(vec2 const& a, vec2 const& b)
+	inline vec2 operator+(vec2 const& a, vec2 const& b)
 	{
 		return vec2(a.x + b.x, a.y + b.y);
 	}
@@ -108,7 +108,7 @@ namespace glm
 		return vec2(s - v.x, s - v.y);
 	}
 
-	vec2 operator-(vec2 const& a, vec2 const& b)
+	inline vec2 operator-(vec2 const& a, vec2 const& b)
 	{
 		return vec2(a.x - b.x, a.y - b.y);
 	}
@@ -119,7 +119,7 @@ namespace glm
 		return vec2(s * v.x, s * v.y);
 	}
 
-	vec2 operator*(vec2 const& a, vec2 const& b)
+	inline vec2 operator*(vec2 const& a, vec2 const& b)
 	{
 		return vec2(a.x * b.x, a.y * b.y);
 	}
@@ -130,7 +130,7 @@ namespace glm
 		return vec2(s / v.x, s / v.y);
 	}
 
-	vec2 operator/(vec2 const& a, vec2 const& b)
+	inline vec2 operator/(vec2 const& a, vec2 const& b)
 	{
 		return vec2(a.x / b.x, a.y / b.y);
 	}

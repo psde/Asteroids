@@ -99,7 +99,7 @@ namespace Game
 
 		if (projectile)
 		{
-			glm::vec2 dir = glm::rotate(glm::vec2(0.f, -1), _rotation);
+			glm::vec2 dir = glm::rotate(glm::vec2(0.f, -1.f), _rotation);
 			glm::vec2 position = _physicsComponent.getPosition() + glm::vec2(_size / 2.f) + (dir * (float)_size / 2.f);
 			projectile->shoot(position, dir);
 			_reloadTime = 0.20f;

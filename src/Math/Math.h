@@ -23,16 +23,16 @@ namespace glm
 	template <typename T>
 	T pi()
 	{
-		return 3.14159265359;
+		return static_cast<T>(3.14159265359);
 	}
 
-	vec2 normalize(vec2 const &x)
+	inline vec2 normalize(vec2 const &x)
 	{
 		float sqr = x.x * x.x + x.y * x.y;
 		return x * (1.f / (float)std::sqrt(sqr));
 	}
 
-	float length(vec2 const& v)
+	inline float length(vec2 const& v)
 	{
 		float sqr = v.x * v.x + v.y * v.y;
 		return (float)std::sqrt(sqr);

@@ -7,18 +7,17 @@ namespace glm
 	class vec4
 	{
 	public:
-		union {
-			float x;
-			float y;
-			float z;
-			float w;
-		};
+		float x;
+		float y;
+		float z;
+		float w;
 
 		vec4()
 			: vec4(0.f)
 		{ }
 
-		vec4(float v)
+		template<class T>
+		vec4(T v)
 			: vec4(v, v, v, v)
 		{ }
 
@@ -26,15 +25,16 @@ namespace glm
 			: vec4(a.x, a.y, b.x, b.y)
 		{ }
 
-		vec4(float x, float y, float z, float w)
-			: x(x)
-			, y(y)
-			, z(z)
-			, w(w)
+		template<class T1, class T2, class T3, class T4>
+		vec4(T1 x, T2 y, T3 z, T4 w)
+			: x(static_cast<float>(x))
+			, y(static_cast<float>(y))
+			, z(static_cast<float>(z))
+			, w(static_cast<float>(w))
 		{ }
 	};
 
-	vec4 operator+(vec4 const& a, vec4 const& b)
+	inline vec4 operator+(vec4 const& a, vec4 const& b)
 	{
 		return vec4(a.x + b.x, a.y + b.y, a.z + b.z, a.w + b.w);
 	}
