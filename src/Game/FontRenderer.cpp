@@ -85,7 +85,7 @@ namespace Game
 
 			if (it != std::end(_characterLookup))
 			{
-				_mesh->draw(GL_LINE_STRIP, it->second.first, it->second.second);
+				_mesh->draw(Geometry::Mesh::LINE_STRIP, it->second.first, it->second.second);
 			}
 
 			position.x += size;

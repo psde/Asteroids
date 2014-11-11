@@ -153,10 +153,10 @@ namespace Game
 			for (int x = -1; x <= 1; ++x)
 			{
 				_shader->uniform("position") = _physicsComponent.getPosition() + glm::vec2(800 * x, 600 * y);
-				_rotatedMesh->draw(GL_LINE_STRIP, 7, 0);
+				_rotatedMesh->draw(Geometry::Mesh::LINE_STRIP, 7, 0);
 				if (glm::length(_physicsComponent.getAcceleration()) > 0.f && std::fmod(glfwGetTime(), 0.2) >= 0.1)
 				{
-					_rotatedMesh->draw(GL_LINE_STRIP, 3, 7);
+					_rotatedMesh->draw(Geometry::Mesh::LINE_STRIP, 3, 7);
 				}
 			}
 		}

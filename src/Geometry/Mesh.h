@@ -11,6 +11,15 @@ namespace Geometry
 {
 	class Mesh
 	{
+	public:
+		enum DrawMode
+		{
+			POINTS = GL_POINTS,
+			LINES = GL_LINES,
+			LINE_STRIP = GL_LINE_STRIP,
+			LINE_LOOP = GL_LINE_LOOP
+		};
+
 	private:
 		GLuint _vao, _vbo, _ebo;
 
@@ -30,8 +39,8 @@ namespace Geometry
 		Mesh(std::vector<glm::vec2> vertices, std::vector<GLuint> indices);
 		~Mesh();
 
-		void draw(GLenum mode);
-		void draw(GLenum mode, int count, int offset);
+		void draw(DrawMode mode);
+		void draw(DrawMode mode, int count, int offset);
 
 		glm::vec4 getBoundingBox();
 		std::unique_ptr<Mesh> rotate(float rotation, glm::vec2 center);

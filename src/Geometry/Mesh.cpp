@@ -52,7 +52,7 @@ namespace Geometry
 	{
 		if (_initialized)
 			return;
-
+		
 		glGenVertexArrays(1, &_vao);
 		glBindVertexArray(_vao);
 
@@ -84,12 +84,12 @@ namespace Geometry
 		}
 	}
 
-	void Mesh::draw(GLenum mode)
+	void Mesh::draw(DrawMode mode)
 	{
 		draw(mode, _indices.size(), 0);
 	}
 
-	void Mesh::draw(GLenum mode, int count, int offset)
+	void Mesh::draw(DrawMode mode, int count, int offset)
 	{
 		initializeMesh();
 		glBindVertexArray(_vao);
