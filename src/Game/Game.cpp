@@ -48,34 +48,28 @@ namespace Game
 		_ufo.reset(new UFO());
 	}
 
-	void Game::destroyAsteroid(Asteroid *asteroid, bool addToScore)
+	void Game::addToScore(int points)
 	{
-		int size = asteroid->getAsteroidSize();
-		float asteroidSize = Asteroid::AsteroidSizes().at(size);
-		glm::vec2 pos = asteroid->getPhysicsComponent()->getPosition() + (asteroidSize / 2.f);
-
-		// Add to score if needed
-		if(addToScore)
-			_score += (Asteroid::AsteroidSizes().size() - size) * 100;
-
-		// Emitt particle cloud
-		_emitter.emitParticles(pos, asteroidSize / 2.f, asteroidSize);
-
-		// Flag asteroid as destroyed
-		asteroid->destroy();
-
-		// If the asteroid is not the smallest one yet, spawn two new ones
-		if (size != 0)
+		if (_score + points >= 10000)
 		{
-			size--;
-			asteroidSize = Asteroid::AsteroidSizes().at(size);
-			pos -= asteroidSize / 2.f;
-			glm::vec2 dir = glm::normalize(asteroid->getPhysicsComponent()->getVelocity());
-
-			dir = glm::rotate(dir, 0.5f * glm::pi<float>());
-			_asteroids.push_back(new Asteroid(size, pos + (dir * asteroidSize / 2.f), dir));
-			_asteroids.push_back(new Asteroid(size, pos + (-dir * asteroidSize / 2.f), -dir));
+			_score -= 10000;
+			_lives += 3;
 		}
+		else
+		{
+			for (int i = 1000; i < 9000; i+=1000)
+			{
+				if (_score < i && _score + points >= i)
+				{
+					_lives++;
+				}
+			}
+		}
+
+		if (_lives > 6)
+			_lives = 6;
+
+		_score += points;
 	}
 
 	void Game::updateState(float timeDelta)
@@ -246,7 +240,7 @@ namespace Game
 
 				// Add to score if projectile originated from player 
 				if (projectile->isFriendly())
-					_score += 1000;
+					addToScore(500);
 				
 				// Reload projectile
 				projectile->reload();
@@ -290,6 +284,36 @@ namespace Game
 			{
 				++asteroid;
 			}
+		}
+	}
+
+	void Game::destroyAsteroid(Asteroid *asteroid, bool addPoints)
+	{
+		int size = asteroid->getAsteroidSize();
+		float asteroidSize = Asteroid::AsteroidSizes().at(size);
+		glm::vec2 pos = asteroid->getPhysicsComponent()->getPosition() + (asteroidSize / 2.f);
+
+		// Add to score if needed
+		if (addPoints)
+			addToScore((Asteroid::AsteroidSizes().size() - size) * 100);
+
+		// Emitt particle cloud
+		_emitter.emitParticles(pos, asteroidSize / 2.f, asteroidSize);
+
+		// Flag asteroid as destroyed
+		asteroid->destroy();
+
+		// If the asteroid is not the smallest one yet, spawn two new ones
+		if (size != 0)
+		{
+			size--;
+			asteroidSize = Asteroid::AsteroidSizes().at(size);
+			pos -= asteroidSize / 2.f;
+			glm::vec2 dir = glm::normalize(asteroid->getPhysicsComponent()->getVelocity());
+
+			dir = glm::rotate(dir, 0.5f * glm::pi<float>());
+			_asteroids.push_back(new Asteroid(size, pos + (dir * asteroidSize / 2.f), dir));
+			_asteroids.push_back(new Asteroid(size, pos + (-dir * asteroidSize / 2.f), -dir));
 		}
 	}
 
@@ -416,7 +440,7 @@ namespace Game
 			}
 
 			std::stringstream scoress;
-			scoress << "SCORE " << std::setw(5) << std::setfill('0') << _score;
+			scoress << "SCORE " << std::setw(4) << std::setfill('0') << _score;
 			std::string score = scoress.str();
 			_fontRenderer.draw(glm::vec2(10, 10), score, 17.f);
 

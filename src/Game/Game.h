@@ -46,14 +46,14 @@ namespace Game
 		int _level;
 		int _score;
 
-
 		GameState _state;
 		float _stateTime;
 
-		void destroyAsteroid(Asteroid *asteroid, bool addToScore);
+		void destroyAsteroid(Asteroid *asteroid, bool addPoints);
 		void loadLevel();
 		void updateState(float timeDelta);
 		void reset();
+		void addToScore(int points);
 
 		void resolveCollisions();
 
