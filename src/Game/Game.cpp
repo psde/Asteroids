@@ -136,6 +136,18 @@ namespace Game
 	{
 		std::vector<std::pair<Asteroid*, bool>> destroyedAsteroids;
 
+		// Resolve Ufo -> Player collision
+		if (_ufo &&  _ufo->collidesWith(_ship))
+		{
+			// Destroy ufo
+			_emitter.emitParticles(_ufo->getPhysicsComponent()->getPosition() + 12.5f, 5, 5);
+			_ufo = nullptr;
+
+			// Player is dead, set state and release particle cloud
+			_state = Game::Dead;
+			_emitter.emitParticles(_ship.getPhysicsComponent()->getPosition() + 12.5f, 5, 5);
+		}
+
 		// Resolve Asteroids -> Asteroids collisions
 		/*for (auto asteroidA : _asteroids)
 		{
@@ -173,7 +185,7 @@ namespace Game
 				if(projectile->isLaunched() == false)
 					continue;
 
-				bool collides = projectile->collidesWith(*asteroid);
+				bool collides = projectile->collidesWith(asteroid);
 				if(collides)
 				{
 					// Destroy asteroid, add score if projectile is friendly
@@ -191,8 +203,23 @@ namespace Game
 			if(asteroid->isDestroyed())
 				continue;
 
+			if (_ufo && _ufo->collidesWith(asteroid))
+			{
+				// Destroy Ufo
+				_emitter.emitParticles(_ufo->getPhysicsComponent()->getPosition() + 12.5f, 5, 5);
+				_ufo = nullptr;
+
+				// Destroy asteroid and don't add to score
+				asteroid->destroy();
+				destroyedAsteroids.push_back({ asteroid, false });
+			}
+
+			// Did the Ufo crash into it?
+			if (asteroid->isDestroyed())
+				continue;
+
 			// Resolve Asteroid -> Ship collision
-			if(_ship.collidesWith(*asteroid))
+			if(_ship.collidesWith(asteroid))
 			{
 				// Player is dead, set state and release particle cloud
 				_state = Game::Dead;
@@ -201,6 +228,36 @@ namespace Game
 				// Destroy asteroid and don't add to score
 				asteroid->destroy();
 				destroyedAsteroids.push_back({ asteroid, false });
+			}
+		}
+
+		// Resolve Projectile -> Ship/UFO collisions
+		for (auto projectile : _projectiles)
+		{
+			// If the projectile is not launched, we do not need to consider it
+			if (projectile->isLaunched() == false)
+				continue;
+
+			if (_ufo && projectile->collidesWith(_ufo.get()))
+			{
+				// Destroy Ufo
+				_emitter.emitParticles(_ufo->getPhysicsComponent()->getPosition() + 12.5f, 5, 5);
+				_ufo = nullptr;
+
+				// Add to score if projectile originated from player 
+				if (projectile->isFriendly())
+					_score += 1000;
+				
+				// Reload projectile
+				projectile->reload();
+			}
+
+			if (projectile->collidesWith(_ship))
+			{
+				// Player is dead, set state and release particle cloud
+				_state = Game::Dead;
+				_emitter.emitParticles(_ship.getPhysicsComponent()->getPosition() + 12.5f, 5, 5);
+				projectile->reload();
 			}
 		}
 

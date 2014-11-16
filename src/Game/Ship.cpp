@@ -168,12 +168,12 @@ namespace Game
 		_moving = false;
 	}
 
-	const Components::ColliderComponent* Ship::getColliderComponent()
+	const Components::ColliderComponent* Ship::getColliderComponent() const
 	{
 		return &_colliderComponent;
 	}
 
-	const Components::PhysicsComponent* Ship::getPhysicsComponent()
+	const Components::PhysicsComponent* Ship::getPhysicsComponent() const
 	{
 		return &_physicsComponent;
 	}

@@ -64,9 +64,9 @@ namespace Game
 		void draw();
 
 		// See GameObject
-		const Components::ColliderComponent* getColliderComponent();
+		const Components::ColliderComponent* getColliderComponent() const;
 
 		// See GameObject
-		const Components::PhysicsComponent* getPhysicsComponent();
+		const Components::PhysicsComponent* getPhysicsComponent() const;
 	};
 }

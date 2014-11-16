@@ -176,12 +176,12 @@ namespace Game
 		return _size;
 	}
 
-	const Components::ColliderComponent* Asteroid::getColliderComponent()
+	const Components::ColliderComponent* Asteroid::getColliderComponent() const
 	{
 		return &_colliderComponent;
 	}
 
-	const Components::PhysicsComponent* Asteroid::getPhysicsComponent()
+	const Components::PhysicsComponent* Asteroid::getPhysicsComponent() const
 	{
 		return &_physicsComponent;
 	}

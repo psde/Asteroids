@@ -63,12 +63,12 @@ namespace Game
 		}
 	}
 
-	const Components::ColliderComponent* Projectile::getColliderComponent()
+	const Components::ColliderComponent* Projectile::getColliderComponent() const
 	{
 		return &_colliderComponent;
 	}
 
-	const Components::PhysicsComponent* Projectile::getPhysicsComponent()
+	const Components::PhysicsComponent* Projectile::getPhysicsComponent() const
 	{
 		return &_physicsComponent;
 	}

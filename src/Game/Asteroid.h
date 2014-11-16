@@ -50,10 +50,10 @@ namespace Game
 		void update(float delta);
 
 		// See GameObject
-		const Components::ColliderComponent* getColliderComponent();
+		const Components::ColliderComponent* getColliderComponent() const;
 
 		// See GameObject
-		const Components::PhysicsComponent* getPhysicsComponent();
+		const Components::PhysicsComponent* getPhysicsComponent() const;
 
 		// Returns the current asteroid size index
 		int getAsteroidSize();

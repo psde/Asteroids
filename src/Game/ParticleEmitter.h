@@ -27,8 +27,8 @@ namespace Game
 
 		void update(float timeDelta);
 		void draw();
-		const Components::ColliderComponent* getColliderComponent() { return nullptr; }
-		const Components::PhysicsComponent* getPhysicsComponent() { return &_physicsComponent; }
+		const Components::ColliderComponent* getColliderComponent() const { return nullptr; }
+		const Components::PhysicsComponent* getPhysicsComponent() const { return &_physicsComponent; }
 
 		bool isDead() { return _remainingTime <= 0.f; }
 	};
@@ -47,7 +47,7 @@ namespace Game
 
 		void update(float timeDelta);
 		void draw();
-		const Components::ColliderComponent* getColliderComponent() { return nullptr; }
-		const Components::PhysicsComponent* getPhysicsComponent() { return nullptr; }
+		const Components::ColliderComponent* getColliderComponent() const { return nullptr; }
+		const Components::PhysicsComponent* getPhysicsComponent() const { return nullptr; }
 	};
 }

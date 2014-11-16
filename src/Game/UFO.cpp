@@ -135,12 +135,12 @@ namespace Game
 		}
 	}
 
-	const Components::ColliderComponent* UFO::getColliderComponent()
+	const Components::ColliderComponent* UFO::getColliderComponent() const
 	{
 		return &_colliderComponent;
 	}
 
-	const Components::PhysicsComponent* UFO::getPhysicsComponent()
+	const Components::PhysicsComponent* UFO::getPhysicsComponent() const
 	{
 		return &_physicsComponent;
 	}

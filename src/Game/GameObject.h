@@ -22,11 +22,12 @@ namespace Game
 		virtual void draw() = 0;
 
 		// Returns a const pointer to the game objects ColliderComponent, if any. nullptr if none.
-		virtual const Components::ColliderComponent* getColliderComponent() = 0;
+		virtual const Components::ColliderComponent* getColliderComponent() const = 0;
 
 		// Returns a const pointer to the game objects PhysicsComponent, if any. nullptr if none.
-		virtual const Components::PhysicsComponent* getPhysicsComponent() = 0;
+		virtual const Components::PhysicsComponent* getPhysicsComponent() const = 0;
 
-		bool collidesWith(GameObject& other);
+		bool collidesWith(const GameObject& other);
+		bool collidesWith(const GameObject* other);
 	};
 }

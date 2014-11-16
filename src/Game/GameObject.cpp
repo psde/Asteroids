@@ -4,11 +4,16 @@
 
 namespace Game
 {
-	bool GameObject::collidesWith(GameObject& other)
+	bool GameObject::collidesWith(const GameObject& other)
 	{
-		if(getColliderComponent() == nullptr || other.getColliderComponent() == nullptr)
+		return collidesWith(&other);
+	}
+
+	bool GameObject::collidesWith(const GameObject* other)
+	{
+		if (getColliderComponent() == nullptr || other->getColliderComponent() == nullptr)
 			return false;
 
-		return getColliderComponent()->collidesWith(other.getColliderComponent());
+		return getColliderComponent()->collidesWith(other->getColliderComponent());
 	}
 }
