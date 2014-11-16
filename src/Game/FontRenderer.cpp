@@ -44,6 +44,8 @@ namespace Game
 		_characterLookup['8'] = addCharToElement(elements, { 3, 0, 2, 5, 3, 6, 8, 5 });
 		_characterLookup['9'] = addCharToElement(elements, { 5, 2, 0, 3, 5, 8 });
 
+		_characterLookup['.'] = addCharToElement(elements, { 4, 7 });
+
 		_characterLookup['A'] = addCharToElement(elements, { 6, 3, 1, 5, 8, R, 5, 3 });
 		_characterLookup['B'] = _characterLookup['8'];
 		_characterLookup['C'] = addCharToElement(elements, { 2, 0, 6, 8 });

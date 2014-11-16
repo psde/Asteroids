@@ -42,6 +42,8 @@ namespace Game
 		Ship _ship;
 		Ship _livesRenderer;
 
+		float _ufoTime;
+
 		int _lives;
 		int _level;
 		int _score;

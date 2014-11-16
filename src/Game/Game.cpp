@@ -45,7 +45,8 @@ namespace Game
 			//component->reset(glm::vec2(400, 580), glm::vec2(0));
 		}
 
-		_ufo.reset(new UFO());
+		_ufo.reset();
+		_ufoTime = 20.f;
 	}
 
 	void Game::addToScore(int points)
@@ -368,6 +369,8 @@ namespace Game
 		{
 			_emitter.update(timeDelta);
 
+			
+
 			for (auto asteroid : _asteroids)
 			{
 				asteroid->update(timeDelta);
@@ -386,6 +389,16 @@ namespace Game
 				if (projectile)
 				{
 					_projectiles.push_back(projectile);
+				}
+			}
+			else
+			{
+				_ufoTime -= timeDelta;
+
+				if (_ufoTime <= 0.f)
+				{
+					_ufo.reset(new UFO());
+					_ufoTime = 20.f;
 				}
 			}
 
@@ -422,6 +435,11 @@ namespace Game
 		}
 		else
 		{
+			std::stringstream ufotimess;
+			ufotimess << std::setw(2) << std::setfill('0') << _ufoTime;
+			std::string ufotimes = ufotimess.str();
+			_fontRenderer.draw(glm::vec2(400, 10), ufotimes, 3.f);
+
 			if (_state == Game::WaitingForStart)
 			{
 				_fontRenderer.draw(glm::vec2(310, 240), "GET READY", 20.f);
