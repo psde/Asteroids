@@ -1,4 +1,4 @@
-#include "Mesh.h"
+﻿#include "Mesh.h"
 
 #include <glm/gtx/rotate_vector.hpp>
 
@@ -67,6 +67,8 @@ namespace Geometry
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _ebo);
 		glBufferData(GL_ELEMENT_ARRAY_BUFFER, _indices.size() * sizeof(GLuint), _indices.data(), GL_STATIC_DRAW);
 
+		glPrimitiveRestartIndex(PrimitiveRestartIndex);
+
 		glBindVertexArray(0);
 
 		_initialized = true;
@@ -91,6 +93,7 @@ namespace Geometry
 
 	void Mesh::draw(DrawMode mode, int count, int offset)
 	{
+		glEnable(GL_PRIMITIVE_RESTART);
 		initializeMesh();
 		glBindVertexArray(_vao);
 		glDrawElements(mode, count, GL_UNSIGNED_INT, (void*)(offset * sizeof(GLuint)));

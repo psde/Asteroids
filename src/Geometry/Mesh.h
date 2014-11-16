@@ -20,6 +20,8 @@ namespace Geometry
 			LINE_LOOP = GL_LINE_LOOP
 		};
 
+		static const unsigned int PrimitiveRestartIndex = 65535;
+
 	private:
 		GLuint _vao, _vbo, _ebo;
 

@@ -19,23 +19,43 @@ namespace Game
 		_physicsComponent.reset(glm::vec2(200, 200), glm::vec2(10.f));
 		_movementTimeRemaining = 0.f;
 
+		//       6--7
+		//       |  |
+		//   4---8--9---5
+		//  /            \
+		// 0--------------1
+		//  \            /
+		//   2----------3
+
 		std::vector<glm::vec2> vertices = {
-			glm::vec2(0.10f * _size, 0.50f * _size),
-			glm::vec2(0.30f * _size, 0.65f * _size),
-			glm::vec2(0.70f * _size, 0.65f * _size),
-			glm::vec2(0.90f * _size, 0.50f * _size),
-			glm::vec2(0.10f * _size, 0.50f * _size),
-			glm::vec2(0.30f * _size, 0.35f * _size),
-			glm::vec2(0.40f * _size, 0.35f * _size),
-			glm::vec2(0.42f * _size, 0.15f * _size),
-			glm::vec2(0.58f * _size, 0.15f * _size),
-			glm::vec2(0.60f * _size, 0.35f * _size),
-			glm::vec2(0.30f * _size, 0.35f * _size),
-			glm::vec2(0.70f * _size, 0.35f * _size),
-			glm::vec2(0.90f * _size, 0.50f * _size)
+			glm::vec2(0.10f * _size, 0.50f * _size), // 0
+			glm::vec2(0.90f * _size, 0.50f * _size), // 1
+			glm::vec2(0.30f * _size, 0.65f * _size), // 2
+			glm::vec2(0.70f * _size, 0.65f * _size), // 3
+			glm::vec2(0.30f * _size, 0.35f * _size), // 4
+			glm::vec2(0.70f * _size, 0.35f * _size), // 5
+			glm::vec2(0.42f * _size, 0.15f * _size), // 6
+			glm::vec2(0.58f * _size, 0.15f * _size), // 7
+			glm::vec2(0.40f * _size, 0.35f * _size), // 8
+			glm::vec2(0.60f * _size, 0.35f * _size)  // 9
 		};
 
-		_mesh.reset(new Geometry::Mesh(vertices));
+		auto R = Geometry::Mesh::PrimitiveRestartIndex;
+		std::vector<GLuint> elements = {
+			// Bottom Part
+			0, 2, 3, 1, R,
+
+			// Middle Part
+			0, 1, R,
+
+			// Top Part
+			0, 4, 5, 1, R,
+
+			// Cockpit
+			8, 6, 7, 9
+		};
+
+		_mesh.reset(new Geometry::Mesh(vertices, elements));
 		_colliderComponent.setCollisionMesh(_mesh.get());
 
 		for (int i = 0; i < 1; i++)
