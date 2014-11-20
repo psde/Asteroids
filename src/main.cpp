@@ -11,7 +11,7 @@
 #include "Game/Game.h"
 #include "Shader/Globals.h"
 
-int main()
+int main(int argc, char** argv)
 {
 	std::shared_ptr<Window::Window> window(new Window::Window(800, 600));
 	Game::Game game(window);
@@ -64,4 +64,6 @@ int main()
 
 		window->finishFrame();
 	}
+
+	return 0;
 }
