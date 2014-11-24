@@ -435,11 +435,6 @@ namespace Game
 		}
 		else
 		{
-			std::stringstream ufotimess;
-			ufotimess << std::setw(2) << std::setfill('0') << _ufoTime;
-			std::string ufotimes = ufotimess.str();
-			_fontRenderer.draw(glm::vec2(400, 10), ufotimes, 3.f);
-
 			if (_state == Game::WaitingForStart)
 			{
 				_fontRenderer.draw(glm::vec2(310, 240), "GET READY", 20.f);
