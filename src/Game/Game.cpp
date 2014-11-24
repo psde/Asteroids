@@ -118,7 +118,7 @@ namespace Game
 					_stateTime = 2.f;
 				}
 			case GameOver:
-				if (_window->getGlfwKeyState(GLFW_KEY_ENTER) == GLFW_PRESS || _window->getGlfwKeyState(GLFW_KEY_KP_ENTER) == GLFW_PRESS)
+				if (_window->getKeyState(Window::Window::KEY_ENTER) == Window::Window::KEY_PRESS || _window->getKeyState(Window::Window::KEY_KP_ENTER) == Window::Window::KEY_PRESS)
 				{
 					reset();
 				}
@@ -321,7 +321,7 @@ namespace Game
 	void Game::update(float timeDelta)
 	{
 		// Cheats!
-		if (_window->getGlfwKeyState(GLFW_KEY_DELETE) == GLFW_PRESS)
+		if (_window->getKeyState(Window::Window::KEY_DELETE) == Window::Window::KEY_PRESS)
 		{
 			_lives = 3;
 			_asteroids.clear();
@@ -330,22 +330,22 @@ namespace Game
 		updateState(timeDelta);
 		if (_state == Game::Playing || _state == Game::LevelTransition)
 		{
-			if (_window->getGlfwKeyState(GLFW_KEY_UP) == GLFW_PRESS)
+			if (_window->getKeyState(Window::Window::KEY_UP) == Window::Window::KEY_PRESS)
 			{
 				_ship.accelerate();
 			}
 
 			int rotation = 0;
-			if (_window->getGlfwKeyState(GLFW_KEY_LEFT) == GLFW_PRESS)
+			if (_window->getKeyState(Window::Window::KEY_LEFT) == Window::Window::KEY_PRESS)
 			{
 				rotation = -1;
 			}
-			else if (_window->getGlfwKeyState(GLFW_KEY_RIGHT) == GLFW_PRESS)
+			else if (_window->getKeyState(Window::Window::KEY_RIGHT) == Window::Window::KEY_PRESS)
 			{
 				rotation = 1;
 			}
 
-			if (_window->getGlfwKeyState(GLFW_KEY_SPACE) == GLFW_PRESS)
+			if (_window->getKeyState(Window::Window::KEY_SPACE) == Window::Window::KEY_PRESS)
 			{
 				auto projectile = _ship.shoot();
 

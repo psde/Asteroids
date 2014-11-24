@@ -82,7 +82,7 @@ namespace Window
 		_time.y = _time.x;
 		_time.x = glfwGetTime();
 
-		if (getGlfwKeyState(GLFW_KEY_ESCAPE) == GLFW_PRESS)
+		if (getKeyState(KEY_ESCAPE) == GLFW_PRESS)
 			glfwSetWindowShouldClose(_glfwWindow, GL_TRUE);
 	}
 
@@ -91,8 +91,8 @@ namespace Window
 		return _time.x - _time.y;
 	}
 
-	int Window::getGlfwKeyState(int key)
+	Window::KeyState Window::getKeyState(Key key)
 	{
-		return glfwGetKey(_glfwWindow, key);
+		return static_cast<KeyState>(glfwGetKey(_glfwWindow, key));
 	}
 }
