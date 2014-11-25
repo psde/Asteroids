@@ -1,6 +1,6 @@
 #pragma once
 
-namespace glm
+namespace Math
 {
 	class vec2
 	{

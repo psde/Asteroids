@@ -27,27 +27,27 @@ namespace Geometry
 
 		bool _initialized;
 
-		std::vector<glm::vec2> _vertices;
+		std::vector<Math::vec2> _vertices;
 		std::vector<GLuint> _indices;
 
-		glm::vec4 _boundingBox;
+		Math::vec4 _boundingBox;
 
 		void initializeMesh();
 		void deleteMesh();
 		void createBoundingBox();
 	public:
 		Mesh(const Mesh &other);
-		Mesh(std::vector<glm::vec2> vertices);
-		Mesh(std::vector<glm::vec2> vertices, std::vector<GLuint> indices);
+		Mesh(std::vector<Math::vec2> vertices);
+		Mesh(std::vector<Math::vec2> vertices, std::vector<GLuint> indices);
 		~Mesh();
 
 		void draw(DrawMode mode);
 		void draw(DrawMode mode, int count, int offset);
 
-		glm::vec4 getBoundingBox();
-		std::unique_ptr<Mesh> rotate(float rotation, glm::vec2 center);
-		std::unique_ptr<Mesh> scale(glm::vec2 scaling);
+		Math::vec4 getBoundingBox();
+		std::unique_ptr<Mesh> rotate(float rotation, Math::vec2 center);
+		std::unique_ptr<Mesh> scale(Math::vec2 scaling);
 
-		const std::vector<glm::vec2> &vertices() const { return _vertices; }
+		const std::vector<Math::vec2> &vertices() const { return _vertices; }
 	};
 }

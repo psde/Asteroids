@@ -19,10 +19,10 @@ namespace Game
 		: _shader(Shader::Program::getProgram("data/shader/font.glsl"))
 	{
 
-		std::vector<glm::vec2> vertices;
+		std::vector<Math::vec2> vertices;
 		for (int i = 0; i < 9; i++)
 		{
-			glm::vec2 vec(0.1f + 0.4f * (i % 3), 0.1f + 0.4f * (i / 3));
+			Math::vec2 vec(0.1f + 0.4f * (i % 3), 0.1f + 0.4f * (i / 3));
 			vertices.push_back(vec);
 		}
 
@@ -82,7 +82,7 @@ namespace Game
 		_mesh.reset(new Geometry::Mesh(vertices, elements));
 	}
 
-	void FontRenderer::draw(glm::vec2 position, std::string text, float size)
+	void FontRenderer::draw(Math::vec2 position, std::string text, float size)
 	{
 		_shader->use();
 		_shader->uniform("size") = size;

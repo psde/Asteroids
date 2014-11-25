@@ -2,7 +2,6 @@
 
 #include <memory>
 
-//#include <glm/glm.hpp>
 #include "Math/Math.h"
 
 #include "Geometry/Mesh.h"
@@ -47,7 +46,7 @@ namespace Game
 		bool isLaunched();
 
 		// Launches the projectile from the given position in the given direction
-		void shoot(glm::vec2 position, glm::vec2 direction);
+		void shoot(Math::vec2 position, Math::vec2 direction);
 
 		// Reloads the projectile, allowing it to be fired again
 		void reload();

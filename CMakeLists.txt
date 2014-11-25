@@ -25,10 +25,6 @@ find_package(GLFW3 REQUIRED)
 include_directories(${GLFW3_INCLUDE_DIR})
 link_directories(${GLFW3_LIBRARY_DIR})
 
-# GLM
-find_package(GLM REQUIRED)
-include_directories(${GLM_INCLUDE_DIR})
-
 # OpenGL
 find_package(OpenGL REQUIRED)
 include_directories(${OPENGL_INCLUDE_DIRS})

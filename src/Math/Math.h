@@ -5,7 +5,7 @@
 #include "Vector2.h"
 #include "Vector4.h"
 
-namespace glm
+namespace Math
 {
 	template <typename T>
 	vec2 rotate(vec2 const &v, T const& angle)

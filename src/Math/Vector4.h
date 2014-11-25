@@ -2,7 +2,7 @@
 
 #include "Vector2.h"
 
-namespace glm
+namespace Math
 {
 	class vec4
 	{

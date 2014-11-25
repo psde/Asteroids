@@ -2,7 +2,6 @@
 
 #include <memory>
 
-//#include <glm/glm.hpp>
 #include "Math/Math.h"
 
 #include "Geometry/Mesh.h"

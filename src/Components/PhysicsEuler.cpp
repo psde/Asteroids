@@ -18,13 +18,13 @@ namespace Components
 
 	}
 
-	void PhysicsEuler::reset(glm::vec2 position, glm::vec2 velocity)
+	void PhysicsEuler::reset(Math::vec2 position, Math::vec2 velocity)
 	{
 		_position = position;
 		_velocity = velocity;
 	}
 
-	void PhysicsEuler::setAcceleration(glm::vec2 acceleration)
+	void PhysicsEuler::setAcceleration(Math::vec2 acceleration)
 	{
 		_acceleration = acceleration;
 	}

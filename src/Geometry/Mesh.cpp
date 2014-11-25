@@ -1,7 +1,5 @@
 ﻿#include "Mesh.h"
 
-//#include <glm/gtx/rotate_vector.hpp>
-//#include <glm/glm.hpp>
 #include "Math/Math.h"
 
 #include <iostream>
@@ -16,7 +14,7 @@ namespace Geometry
 		, _boundingBox(other._boundingBox)
 	{ }
 
-	Mesh::Mesh(std::vector<glm::vec2> vertices)
+	Mesh::Mesh(std::vector<Math::vec2> vertices)
 		: _initialized(false)
 		, _vertices(vertices)
 	{
@@ -27,7 +25,7 @@ namespace Geometry
 		createBoundingBox();
 	}
 
-	Mesh::Mesh(std::vector<glm::vec2> vertices, std::vector<GLuint> indices)
+	Mesh::Mesh(std::vector<Math::vec2> vertices, std::vector<GLuint> indices)
 		: _initialized(false)
 		, _vertices(vertices)
 		, _indices(indices)
@@ -60,7 +58,7 @@ namespace Geometry
 
 		glGenBuffers(1, &_vbo);
 		glBindBuffer(GL_ARRAY_BUFFER, _vbo);
-		glBufferData(GL_ARRAY_BUFFER, _vertices.size() * sizeof(glm::vec2), _vertices.data(), GL_STATIC_DRAW);
+		glBufferData(GL_ARRAY_BUFFER, _vertices.size() * sizeof(Math::vec2), _vertices.data(), GL_STATIC_DRAW);
 
 		glEnableVertexAttribArray(0);
 		glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(GLfloat), 0);
@@ -102,26 +100,26 @@ namespace Geometry
 		glBindVertexArray(0);
 	}
 
-	glm::vec4 Mesh::getBoundingBox()
+	Math::vec4 Mesh::getBoundingBox()
 	{
 		return _boundingBox;
 	}
 
-	std::unique_ptr<Mesh> Mesh::rotate(float rotation, glm::vec2 center)
+	std::unique_ptr<Mesh> Mesh::rotate(float rotation, Math::vec2 center)
 	{
 		auto vertices = _vertices;
 
 		for (auto &v : vertices)
 		{
 			v -= center;
-			v = glm::rotate(v, rotation);
+			v = Math::rotate(v, rotation);
 			v += center;
 		}
 
 		return std::unique_ptr<Mesh>(new Mesh(vertices, _indices));
 	}
 
-	std::unique_ptr<Mesh> Mesh::scale(glm::vec2 scaling)
+	std::unique_ptr<Mesh> Mesh::scale(Math::vec2 scaling)
 	{
 		auto vertices = _vertices;
 

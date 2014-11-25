@@ -4,8 +4,6 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
-//#include <glm/gtc/matrix_transform.hpp>
-//#include <glm/glm.hpp>
 #include "Math/Math.h"
 
 #include "Window/Window.h"
@@ -49,7 +47,7 @@ int main(int argc, char** argv)
 		}
 
 		Shader::Globals::globals().update<float>("time", currentTime);
-		Shader::Globals::globals().update<glm::vec2>("windowDimensions", window->getWindowDimensions());
+		Shader::Globals::globals().update<Math::vec2>("windowDimensions", window->getWindowDimensions());
 
 		game.draw();
 

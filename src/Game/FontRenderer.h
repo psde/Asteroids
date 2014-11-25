@@ -3,7 +3,6 @@
 #include <map>
 #include <string>
 
-//#include <glm/glm.hpp>
 #include "Math/Math.h"
 
 #include "Shader/Program.h"
@@ -29,7 +28,7 @@ namespace Game
 		FontRenderer();
 
 		// Renders a given string at a given position with a given size
-		void draw(glm::vec2 position, std::string text, float size);
+		void draw(Math::vec2 position, std::string text, float size);
 	};
 
 }

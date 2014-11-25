@@ -1,6 +1,6 @@
 #pragma once
 
-//#include <glm/glm.hpp>
+//#include <Math/Math.hpp>
 #include "Math/Math.h"
 
 #include "Geometry/Mesh.h"
@@ -14,11 +14,11 @@ namespace Components
 	{
 	private:
 		Geometry::Mesh* _mesh;
-		glm::vec2 _position;
+		Math::vec2 _position;
 
 		bool collidesWithAABB(const ColliderComponent *other) const;
 
-		bool isIntersecting(glm::vec2 a, glm::vec2 b, glm::vec2 c, glm::vec2 d) const;
+		bool isIntersecting(Math::vec2 a, Math::vec2 b, Math::vec2 c, Math::vec2 d) const;
 
 	public:
 		ColliderComponent();
@@ -27,7 +27,7 @@ namespace Components
 		void setCollisionMesh(Geometry::Mesh* mesh);
 
 		// Sets the position of the collision mesh
-		void setPosition(glm::vec2 pos) { _position = pos; }
+		void setPosition(Math::vec2 pos) { _position = pos; }
 
 		// Returns true if the other ColliderComponent collides with this component
 		bool collidesWith(const ColliderComponent *other) const;

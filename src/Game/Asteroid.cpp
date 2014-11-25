@@ -2,7 +2,6 @@
 #include <iostream>
 
 #include <memory>
-//#include <glm/gtx/rotate_vector.hpp>
 #include "Math/Math.h"
 
 #include "Asteroid.h"
@@ -20,72 +19,72 @@ namespace Game
 
 			int type = dis(gen);
 
-			std::vector<glm::vec2> vertices;
+			std::vector<Math::vec2> vertices;
 			switch (type)
 			{
 			default:
 			case 1:
 				vertices = {
-					glm::vec2(0.27f, 0.08f),
-					glm::vec2(0.82f, 0.10f),
-					glm::vec2(0.66f, 0.30f),
-					glm::vec2(0.82f, 0.56f),
-					glm::vec2(0.60f, 0.81f),
-					glm::vec2(0.54f, 0.63f),
-					glm::vec2(0.31f, 0.76f),
-					glm::vec2(0.10f, 0.79f),
-					glm::vec2(0.05f, 0.40f),
-					glm::vec2(0.38f, 0.28f)
+					Math::vec2(0.27f, 0.08f),
+					Math::vec2(0.82f, 0.10f),
+					Math::vec2(0.66f, 0.30f),
+					Math::vec2(0.82f, 0.56f),
+					Math::vec2(0.60f, 0.81f),
+					Math::vec2(0.54f, 0.63f),
+					Math::vec2(0.31f, 0.76f),
+					Math::vec2(0.10f, 0.79f),
+					Math::vec2(0.05f, 0.40f),
+					Math::vec2(0.38f, 0.28f)
 				};
 				break;
 			case 2:
 				vertices = {
-					glm::vec2(0.30f, 0.08f),
-					glm::vec2(0.69f, 0.09f),
-					glm::vec2(0.83f, 0.29f),
-					glm::vec2(0.83f, 0.58f),
-					glm::vec2(0.70f, 0.82f),
-					glm::vec2(0.51f, 0.82f),
-					glm::vec2(0.53f, 0.60f),
-					glm::vec2(0.26f, 0.76f),
-					glm::vec2(0.18f, 0.62f),
-					glm::vec2(0.43f, 0.53f),
-					glm::vec2(0.10f, 0.35f)
+					Math::vec2(0.30f, 0.08f),
+					Math::vec2(0.69f, 0.09f),
+					Math::vec2(0.83f, 0.29f),
+					Math::vec2(0.83f, 0.58f),
+					Math::vec2(0.70f, 0.82f),
+					Math::vec2(0.51f, 0.82f),
+					Math::vec2(0.53f, 0.60f),
+					Math::vec2(0.26f, 0.76f),
+					Math::vec2(0.18f, 0.62f),
+					Math::vec2(0.43f, 0.53f),
+					Math::vec2(0.10f, 0.35f)
 				};
 				break;
 			case 3:
 				vertices = {
-					glm::vec2(0.27f, 0.14f),
-					glm::vec2(0.45f, 0.28f),
-					glm::vec2(0.77f, 0.22f),
-					glm::vec2(0.89f, 0.38f),
-					glm::vec2(0.65f, 0.46f),
-					glm::vec2(0.82f, 0.59f),
-					glm::vec2(0.70f, 0.76f),
-					glm::vec2(0.43f, 0.71f),
-					glm::vec2(0.32f, 0.79f),
-					glm::vec2(0.13f, 0.64f),
-					glm::vec2(0.25f, 0.54f),
-					glm::vec2(0.23f, 0.45f),
-					glm::vec2(0.08f, 0.35f)
+					Math::vec2(0.27f, 0.14f),
+					Math::vec2(0.45f, 0.28f),
+					Math::vec2(0.77f, 0.22f),
+					Math::vec2(0.89f, 0.38f),
+					Math::vec2(0.65f, 0.46f),
+					Math::vec2(0.82f, 0.59f),
+					Math::vec2(0.70f, 0.76f),
+					Math::vec2(0.43f, 0.71f),
+					Math::vec2(0.32f, 0.79f),
+					Math::vec2(0.13f, 0.64f),
+					Math::vec2(0.25f, 0.54f),
+					Math::vec2(0.23f, 0.45f),
+					Math::vec2(0.08f, 0.35f)
 				};
 				break;
 			case 4:
 				vertices = {
-					glm::vec2(0.25f, 0.25f),
-					glm::vec2(0.75f, 0.25f),
-					glm::vec2(0.75f, 0.75f),
-					glm::vec2(0.25f, 0.75f)
+					Math::vec2(0.25f, 0.25f),
+					Math::vec2(0.75f, 0.25f),
+					Math::vec2(0.75f, 0.75f),
+					Math::vec2(0.25f, 0.75f)
 				};
 				break;
 			}
 
 			for (auto &v : vertices)
 			{
-				v -= glm::vec2(0.5f);
-				v += glm::vec2(offset(gen), offset(gen));
-				//v = glm::rotate(v, rotation);
-				v += glm::vec2(0.5f);
+				v -= Math::vec2(0.5f);
+				v += Math::vec2(offset(gen), offset(gen));
+				//v = Math::rotate(v, rotation);
+				v += Math::vec2(0.5f);
 				v *= size;
 			}
 
@@ -105,8 +104,8 @@ namespace Game
 		std::uniform_real_distribution<> dis_y(0, 600);
 		std::uniform_real_distribution<> dir(-1, 1);
 
-		glm::vec2 position = glm::vec2(dis_x(gen), dis_y(gen));
-		glm::vec2 direction = glm::vec2(dir(gen), dir(gen));
+		Math::vec2 position = Math::vec2(dis_x(gen), dis_y(gen));
+		Math::vec2 direction = Math::vec2(dir(gen), dir(gen));
 
 		if (position.x > 200 && position.x < 450 && 
 			position.y > 200 && position.y < 350)
@@ -118,18 +117,18 @@ namespace Game
 		init(size, position, direction);
 	}
 
-	Asteroid::Asteroid(int size, glm::vec2 position, glm::vec2 direction)
+	Asteroid::Asteroid(int size, Math::vec2 position, Math::vec2 direction)
 	{
 		init(size, position, direction);
 	}
 
-	void Asteroid::init(int size, glm::vec2 position, glm::vec2 direction)
+	void Asteroid::init(int size, Math::vec2 position, Math::vec2 direction)
 	{
 		std::random_device rd;
 		std::mt19937 gen(rd());
 		std::uniform_real_distribution<> vel(30.0, 55.0);
 		std::exponential_distribution<> vel2(50);
-		std::uniform_real_distribution<> rotation(0, 2.f * glm::pi<float>());
+		std::uniform_real_distribution<> rotation(0, 2.f * Math::pi<float>());
 		std::uniform_real_distribution<> sizeOffset(0.f, 4.f);
 
 		_destroyed = false;
@@ -137,7 +136,7 @@ namespace Game
 		_shader = Shader::Program::getProgram("data/shader/asteroid.glsl");
 		_rotation = rotation(gen);
 
-		glm::vec2 velocity = direction * glm::vec2(vel2(gen) + 30.f);
+		Math::vec2 velocity = direction * Math::vec2(vel2(gen) + 30.f);
 
 		velocity *= (Asteroid::AsteroidSizes().size() - size);
 
@@ -145,7 +144,7 @@ namespace Game
 
 		_meshSize = AsteroidSizes().at(_size) + sizeOffset(gen);
 		_mesh = generateAsteroid(_meshSize);
-		_mesh = std::move(_mesh->rotate(_rotation, glm::vec2(_meshSize / 2.0f)));
+		_mesh = std::move(_mesh->rotate(_rotation, Math::vec2(_meshSize / 2.0f)));
 
 		std::unique_ptr<Geometry::Mesh> collision(new Geometry::Mesh(*_mesh.get()));
 		_colliderComponent.setCollisionMesh(_mesh.get());
@@ -166,7 +165,7 @@ namespace Game
 		{
 			for (int x = -1; x <= 1; ++x)
 			{
-				_shader->uniform("position") = _physicsComponent.getPosition() + glm::vec2(800 * x, 600 * y);
+				_shader->uniform("position") = _physicsComponent.getPosition() + Math::vec2(800 * x, 600 * y);
 				_mesh->draw(Geometry::Mesh::LINE_LOOP);
 			}
 		}

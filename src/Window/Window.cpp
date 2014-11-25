@@ -45,7 +45,7 @@ namespace Window
 
 		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
-		glm::vec2 dimensions(getWindowDimensions());
+		Math::vec2 dimensions(getWindowDimensions());
 		glViewport(0, 0, dimensions.x, dimensions.y);
 	}
 
@@ -55,18 +55,18 @@ namespace Window
 		glfwTerminate();
 	}
 
-	glm::vec2 Window::getWindowDimensions()
+	Math::vec2 Window::getWindowDimensions()
 	{
 		int x, y;
 		glfwGetWindowSize(_glfwWindow, &x, &y);
-		return glm::vec2(x, y);
+		return Math::vec2(x, y);
 	}
 
-	glm::vec2 Window::getCursorPosition()
+	Math::vec2 Window::getCursorPosition()
 	{
 		double x, y;
 		glfwGetCursorPos(_glfwWindow, &x, &y);
-		return glm::vec2(x, y);
+		return Math::vec2(x, y);
 	}
 
 	bool Window::shouldClose()

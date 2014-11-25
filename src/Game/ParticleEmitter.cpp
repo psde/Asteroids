@@ -4,7 +4,7 @@
 
 namespace Game
 {
-	Particle::Particle(std::shared_ptr<Geometry::Mesh> mesh, glm::vec2 position, glm::vec2 direction)
+	Particle::Particle(std::shared_ptr<Geometry::Mesh> mesh, Math::vec2 position, Math::vec2 direction)
 		: _shader(Shader::Program::getProgram("data/shader/particle.glsl"))
 		, _mesh(mesh)
 	{
@@ -22,7 +22,7 @@ namespace Game
 	void Particle::update(float timeDelta)
 	{
 		_physicsComponent.update(timeDelta);
-		_physicsComponent.setAcceleration(glm::vec2(-1.f));
+		_physicsComponent.setAcceleration(Math::vec2(-1.f));
 		_remainingTime -= timeDelta;
 	}
 
@@ -43,17 +43,17 @@ namespace Game
 
 		int steps = 12;
 		float r = 0.f;
-		std::vector<glm::vec2> vertices;
+		std::vector<Math::vec2> vertices;
 		for (int i = 0; i <= steps; i++)
 		{
-			r += ((2.f * glm::pi<float>()) / (float)steps);
-			vertices.push_back(glm::vec2(sin(r), cos(r)));
+			r += ((2.f * Math::pi<float>()) / (float)steps);
+			vertices.push_back(Math::vec2(sin(r), cos(r)));
 		}
 
 		_mesh.reset(new Geometry::Mesh(vertices));
 	}
 
-	void ParticleEmitter::emitParticles(glm::vec2 position, float radius, int count)
+	void ParticleEmitter::emitParticles(Math::vec2 position, float radius, int count)
 	{
 		std::random_device rd;
 		std::mt19937 gen(rd());
@@ -62,12 +62,12 @@ namespace Game
 
 		for (int i = 0; i < count; i++)
 		{
-			glm::vec2 pos = position + glm::vec2(offset(gen), offset(gen));
+			Math::vec2 pos = position + Math::vec2(offset(gen), offset(gen));
 
-			float t = 2.f * glm::pi<float>() * foo(gen);
-			pos = position + glm::vec2(offset(gen) * cos(t), offset(gen) * sin(t));
+			float t = 2.f * Math::pi<float>() * foo(gen);
+			pos = position + Math::vec2(offset(gen) * cos(t), offset(gen) * sin(t));
 
-			glm::vec2 dir = glm::normalize(pos - position);
+			Math::vec2 dir = Math::normalize(pos - position);
 			_particles.push_back(new Particle(_mesh, pos, dir));
 		}
 	}

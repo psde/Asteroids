@@ -3,7 +3,6 @@
 #include <vector>
 #include <memory>
 
-//#include <glm/glm.hpp>
 #include "Math/Math.h"
 
 #include "Geometry/Mesh.h"
@@ -24,7 +23,7 @@ namespace Game
 		std::shared_ptr<Geometry::Mesh> _mesh;
 
 	public:
-		Particle(std::shared_ptr<Geometry::Mesh> mesh, glm::vec2 position, glm::vec2 direction);
+		Particle(std::shared_ptr<Geometry::Mesh> mesh, Math::vec2 position, Math::vec2 direction);
 
 		void update(float timeDelta);
 		void draw();
@@ -43,7 +42,7 @@ namespace Game
 	public:
 		ParticleEmitter();
 
-		void emitParticles(glm::vec2 position, float radius, int count);
+		void emitParticles(Math::vec2 position, float radius, int count);
 		void reset();
 
 		void update(float timeDelta);

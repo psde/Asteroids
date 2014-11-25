@@ -5,7 +5,6 @@
 
 #include "Game.h"
 
-//#include <glm/gtx/rotate_vector.hpp>
 #include "Math/Math.h"
 
 #include <GLFW/glfw3.h>
@@ -44,7 +43,7 @@ namespace Game
 		{
 			//auto a = _asteroids.at(0);
 			//Components::PhysicsComponent *component = const_cast<Components::PhysicsComponent*>(a->getPhysicsComponent());
-			//component->reset(glm::vec2(400, 580), glm::vec2(0));
+			//component->reset(Math::vec2(400, 580), Math::vec2(0));
 		}
 
 		_ufo.reset();
@@ -294,7 +293,7 @@ namespace Game
 	{
 		int size = asteroid->getAsteroidSize();
 		float asteroidSize = Asteroid::AsteroidSizes().at(size);
-		glm::vec2 pos = asteroid->getPhysicsComponent()->getPosition() + (asteroidSize / 2.f);
+		Math::vec2 pos = asteroid->getPhysicsComponent()->getPosition() + (asteroidSize / 2.f);
 
 		// Add to score if needed
 		if (addPoints)
@@ -312,9 +311,9 @@ namespace Game
 			size--;
 			asteroidSize = Asteroid::AsteroidSizes().at(size);
 			pos -= asteroidSize / 2.f;
-			glm::vec2 dir = glm::normalize(asteroid->getPhysicsComponent()->getVelocity());
+			Math::vec2 dir = Math::normalize(asteroid->getPhysicsComponent()->getVelocity());
 
-			dir = glm::rotate(dir, 0.5f * glm::pi<float>());
+			dir = Math::rotate(dir, 0.5f * Math::pi<float>());
 			_asteroids.push_back(new Asteroid(size, pos + (dir * asteroidSize / 2.f), dir));
 			_asteroids.push_back(new Asteroid(size, pos + (-dir * asteroidSize / 2.f), -dir));
 		}
@@ -360,7 +359,7 @@ namespace Game
 		}
 
 		//Components::PhysicsComponent *component = const_cast<Components::PhysicsComponent*>(_ship.getPhysicsComponent());
-		//component->reset(_window->getCursorPosition() - glm::vec2(10), glm::vec2(0));
+		//component->reset(_window->getCursorPosition() - Math::vec2(10), Math::vec2(0));
 
 		if (_state != Game::GameOver && _state != Game::WaitingForRespawn && _state != Game::WaitingForStart)
 		{
@@ -432,37 +431,37 @@ namespace Game
 
 		if (_state == Game::GameOver)
 		{
-			_fontRenderer.draw(glm::vec2(220, 260), "GAME OVER", 40.f);
-			_fontRenderer.draw(glm::vec2(210, 330), "PRESS RETURN TO PLAY AGAIN", 15.f);
+			_fontRenderer.draw(Math::vec2(220, 260), "GAME OVER", 40.f);
+			_fontRenderer.draw(Math::vec2(210, 330), "PRESS RETURN TO PLAY AGAIN", 15.f);
 		}
 		else
 		{
 			if (_state == Game::WaitingForStart)
 			{
-				_fontRenderer.draw(glm::vec2(310, 240), "GET READY", 20.f);
+				_fontRenderer.draw(Math::vec2(310, 240), "GET READY", 20.f);
 			}
 			else if (_state == Game::LevelTransition)
 			{
-				_fontRenderer.draw(glm::vec2(260, 240), "CONGRATULATIONS", 20.f);
+				_fontRenderer.draw(Math::vec2(260, 240), "CONGRATULATIONS", 20.f);
 			}
 
-			_fontRenderer.draw(glm::vec2(10, 35), "LIVES", 17.f);
+			_fontRenderer.draw(Math::vec2(10, 35), "LIVES", 17.f);
 			for (int i = 0; i < _lives; i++)
 			{
 				Components::PhysicsComponent *component = const_cast<Components::PhysicsComponent*>(_livesRenderer.getPhysicsComponent());
-				component->reset(glm::vec2(110.f + i * 15.f, 32.f), glm::vec2(0));
+				component->reset(Math::vec2(110.f + i * 15.f, 32.f), Math::vec2(0));
 				_livesRenderer.draw();
 			}
 
 			std::stringstream scoress;
 			scoress << "SCORE " << std::setw(4) << std::setfill('0') << _score;
 			std::string score = scoress.str();
-			_fontRenderer.draw(glm::vec2(10, 10), score, 17.f);
+			_fontRenderer.draw(Math::vec2(10, 10), score, 17.f);
 
 			std::stringstream levelss;
 			levelss << "LEVEL " << std::setw(2) << std::setfill('0') << _level;
 			std::string level = levelss.str();
-			_fontRenderer.draw(glm::vec2(660, 10), level, 17.f);
+			_fontRenderer.draw(Math::vec2(660, 10), level, 17.f);
 		}
 	}
 }

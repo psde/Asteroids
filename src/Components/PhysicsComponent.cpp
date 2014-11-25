@@ -5,7 +5,7 @@
 
 namespace Components
 {
-	void PhysicsComponent::performWrapAround(glm::vec2 &position)
+	void PhysicsComponent::performWrapAround(Math::vec2 &position)
 	{
 		// Perform wrap-around
 		while (position.x > 800.0f)
@@ -27,12 +27,12 @@ namespace Components
 		}
 	}
 
-	void PhysicsComponent::applyTerminalVelocity(glm::vec2 &velocity)
+	void PhysicsComponent::applyTerminalVelocity(Math::vec2 &velocity)
 	{
 		float terminalVelocity = getTerminalVelocity();
 		if (terminalVelocity > 0.f && (std::abs(velocity.x) > terminalVelocity || std::abs(velocity.y) > terminalVelocity))
 		{
-			velocity = glm::normalize(velocity) * std::fmin(glm::length(velocity), terminalVelocity);
+			velocity = Math::normalize(velocity) * std::fmin(Math::length(velocity), terminalVelocity);
 		}
 	}
 }

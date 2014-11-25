@@ -16,18 +16,18 @@ namespace Components
 
 	}
 
-	void PhysicsRungeKutta::reset(glm::vec2 position, glm::vec2 velocity)
+	void PhysicsRungeKutta::reset(Math::vec2 position, Math::vec2 velocity)
 	{
 		_state.position = position;
 		_state.velocity = velocity;
 	}
 
-	void PhysicsRungeKutta::setAcceleration(glm::vec2 acceleration)
+	void PhysicsRungeKutta::setAcceleration(Math::vec2 acceleration)
 	{
 		_acceleration = acceleration;
 	}
 
-	glm::vec2 PhysicsRungeKutta::acceleration(const State &/*state*/)
+	Math::vec2 PhysicsRungeKutta::acceleration(const State &/*state*/)
 	{
 		return _acceleration;
 	}
@@ -58,8 +58,8 @@ namespace Components
 		State c = evaluate(state, dt*0.5f, b);
 		State d = evaluate(state, dt, c);
 
-		const glm::vec2 dxdt = 1.0f / 6.0f * (a.position + 2.0f*(b.position + c.position) + d.position);
-		const glm::vec2 dvdt = 1.0f / 6.0f * (a.velocity + 2.0f*(b.velocity + c.velocity) + d.velocity);
+		const Math::vec2 dxdt = 1.0f / 6.0f * (a.position + 2.0f*(b.position + c.position) + d.position);
+		const Math::vec2 dvdt = 1.0f / 6.0f * (a.velocity + 2.0f*(b.velocity + c.velocity) + d.velocity);
 
 		state.position = state.position + dxdt*dt;
 		state.velocity = state.velocity + dvdt*dt;

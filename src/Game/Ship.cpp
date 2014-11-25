@@ -1,8 +1,6 @@
 #include <random>
 #include <iostream>
 
-//#include <glm/gtx/rotate_vector.hpp>
-//#include <glm/glm.hpp>
 #include "Math/Math.h"
 
 #include "Ship.h"
@@ -22,15 +20,15 @@ namespace Game
 	{
 		_physicsComponent.setTerminalVelocity(225.f);
 
-		std::vector<glm::vec2> vertices = {
-			glm::vec2(0.25f * _size, 0.90f * _size), // 0
-			glm::vec2(0.50f * _size, 0.10f * _size), // 1
-			glm::vec2(0.75f * _size, 0.90f * _size), // 2
-			glm::vec2(0.70f * _size, 0.75f * _size), // 3
-			glm::vec2(0.60f * _size, 0.70f * _size), // 4
-			glm::vec2(0.40f * _size, 0.70f * _size), // 5
-			glm::vec2(0.30f * _size, 0.75f * _size), // 6
-			glm::vec2(0.50f * _size, 0.99f * _size)  // 7
+		std::vector<Math::vec2> vertices = {
+			Math::vec2(0.25f * _size, 0.90f * _size), // 0
+			Math::vec2(0.50f * _size, 0.10f * _size), // 1
+			Math::vec2(0.75f * _size, 0.90f * _size), // 2
+			Math::vec2(0.70f * _size, 0.75f * _size), // 3
+			Math::vec2(0.60f * _size, 0.70f * _size), // 4
+			Math::vec2(0.40f * _size, 0.70f * _size), // 5
+			Math::vec2(0.30f * _size, 0.75f * _size), // 6
+			Math::vec2(0.50f * _size, 0.99f * _size)  // 7
 		};
 
 		auto R = Geometry::Mesh::PrimitiveRestartIndex;
@@ -52,8 +50,8 @@ namespace Game
 
 	void Ship::reset()
 	{
-		_physicsComponent.reset(glm::vec2(400.0f - _size / 2.f, 300 - _size / 2.f), glm::vec2(0.f));
-		_physicsComponent.setAcceleration(glm::vec2(0.f, 0.f));
+		_physicsComponent.reset(Math::vec2(400.0f - _size / 2.f, 300 - _size / 2.f), Math::vec2(0.f));
+		_physicsComponent.setAcceleration(Math::vec2(0.f, 0.f));
 		_moving = false;
 		_invicibility = 0.f;
 		//_rotation = 0.f;
@@ -103,8 +101,8 @@ namespace Game
 
 		if (projectile)
 		{
-			glm::vec2 dir = glm::rotate(glm::vec2(0.f, -1.f), _rotation);
-			glm::vec2 position = _physicsComponent.getPosition() + glm::vec2(_size / 2.f) + (dir * (float)_size / 2.f);
+			Math::vec2 dir = Math::rotate(Math::vec2(0.f, -1.f), _rotation);
+			Math::vec2 position = _physicsComponent.getPosition() + Math::vec2(_size / 2.f) + (dir * (float)_size / 2.f);
 			projectile->shoot(position, dir);
 			_reloadTime = 0.20f;
 		}
@@ -117,11 +115,11 @@ namespace Game
 		if (_moving)
 		{
 			float acceleration = 175.f;
-			_physicsComponent.setAcceleration(glm::rotate(glm::vec2(0.f, -acceleration), _rotation));
+			_physicsComponent.setAcceleration(Math::rotate(Math::vec2(0.f, -acceleration), _rotation));
 		}
 		else
 		{
-			_physicsComponent.setAcceleration(glm::vec2(0.f, 0.f));
+			_physicsComponent.setAcceleration(Math::vec2(0.f, 0.f));
 		}
 
 		_physicsComponent.update(delta);
@@ -140,7 +138,7 @@ namespace Game
 		if (_rotating != 0)
 		{
 			_rotation += 4.5f * (float)_rotating * delta;
-			_rotatedMesh = std::move(_mesh->rotate(_rotation, glm::vec2(_size / 2.0f)));
+			_rotatedMesh = std::move(_mesh->rotate(_rotation, Math::vec2(_size / 2.0f)));
 			_rotating = 0;
 		}
 
@@ -158,9 +156,9 @@ namespace Game
 		{
 			for (int x = -1; x <= 1; ++x)
 			{
-				_shader->uniform("position") = _physicsComponent.getPosition() + glm::vec2(800 * x, 600 * y);
+				_shader->uniform("position") = _physicsComponent.getPosition() + Math::vec2(800 * x, 600 * y);
 				_rotatedMesh->draw(Geometry::Mesh::LINE_STRIP, 8, 0);
-				if (glm::length(_physicsComponent.getAcceleration()) > 0.f && std::fmod(glfwGetTime(), 0.2) >= 0.1)
+				if (Math::length(_physicsComponent.getAcceleration()) > 0.f && std::fmod(glfwGetTime(), 0.2) >= 0.1)
 				{
 					_rotatedMesh->draw(Geometry::Mesh::LINE_STRIP, 3, 8);
 				}

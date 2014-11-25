@@ -2,7 +2,6 @@
 
 #include <memory>
 
-//#include <glm/glm.hpp>
 #include "Math/Math.h"
 
 #include "Geometry/Mesh.h"
@@ -29,7 +28,7 @@ namespace Game
 		std::unique_ptr<Geometry::Mesh> _mesh;
 		std::shared_ptr<Shader::Program> _shader;
 
-		void init(int size, glm::vec2 position, glm::vec2 direction);
+		void init(int size, Math::vec2 position, Math::vec2 direction);
 	public:
 		// Creates an asteroid with a random position and random velocity, 
 		// and with maximum size.
@@ -42,7 +41,7 @@ namespace Game
 		// Creates an asteroid with a given position and given direction, 
 		// but random velocity depending on the asteroid size
 		// and with a size which is determined by the given size index
-		Asteroid(int size, glm::vec2 position, glm::vec2 direction);
+		Asteroid(int size, Math::vec2 position, Math::vec2 direction);
 
 		// Draws the asteroid at the current position
 		void draw();

@@ -20,8 +20,8 @@ namespace Components
 		{
 			for (int x = -1; x <= 1; ++x)
 			{
-				glm::vec4 a = _mesh->getBoundingBox() + glm::vec4(_position + glm::vec2(800 * x, 600 * y), _position + glm::vec2(800 * x, 600 * y));
-				glm::vec4 b = other->_mesh->getBoundingBox() + glm::vec4(other->_position, other->_position);
+				Math::vec4 a = _mesh->getBoundingBox() + Math::vec4(_position + Math::vec2(800 * x, 600 * y), _position + Math::vec2(800 * x, 600 * y));
+				Math::vec4 b = other->_mesh->getBoundingBox() + Math::vec4(other->_position, other->_position);
 
 				if (a.z >= b.x && a.x <= b.z && a.w >= b.y && a.y <= b.w) return true;
 			}
@@ -30,7 +30,7 @@ namespace Components
 		return false;
 	}
 
-	bool ColliderComponent::isIntersecting(glm::vec2 a, glm::vec2 b, glm::vec2 c, glm::vec2 d) const
+	bool ColliderComponent::isIntersecting(Math::vec2 a, Math::vec2 b, Math::vec2 c, Math::vec2 d) const
 	{
 		float denominator = ((b.x - a.x) * (d.y - c.y)) - ((b.y - a.y) * (d.x - c.x));
 		float numerator1 = ((a.y - c.y) * (d.x - c.x)) - ((a.x - c.x) * (d.y - c.y));
@@ -68,7 +68,7 @@ namespace Components
 				{
 					for (int x = -1; x <= 1; ++x)
 					{
-						if (isIntersecting(*a1 + _position + glm::vec2(800 * x, 600 * y), *a2 + _position + glm::vec2(800 * x, 600 * y), *b1 + other->_position, *b2 + other->_position))
+						if (isIntersecting(*a1 + _position + Math::vec2(800 * x, 600 * y), *a2 + _position + Math::vec2(800 * x, 600 * y), *b1 + other->_position, *b2 + other->_position))
 						{
 							return true;
 						}

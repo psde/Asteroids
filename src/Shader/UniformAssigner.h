@@ -2,7 +2,6 @@
 
 #include <GL/glew.h>
 
-//#include <glm/glm.hpp>
 #include "Math/Math.h"
 
 namespace Shader
@@ -15,9 +14,9 @@ namespace Shader
 	public:
 		explicit UniformAssigner(GLuint location);
 
-		//UniformAssigner& operator=(const glm::mat4 &val);
+		//UniformAssigner& operator=(const Math::mat4 &val);
 
-		UniformAssigner& operator=(const glm::vec2 &val);
+		UniformAssigner& operator=(const Math::vec2 &val);
 
 		UniformAssigner& operator=(const float &val);
 	};
