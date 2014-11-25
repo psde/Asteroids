@@ -16,7 +16,7 @@ namespace Game
 	}
 
 	FontRenderer::FontRenderer()
-		: _shader(Shader::Program::getProgram("data/shader/font.glsl"))
+		: _shader(Graphics::Program::getProgram("data/shader/font.glsl"))
 	{
 
 		std::vector<Math::vec2> vertices;
@@ -30,7 +30,7 @@ namespace Game
 		   3 4 5
 		   6 7 8 */
 
-		auto R = Geometry::GeometryRestartIndex;
+		auto R = Graphics::GeometryRestartIndex;
 
 		std::vector<GLuint> elements;
 		_characterLookup['0'] = addCharToElement(elements, { 0, 2, 8, 6, 0 });
@@ -79,7 +79,7 @@ namespace Game
 			_characterLookup['a' + c - 'A'] = _characterLookup[c];
 		}
 
-		_mesh.reset(new Geometry::Mesh(vertices, elements));
+		_mesh.reset(new Graphics::Mesh(vertices, elements));
 	}
 
 	void FontRenderer::draw(Math::vec2 position, std::string text, float size)
@@ -95,7 +95,7 @@ namespace Game
 
 			if (it != std::end(_characterLookup))
 			{
-				_mesh->draw(Geometry::LINE_STRIP, it->second.first, it->second.second);
+				_mesh->draw(Graphics::LINE_STRIP, it->second.first, it->second.second);
 			}
 
 			position.x += size;

@@ -7,7 +7,7 @@
 
 #include "Graphics/Shader/Program.h"
 
-namespace Geometry
+namespace Graphics
 {
 	const unsigned int GeometryRestartIndex = 65535;
 	enum DrawMode

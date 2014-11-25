@@ -29,7 +29,7 @@ namespace Game
 			LevelTransition
 		};
 
-		std::shared_ptr<Window::Window> _window;
+		std::shared_ptr<Graphics::Window> _window;
 
 		std::vector<Asteroid*> _asteroids;
 		std::vector<std::shared_ptr<Projectile>> _projectiles;
@@ -60,7 +60,7 @@ namespace Game
 		void resolveCollisions();
 
 	public:
-		Game(std::shared_ptr<Window::Window> window);
+		Game(std::shared_ptr<Graphics::Window> window);
 
 		void update(float timeDelta);
 

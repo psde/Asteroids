@@ -5,7 +5,7 @@
 
 #include "Shader.h"
 
-namespace Shader
+namespace Graphics
 {
 	Shader::Shader(std::string name, GLuint type)
 		:_name(name), _type(type)

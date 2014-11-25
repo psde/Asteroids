@@ -18,11 +18,11 @@ namespace Game
 	{
 	private:
 
-		std::unique_ptr<Geometry::Mesh> _mesh;
+		std::unique_ptr<Graphics::Mesh> _mesh;
 
 		std::map<char, std::pair<int, int>> _characterLookup;
 
-		std::shared_ptr<Shader::Program> _shader;
+		std::shared_ptr<Graphics::Program> _shader;
 	public:
 		// Constructor
 		FontRenderer();

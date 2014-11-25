@@ -2,7 +2,7 @@
 
 #include "Window.h"
 
-namespace Window
+namespace Graphics
 {
 	namespace {
 		static void error_callback(int error, const char* description)

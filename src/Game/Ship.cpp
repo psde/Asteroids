@@ -10,7 +10,7 @@
 namespace Game
 {
 	Ship::Ship(float size)
-		: _shader(Shader::Program::getProgram("data/shader/ship.glsl"))
+		: _shader(Graphics::Program::getProgram("data/shader/ship.glsl"))
 		, _size(size)
 		, _rotation(0.f)
 		, _moving(false)
@@ -31,7 +31,7 @@ namespace Game
 			Math::vec2(0.50f * _size, 0.99f * _size)  // 7
 		};
 
-		auto R = Geometry::GeometryRestartIndex;
+		auto R = Graphics::GeometryRestartIndex;
 		std::vector<GLuint> elements = {
 			0, 1, 2, R, 3, 4, 5, 6,
 			
@@ -39,8 +39,8 @@ namespace Game
 			3, 7, 6
 		};
 
-		_mesh.reset(new Geometry::Mesh(vertices, elements));
-		_rotatedMesh = std::unique_ptr<Geometry::Mesh>(new Geometry::Mesh(*_mesh.get()));
+		_mesh.reset(new Graphics::Mesh(vertices, elements));
+		_rotatedMesh = std::unique_ptr<Graphics::Mesh>(new Graphics::Mesh(*_mesh.get()));
 
 		for (int i = 0; i < 5; i++)
 			_projectiles.push_back(std::make_shared<Projectile>(2.f, true));
@@ -157,10 +157,10 @@ namespace Game
 			for (int x = -1; x <= 1; ++x)
 			{
 				_shader->uniform("position") = _physicsComponent.getPosition() + Math::vec2(800 * x, 600 * y);
-				_rotatedMesh->draw(Geometry::LINE_STRIP, 8, 0);
+				_rotatedMesh->draw(Graphics::LINE_STRIP, 8, 0);
 				if (Math::length(_physicsComponent.getAcceleration()) > 0.f && std::fmod(glfwGetTime(), 0.2) >= 0.1)
 				{
-					_rotatedMesh->draw(Geometry::LINE_STRIP, 3, 8);
+					_rotatedMesh->draw(Graphics::LINE_STRIP, 3, 8);
 				}
 			}
 		}

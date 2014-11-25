@@ -13,7 +13,7 @@ namespace Components
 	class ColliderComponent
 	{
 	private:
-		Geometry::Mesh* _mesh;
+		Graphics::Mesh* _mesh;
 		Math::vec2 _position;
 
 		bool collidesWithAABB(const ColliderComponent *other) const;
@@ -24,7 +24,7 @@ namespace Components
 		ColliderComponent();
 
 		// Sets the collision mesh to the given mesh
-		void setCollisionMesh(Geometry::Mesh* mesh);
+		void setCollisionMesh(Graphics::Mesh* mesh);
 
 		// Sets the position of the collision mesh
 		void setPosition(Math::vec2 pos) { _position = pos; }

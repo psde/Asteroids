@@ -4,8 +4,8 @@
 
 namespace Game
 {
-	Particle::Particle(std::shared_ptr<Geometry::Mesh> mesh, Math::vec2 position, Math::vec2 direction)
-		: _shader(Shader::Program::getProgram("data/shader/particle.glsl"))
+	Particle::Particle(std::shared_ptr<Graphics::Mesh> mesh, Math::vec2 position, Math::vec2 direction)
+		: _shader(Graphics::Program::getProgram("data/shader/particle.glsl"))
 		, _mesh(mesh)
 	{
 		_physicsComponent.reset(position, direction * 10.f);
@@ -33,13 +33,13 @@ namespace Game
 		_shader->uniform("remainingTime") = _remainingTime;
 		_shader->uniform("particleSize") = _particleSize;
 		_shader->uniform("position") = _physicsComponent.getPosition();
-		_mesh->draw(Geometry::LINE_STRIP);
+		_mesh->draw(Graphics::LINE_STRIP);
 	}
 
 	ParticleEmitter::ParticleEmitter()
 	{
 		// Preload shader so it does not happen mid-game
-		auto shader = Shader::Program::getProgram("data/shader/particle.glsl");
+		auto shader = Graphics::Program::getProgram("data/shader/particle.glsl");
 
 		int steps = 12;
 		float r = 0.f;
@@ -50,7 +50,7 @@ namespace Game
 			vertices.push_back(Math::vec2(sin(r), cos(r)));
 		}
 
-		_mesh.reset(new Geometry::Mesh(vertices));
+		_mesh.reset(new Graphics::Mesh(vertices));
 	}
 
 	void ParticleEmitter::emitParticles(Math::vec2 position, float radius, int count)

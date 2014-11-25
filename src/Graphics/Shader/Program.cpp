@@ -5,7 +5,7 @@
 #include <iostream>
 #include <fstream>
 
-namespace Shader
+namespace Graphics
 {
 	Program::Program(std::string universalShader)
 		: _linked(false)

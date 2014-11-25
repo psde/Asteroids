@@ -1,6 +1,6 @@
 #include "UniformAssigner.h"
 
-namespace Shader
+namespace Graphics
 {
 	UniformAssigner::UniformAssigner(GLuint location) : _location(location){}
 

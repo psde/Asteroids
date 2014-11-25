@@ -25,8 +25,8 @@ namespace Game
 		Components::ColliderComponent _colliderComponent;
 		float _rotation;
 
-		std::unique_ptr<Geometry::Mesh> _mesh;
-		std::shared_ptr<Shader::Program> _shader;
+		std::unique_ptr<Graphics::Mesh> _mesh;
+		std::shared_ptr<Graphics::Program> _shader;
 
 		void init(int size, Math::vec2 position, Math::vec2 direction);
 	public:

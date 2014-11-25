@@ -12,7 +12,7 @@
 
 int main(int argc, char** argv)
 {
-	std::shared_ptr<Window::Window> window(new Window::Window(800, 600));
+	std::shared_ptr<Graphics::Window> window(new Graphics::Window(800, 600));
 	Game::Game game(window);
 
 	float last_frametime = 0.f;
@@ -46,8 +46,8 @@ int main(int argc, char** argv)
 				break;
 		}
 
-		Shader::Globals::globals().update<float>("time", currentTime);
-		Shader::Globals::globals().update<Math::vec2>("windowDimensions", window->getWindowDimensions());
+		Graphics::Globals::globals().update<float>("time", currentTime);
+		Graphics::Globals::globals().update<Math::vec2>("windowDimensions", window->getWindowDimensions());
 
 		game.draw();
 

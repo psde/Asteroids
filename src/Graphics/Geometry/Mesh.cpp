@@ -5,7 +5,7 @@
 #include <iostream>
 #include <algorithm>
 
-namespace Geometry
+namespace Graphics
 {
 	Mesh::Mesh(const Mesh &other)
 		: _initialized(false)

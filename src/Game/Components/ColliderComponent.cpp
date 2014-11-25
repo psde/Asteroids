@@ -9,7 +9,7 @@ namespace Components
 	{
 	}
 
-	void ColliderComponent::setCollisionMesh(Geometry::Mesh* mesh)
+	void ColliderComponent::setCollisionMesh(Graphics::Mesh* mesh)
 	{
 		_mesh = mesh;
 	}

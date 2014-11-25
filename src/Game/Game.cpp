@@ -11,7 +11,7 @@
 
 namespace Game
 {
-	Game::Game(std::shared_ptr<Window::Window> window)
+	Game::Game(std::shared_ptr<Graphics::Window> window)
 		: _window(window)
 		, _livesRenderer(22.5f)
 		, _stateTime(0.f)
@@ -119,7 +119,7 @@ namespace Game
 					_stateTime = 2.f;
 				}
 			case GameOver:
-				if (_window->getKeyState(Window::KEY_ENTER) == Window::KEY_PRESS || _window->getKeyState(Window::KEY_KP_ENTER) == Window::KEY_PRESS)
+				if (_window->getKeyState(Graphics::KEY_ENTER) == Graphics::KEY_PRESS || _window->getKeyState(Graphics::KEY_KP_ENTER) == Graphics::KEY_PRESS)
 				{
 					reset();
 				}
@@ -322,7 +322,7 @@ namespace Game
 	void Game::update(float timeDelta)
 	{
 		// Cheats!
-		if (_window->getKeyState(Window::KEY_DELETE) == Window::KEY_PRESS)
+		if (_window->getKeyState(Graphics::KEY_DELETE) == Graphics::KEY_PRESS)
 		{
 			_lives = 3;
 			_asteroids.clear();
@@ -331,22 +331,22 @@ namespace Game
 		updateState(timeDelta);
 		if (_state == Game::Playing || _state == Game::LevelTransition)
 		{
-			if (_window->getKeyState(Window::KEY_UP) == Window::KEY_PRESS)
+			if (_window->getKeyState(Graphics::KEY_UP) == Graphics::KEY_PRESS)
 			{
 				_ship.accelerate();
 			}
 
 			int rotation = 0;
-			if (_window->getKeyState(Window::KEY_LEFT) == Window::KEY_PRESS)
+			if (_window->getKeyState(Graphics::KEY_LEFT) == Graphics::KEY_PRESS)
 			{
 				rotation = -1;
 			}
-			else if (_window->getKeyState(Window::KEY_RIGHT) == Window::KEY_PRESS)
+			else if (_window->getKeyState(Graphics::KEY_RIGHT) == Graphics::KEY_PRESS)
 			{
 				rotation = 1;
 			}
 
-			if (_window->getKeyState(Window::KEY_SPACE) == Window::KEY_PRESS)
+			if (_window->getKeyState(Graphics::KEY_SPACE) == Graphics::KEY_PRESS)
 			{
 				auto projectile = _ship.shoot();
 

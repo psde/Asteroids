@@ -20,9 +20,9 @@ namespace Game
 		Components::ColliderComponent _colliderComponent;
 		Components::PhysicsRungeKutta _physicsComponent;
 
-		std::unique_ptr<Geometry::Mesh> _mesh;
-		std::unique_ptr<Geometry::Mesh> _rotatedMesh;
-		std::shared_ptr<Shader::Program> _shader;
+		std::unique_ptr<Graphics::Mesh> _mesh;
+		std::unique_ptr<Graphics::Mesh> _rotatedMesh;
+		std::shared_ptr<Graphics::Program> _shader;
 
 		float _size;
 		float _rotation;

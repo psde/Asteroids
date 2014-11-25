@@ -8,7 +8,7 @@
 
 #include "Math/Math.h"
 
-namespace Window
+namespace Graphics
 {
 	enum KeyState
 	{

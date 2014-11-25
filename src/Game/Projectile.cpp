@@ -10,7 +10,7 @@
 namespace Game
 {
 	Projectile::Projectile(float lifetime, bool friendly)
-		: _shader(Shader::Program::getProgram("data/shader/ship.glsl"))
+		: _shader(Graphics::Program::getProgram("data/shader/ship.glsl"))
 		, _launched(false)
 		, _time(0.f)
 		, _lifetime(lifetime)
@@ -29,7 +29,7 @@ namespace Game
 			vertices.push_back(Math::vec2(sin(r), cos(r)) * size);
 		}
 
-		_mesh.reset(new Geometry::Mesh(vertices));
+		_mesh.reset(new Graphics::Mesh(vertices));
 		_colliderComponent.setCollisionMesh(_mesh.get());
 	}
 
@@ -58,7 +58,7 @@ namespace Game
 			for (int x = -1; x <= 1; ++x)
 			{
 				_shader->uniform("position") = _physicsComponent.getPosition() + Math::vec2(800 * x, 600 * y);
-				_mesh->draw(Geometry::LINE_STRIP);
+				_mesh->draw(Graphics::LINE_STRIP);
 			}
 		}
 	}

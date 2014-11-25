@@ -19,11 +19,11 @@ namespace Game
 		Components::PhysicsEuler _physicsComponent;
 		float _remainingTime;
 		float _particleSize;
-		std::shared_ptr<Shader::Program> _shader;
-		std::shared_ptr<Geometry::Mesh> _mesh;
+		std::shared_ptr<Graphics::Program> _shader;
+		std::shared_ptr<Graphics::Mesh> _mesh;
 
 	public:
-		Particle(std::shared_ptr<Geometry::Mesh> mesh, Math::vec2 position, Math::vec2 direction);
+		Particle(std::shared_ptr<Graphics::Mesh> mesh, Math::vec2 position, Math::vec2 direction);
 
 		void update(float timeDelta);
 		void draw();
@@ -37,7 +37,7 @@ namespace Game
 	{
 	private:
 		std::vector<Particle*> _particles;
-		std::shared_ptr<Geometry::Mesh> _mesh;
+		std::shared_ptr<Graphics::Mesh> _mesh;
 
 	public:
 		ParticleEmitter();

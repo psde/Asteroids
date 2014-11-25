@@ -4,7 +4,7 @@
 
 #include "Math/Math.h"
 
-namespace Shader
+namespace Graphics
 {
 	class UniformAssigner
 	{
