@@ -119,7 +119,7 @@ namespace Game
 					_stateTime = 2.f;
 				}
 			case GameOver:
-				if (_window->getKeyState(Window::Window::KEY_ENTER) == Window::Window::KEY_PRESS || _window->getKeyState(Window::Window::KEY_KP_ENTER) == Window::Window::KEY_PRESS)
+				if (_window->getKeyState(Window::KEY_ENTER) == Window::KEY_PRESS || _window->getKeyState(Window::KEY_KP_ENTER) == Window::KEY_PRESS)
 				{
 					reset();
 				}
@@ -300,7 +300,7 @@ namespace Game
 			addToScore((Asteroid::AsteroidSizes().size() - size) * 100);
 
 		// Emitt particle cloud
-		_emitter.emitParticles(pos, asteroidSize / 2.f, asteroidSize);
+		_emitter.emitParticles(pos, asteroidSize / 2.f, static_cast<int>(asteroidSize));
 
 		// Flag asteroid as destroyed
 		asteroid->destroy();
@@ -322,7 +322,7 @@ namespace Game
 	void Game::update(float timeDelta)
 	{
 		// Cheats!
-		if (_window->getKeyState(Window::Window::KEY_DELETE) == Window::Window::KEY_PRESS)
+		if (_window->getKeyState(Window::KEY_DELETE) == Window::KEY_PRESS)
 		{
 			_lives = 3;
 			_asteroids.clear();
@@ -331,22 +331,22 @@ namespace Game
 		updateState(timeDelta);
 		if (_state == Game::Playing || _state == Game::LevelTransition)
 		{
-			if (_window->getKeyState(Window::Window::KEY_UP) == Window::Window::KEY_PRESS)
+			if (_window->getKeyState(Window::KEY_UP) == Window::KEY_PRESS)
 			{
 				_ship.accelerate();
 			}
 
 			int rotation = 0;
-			if (_window->getKeyState(Window::Window::KEY_LEFT) == Window::Window::KEY_PRESS)
+			if (_window->getKeyState(Window::KEY_LEFT) == Window::KEY_PRESS)
 			{
 				rotation = -1;
 			}
-			else if (_window->getKeyState(Window::Window::KEY_RIGHT) == Window::Window::KEY_PRESS)
+			else if (_window->getKeyState(Window::KEY_RIGHT) == Window::KEY_PRESS)
 			{
 				rotation = 1;
 			}
 
-			if (_window->getKeyState(Window::Window::KEY_SPACE) == Window::Window::KEY_PRESS)
+			if (_window->getKeyState(Window::KEY_SPACE) == Window::KEY_PRESS)
 			{
 				auto projectile = _ship.shoot();
 

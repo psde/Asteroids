@@ -91,7 +91,7 @@ namespace Window
 		return _time.x - _time.y;
 	}
 
-	Window::KeyState Window::getKeyState(Key key)
+	KeyState Window::getKeyState(Key key)
 	{
 		return static_cast<KeyState>(glfwGetKey(_glfwWindow, key));
 	}
