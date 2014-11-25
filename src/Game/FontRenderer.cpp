@@ -30,7 +30,7 @@ namespace Game
 		   3 4 5
 		   6 7 8 */
 
-		auto R = Geometry::Mesh::PrimitiveRestartIndex;
+		auto R = Geometry::GeometryRestartIndex;
 
 		std::vector<GLuint> elements;
 		_characterLookup['0'] = addCharToElement(elements, { 0, 2, 8, 6, 0 });
@@ -95,7 +95,7 @@ namespace Game
 
 			if (it != std::end(_characterLookup))
 			{
-				_mesh->draw(Geometry::Mesh::LINE_STRIP, it->second.first, it->second.second);
+				_mesh->draw(Geometry::LINE_STRIP, it->second.first, it->second.second);
 			}
 
 			position.x += size;

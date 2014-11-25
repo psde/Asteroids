@@ -40,7 +40,7 @@ namespace Game
 			Math::vec2(0.60f * _size, 0.35f * _size)  // 9
 		};
 
-		auto R = Geometry::Mesh::PrimitiveRestartIndex;
+		auto R = Geometry::GeometryRestartIndex;
 		std::vector<GLuint> elements = {
 			// Bottom Part
 			0, 2, 3, 1, R,
@@ -130,7 +130,7 @@ namespace Game
 			for (int x = -1; x <= 1; ++x)
 			{
 				_shader->uniform("position") = _physicsComponent.getPosition() + Math::vec2(800 * x, 600 * y);
-				_mesh->draw(Geometry::Mesh::LINE_STRIP);
+				_mesh->draw(Geometry::LINE_STRIP);
 			}
 		}
 	}

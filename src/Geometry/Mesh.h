@@ -9,19 +9,17 @@
 
 namespace Geometry
 {
+	const unsigned int GeometryRestartIndex = 65535;
+	enum DrawMode
+	{
+		POINTS = GL_POINTS,
+		LINES = GL_LINES,
+		LINE_STRIP = GL_LINE_STRIP,
+		LINE_LOOP = GL_LINE_LOOP
+	};
+
 	class Mesh
 	{
-	public:
-		enum DrawMode
-		{
-			POINTS = GL_POINTS,
-			LINES = GL_LINES,
-			LINE_STRIP = GL_LINE_STRIP,
-			LINE_LOOP = GL_LINE_LOOP
-		};
-
-		static const unsigned int PrimitiveRestartIndex = 65535;
-
 	private:
 		GLuint _vao, _vbo, _ebo;
 

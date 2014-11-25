@@ -31,7 +31,7 @@ namespace Game
 			Math::vec2(0.50f * _size, 0.99f * _size)  // 7
 		};
 
-		auto R = Geometry::Mesh::PrimitiveRestartIndex;
+		auto R = Geometry::GeometryRestartIndex;
 		std::vector<GLuint> elements = {
 			0, 1, 2, R, 3, 4, 5, 6,
 			
@@ -157,10 +157,10 @@ namespace Game
 			for (int x = -1; x <= 1; ++x)
 			{
 				_shader->uniform("position") = _physicsComponent.getPosition() + Math::vec2(800 * x, 600 * y);
-				_rotatedMesh->draw(Geometry::Mesh::LINE_STRIP, 8, 0);
+				_rotatedMesh->draw(Geometry::LINE_STRIP, 8, 0);
 				if (Math::length(_physicsComponent.getAcceleration()) > 0.f && std::fmod(glfwGetTime(), 0.2) >= 0.1)
 				{
-					_rotatedMesh->draw(Geometry::Mesh::LINE_STRIP, 3, 8);
+					_rotatedMesh->draw(Geometry::LINE_STRIP, 3, 8);
 				}
 			}
 		}

@@ -67,7 +67,7 @@ namespace Geometry
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _ebo);
 		glBufferData(GL_ELEMENT_ARRAY_BUFFER, _indices.size() * sizeof(GLuint), _indices.data(), GL_STATIC_DRAW);
 
-		glPrimitiveRestartIndex(PrimitiveRestartIndex);
+		glPrimitiveRestartIndex(GeometryRestartIndex);
 
 		glBindVertexArray(0);
 

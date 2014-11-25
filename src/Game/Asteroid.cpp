@@ -166,7 +166,7 @@ namespace Game
 			for (int x = -1; x <= 1; ++x)
 			{
 				_shader->uniform("position") = _physicsComponent.getPosition() + Math::vec2(800 * x, 600 * y);
-				_mesh->draw(Geometry::Mesh::LINE_LOOP);
+				_mesh->draw(Geometry::LINE_LOOP);
 			}
 		}
 	}

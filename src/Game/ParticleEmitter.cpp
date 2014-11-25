@@ -33,7 +33,7 @@ namespace Game
 		_shader->uniform("remainingTime") = _remainingTime;
 		_shader->uniform("particleSize") = _particleSize;
 		_shader->uniform("position") = _physicsComponent.getPosition();
-		_mesh->draw(Geometry::Mesh::LINE_STRIP);
+		_mesh->draw(Geometry::LINE_STRIP);
 	}
 
 	ParticleEmitter::ParticleEmitter()
