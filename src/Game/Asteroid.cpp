@@ -2,7 +2,8 @@
 #include <iostream>
 
 #include <memory>
-#include <glm/gtx/rotate_vector.hpp>
+//#include <glm/gtx/rotate_vector.hpp>
+#include "Math/Math.h"
 
 #include "Asteroid.h"
 

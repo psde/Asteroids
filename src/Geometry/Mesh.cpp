@@ -1,6 +1,8 @@
 ﻿#include "Mesh.h"
 
-#include <glm/gtx/rotate_vector.hpp>
+//#include <glm/gtx/rotate_vector.hpp>
+//#include <glm/glm.hpp>
+#include "Math/Math.h"
 
 #include <iostream>
 #include <algorithm>
