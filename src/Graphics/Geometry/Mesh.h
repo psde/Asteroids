@@ -5,7 +5,7 @@
 #include <vector>
 #include <memory>
 
-#include "Shader/Program.h"
+#include "Graphics/Shader/Program.h"
 
 namespace Geometry
 {

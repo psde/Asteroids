@@ -2,7 +2,7 @@
 
 #include <vector>
 
-#include "Window/Window.h"
+#include "Graphics/Window/Window.h"
 
 #include "FontRenderer.h"
 

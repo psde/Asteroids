@@ -3,7 +3,7 @@
 //#include <Math/Math.hpp>
 #include "Math/Math.h"
 
-#include "Geometry/Mesh.h"
+#include "Graphics/Geometry/Mesh.h"
 
 namespace Components
 {

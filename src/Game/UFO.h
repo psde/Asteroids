@@ -4,7 +4,7 @@
 
 #include "Math/Math.h"
 
-#include "Geometry/Mesh.h"
+#include "Graphics/Geometry/Mesh.h"
 
 #include "GameObject.h"
 #include "Components/PhysicsRungeKutta.h"

@@ -5,7 +5,7 @@
 
 #include "Math/Math.h"
 
-#include "Geometry/Mesh.h"
+#include "Graphics/Geometry/Mesh.h"
 
 #include "Components/PhysicsEuler.h"
 

@@ -5,8 +5,8 @@
 
 #include "Math/Math.h"
 
-#include "Shader/Program.h"
-#include "Geometry/Mesh.h"
+#include "Graphics/Shader/Program.h"
+#include "Graphics/Geometry/Mesh.h"
 
 namespace Game
 {

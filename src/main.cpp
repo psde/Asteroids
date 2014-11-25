@@ -6,9 +6,9 @@
 
 #include "Math/Math.h"
 
-#include "Window/Window.h"
 #include "Game/Game.h"
-#include "Shader/Globals.h"
+#include "Graphics/Window/Window.h"
+#include "Graphics/Shader/Globals.h"
 
 int main(int argc, char** argv)
 {

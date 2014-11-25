@@ -1,28 +1,28 @@
 # Shader sources
 list(APPEND SRC_SHADER
-	Shader/Globals.h
-	Shader/Program.cpp
-	Shader/Program.h
-	Shader/Shader.h
-	Shader/Shader.cpp
-	Shader/UniformAssigner.h
-	Shader/UniformAssigner.cpp 
+	Graphics/Shader/Globals.h
+	Graphics/Shader/Program.cpp
+	Graphics/Shader/Program.h
+	Graphics/Shader/Shader.h
+	Graphics/Shader/Shader.cpp
+	Graphics/Shader/UniformAssigner.h
+	Graphics/Shader/UniformAssigner.cpp 
 )
-SOURCE_GROUP("Shader" FILES ${SRC_SHADER})
+SOURCE_GROUP("Graphics\\Shader" FILES ${SRC_SHADER})
 
 # Geometry sources
 list(APPEND SRC_GEOMETRY
-	Geometry/Mesh.h
-	Geometry/Mesh.cpp
+	Graphics/Geometry/Mesh.h
+	Graphics/Geometry/Mesh.cpp
 )
-SOURCE_GROUP("Geometry" FILES ${SRC_GEOMETRY})
+SOURCE_GROUP("Graphics\\Geometry" FILES ${SRC_GEOMETRY})
 
 # Window sources
 list(APPEND SRC_WINDOW
-	Window/Window.h
-	Window/Window.cpp
+	Graphics/Window/Window.h
+	Graphics/Window/Window.cpp
 )
-SOURCE_GROUP("Window" FILES ${SRC_WINDOW})
+SOURCE_GROUP("Graphics\\Window" FILES ${SRC_WINDOW})
 
 # Math sources
 list(APPEND SRC_MATH
@@ -55,16 +55,16 @@ SOURCE_GROUP("Game" FILES ${SRC_GAME})
 
 # Components sources
 list(APPEND SRC_COMPONENTS
-	Components/ColliderComponent.h
-	Components/ColliderComponent.cpp
-	Components/PhysicsComponent.h
-	Components/PhysicsComponent.cpp
-	Components/PhysicsRungeKutta.h
-	Components/PhysicsRungeKutta.cpp
-	Components/PhysicsEuler.h
-	Components/PhysicsEuler.cpp
+	Game/Components/ColliderComponent.h
+	Game/Components/ColliderComponent.cpp
+	Game/Components/PhysicsComponent.h
+	Game/Components/PhysicsComponent.cpp
+	Game/Components/PhysicsRungeKutta.h
+	Game/Components/PhysicsRungeKutta.cpp
+	Game/Components/PhysicsEuler.h
+	Game/Components/PhysicsEuler.cpp
 )
-SOURCE_GROUP("Components" FILES ${SRC_COMPONENTS})
+SOURCE_GROUP("Game\\Components" FILES ${SRC_COMPONENTS})
 
 # Source files
 list(APPEND SRC_SOURCE
