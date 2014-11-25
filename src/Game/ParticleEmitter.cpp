@@ -12,8 +12,8 @@ namespace Game
 
 		std::random_device rd;
 		std::mt19937 gen(rd());
-		std::uniform_real_distribution<> size(0.25f, 0.75f);
-		std::uniform_real_distribution<> time(2.2f, 3.75f);
+		std::uniform_real_distribution<float> size(0.25f, 0.75f);
+		std::uniform_real_distribution<float> time(2.2f, 3.75f);
 
 		_remainingTime = time(gen);
 		_particleSize = size(gen);
@@ -57,8 +57,8 @@ namespace Game
 	{
 		std::random_device rd;
 		std::mt19937 gen(rd());
-		std::uniform_real_distribution<> offset(-radius, radius);
-		std::uniform_real_distribution<> foo(0.f, 1.f);
+		std::uniform_real_distribution<float> offset(-radius, radius);
+		std::uniform_real_distribution<float> foo(0.f, 1.f);
 
 		for (int i = 0; i < count; i++)
 		{

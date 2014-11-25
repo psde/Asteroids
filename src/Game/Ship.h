@@ -24,7 +24,7 @@ namespace Game
 		std::unique_ptr<Geometry::Mesh> _rotatedMesh;
 		std::shared_ptr<Shader::Program> _shader;
 
-		int _size;
+		float _size;
 		float _rotation;
 		bool _moving;
 		int _rotating;

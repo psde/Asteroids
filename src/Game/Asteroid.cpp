@@ -14,8 +14,8 @@ namespace Game
 		{
 			std::random_device rd;
 			std::mt19937 gen(rd());
-			std::uniform_int_distribution<> dis(1, 3);
-			std::uniform_real_distribution<> offset(-0.025, 0.025);
+			std::uniform_int_distribution<int> dis(1, 3);
+			std::uniform_real_distribution<float> offset(-0.025f, 0.025f);
 
 			int type = dis(gen);
 
@@ -100,9 +100,9 @@ namespace Game
 	{
 		std::random_device rd;
 		std::mt19937 gen(rd());
-		std::uniform_real_distribution<> dis_x(0, 800);
-		std::uniform_real_distribution<> dis_y(0, 600);
-		std::uniform_real_distribution<> dir(-1, 1);
+		std::uniform_real_distribution<float> dis_x(0, 800);
+		std::uniform_real_distribution<float> dis_y(0, 600);
+		std::uniform_real_distribution<float> dir(-1, 1);
 
 		Math::vec2 position = Math::vec2(dis_x(gen), dis_y(gen));
 		Math::vec2 direction = Math::vec2(dir(gen), dir(gen));
@@ -126,10 +126,10 @@ namespace Game
 	{
 		std::random_device rd;
 		std::mt19937 gen(rd());
-		std::uniform_real_distribution<> vel(30.0, 55.0);
-		std::exponential_distribution<> vel2(50);
-		std::uniform_real_distribution<> rotation(0, 2.f * Math::pi<float>());
-		std::uniform_real_distribution<> sizeOffset(0.f, 4.f);
+		std::uniform_real_distribution<float> vel(30.0, 55.0);
+		std::exponential_distribution<float> vel2(50);
+		std::uniform_real_distribution<float> rotation(0, 2.f * Math::pi<float>());
+		std::uniform_real_distribution<float> sizeOffset(0.f, 4.f);
 
 		_destroyed = false;
 		_size = size;
@@ -138,7 +138,7 @@ namespace Game
 
 		Math::vec2 velocity = direction * Math::vec2(vel2(gen) + 30.f);
 
-		velocity *= (Asteroid::AsteroidSizes().size() - size);
+		velocity *= (Asteroid::AsteroidSizes().size() - static_cast<float>(size));
 
 		_physicsComponent.reset(position, velocity);
 

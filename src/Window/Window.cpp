@@ -46,7 +46,7 @@ namespace Window
 		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
 		Math::vec2 dimensions(getWindowDimensions());
-		glViewport(0, 0, dimensions.x, dimensions.y);
+		glViewport(0, 0, static_cast<GLsizei>(dimensions.x), static_cast<GLsizei>(dimensions.y));
 	}
 
 	Window::~Window()
@@ -80,7 +80,7 @@ namespace Window
 		glfwPollEvents();
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		_time.y = _time.x;
-		_time.x = glfwGetTime();
+		_time.x = static_cast<float>(glfwGetTime());
 
 		if (getKeyState(KEY_ESCAPE) == GLFW_PRESS)
 			glfwSetWindowShouldClose(_glfwWindow, GL_TRUE);

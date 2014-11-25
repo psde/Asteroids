@@ -23,7 +23,7 @@ namespace Game
 		std::unique_ptr<Geometry::Mesh> _mesh;
 		std::shared_ptr<Shader::Program> _shader;
 
-		int _size;
+		float _size;
 		float _reloadTime;
 
 		std::vector<std::shared_ptr<Projectile>> _projectiles;

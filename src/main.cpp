@@ -15,21 +15,21 @@ int main(int argc, char** argv)
 	std::shared_ptr<Window::Window> window(new Window::Window(800, 600));
 	Game::Game game(window);
 
-	double last_frametime = 0;
-	const double frametime_max = 0.1;
-	double accumulatedDrawingTime = 0.0;
+	float last_frametime = 0.f;
+	const float frametime_max = 0.1f;
+	float accumulatedDrawingTime = 0.0;
 	int frames = 0;
 
 	// Physics simulation
-	double accumulatedPhysicsTime = 0;
-	const double physicsTimeStep = 0.001;
+	float accumulatedPhysicsTime = 0.f;
+	const float physicsTimeStep = 0.001f;
 	int physicSteps = 0;
 	const int maxPhysicsStepsPerFrame = 30;
 
 	while (!window->shouldClose())
 	{
-		double currentTime = glfwGetTime();
-		double timeDelta = window->getTimeDelta();
+		float currentTime = static_cast<float>(glfwGetTime());
+		float timeDelta = window->getTimeDelta();
 
 		// Perform physics simulation steps
 		physicSteps = 0;

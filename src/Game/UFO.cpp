@@ -83,7 +83,7 @@ namespace Game
 		{
 			std::random_device rd;
 			std::mt19937 gen(rd());
-			std::uniform_real_distribution<> rotation(-1.75f, 1.75f);
+			std::uniform_real_distribution<float> rotation(-1.75f, 1.75f);
 
 			Math::vec2 norm = Math::normalize(_physicsComponent.getVelocity());
 			Math::vec2 dir = Math::rotate(Math::vec2(1.f, 0.f), std::atan2(norm.x, norm.y) + (float)rotation(gen));
@@ -104,7 +104,7 @@ namespace Game
 		{
 			std::random_device rd;
 			std::mt19937 gen(rd());
-			std::uniform_real_distribution<> rotation(-0.25f, 0.25f);
+			std::uniform_real_distribution<float> rotation(-0.25f, 0.25f);
 
 			Math::vec2 norm = Math::normalize(_physicsComponent.getVelocity());
 			Math::vec2 direction = Math::rotate(Math::vec2(1.f, 0.f), std::atan2(norm.x, norm.y) + (float)rotation(gen));
