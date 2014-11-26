@@ -19,13 +19,15 @@ namespace Game
 		_physicsComponent.reset(Math::vec2(200, 200), Math::vec2(10.f));
 		_movementTimeRemaining = 0.f;
 
-		//       6--7
-		//       |  |
-		//   4---8--9---5
-		//  /            \
-		// 0--------------1
-		//  \            /
-		//   2----------3
+		/*
+		       6--7
+		       |  |
+		   4---8--9---5
+		  /            \
+		 0--------------1
+		  \            /
+		   2----------3
+		*/
 
 		std::vector<Math::vec2> vertices = {
 			Math::vec2(0.10f * _size, 0.50f * _size), // 0
