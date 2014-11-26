@@ -31,7 +31,7 @@ namespace Graphics
 		std::ifstream stream(filename);
 		if (stream.is_open() == false)
 		{
-			std::cout << "Could not open file " << filename << std::endl;
+			std::cerr << "Could not open file " << filename << std::endl;
 			return "";
 		}
 
@@ -85,7 +85,7 @@ namespace Graphics
 			std::vector<char> errorLog(maxLength);
 			glGetShaderInfoLog(_shader, maxLength, &maxLength, &errorLog[0]);
 
-			std::cout << "Failed to compile shader '" << _name << "'" << std::endl << &errorLog[0] << std::endl;
+			std::cerr << "Failed to compile shader '" << _name << "'" << std::endl << &errorLog[0] << std::endl;
 
 			glDeleteShader(_shader);
 			return false;

@@ -97,7 +97,7 @@ namespace Graphics
 				std::vector<char> errorLog(maxLength);
 				glGetProgramInfoLog(_shaderProgram, maxLength, &maxLength, &errorLog[0]);
 
-				std::cout << "Failed to compile program" << std::endl << &errorLog[0] << std::endl;
+				std::cerr << "Failed to compile program" << std::endl << &errorLog[0] << std::endl;
 
 				glDeleteProgram(_shaderProgram);
 				return;
@@ -120,7 +120,7 @@ namespace Graphics
 		link();
 		glUseProgram(_shaderProgram);
 
-		Globals::globals().updateProgram(this);
+		ShaderGlobals::updateProgram(this);
 	}
 
 	GLuint Program::getProgram()

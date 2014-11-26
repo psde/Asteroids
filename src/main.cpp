@@ -46,8 +46,8 @@ int main(int argc, char** argv)
 				break;
 		}
 
-		Graphics::Globals::globals().update<float>("time", currentTime);
-		Graphics::Globals::globals().update<Math::vec2>("windowDimensions", window->getWindowDimensions());
+		Graphics::ShaderGlobals::update<float>("time", currentTime);
+		Graphics::ShaderGlobals::update<Math::vec2>("windowDimensions", window->getWindowDimensions());
 
 		game.draw();
 

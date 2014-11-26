@@ -40,17 +40,26 @@ namespace Graphics
 		};
 	}
 
-	class Globals
+	class ShaderGlobals
 	{
 	private:
 		std::unordered_map<std::string, std::shared_ptr<ShaderGlobalBase>> _globals;
 
-		Globals() {};
+		ShaderGlobals() {};
+		
+		static ShaderGlobals& instance()
+		{
+			static ShaderGlobals instance;
+			return instance;
+		}
+
 	public:
 		template<class T>
-		void update(std::string name, T val)
+		static void update(std::string name, T val)
 		{
-			std::shared_ptr<ShaderGlobalBase> &entry = _globals[name];
+			ShaderGlobals& globals = instance();
+
+			std::shared_ptr<ShaderGlobalBase> &entry = globals._globals[name];
 
 			if (!entry)
 			{
@@ -61,18 +70,14 @@ namespace Graphics
 			global->updateValue(val);
 		}
 
-		void updateProgram(Program *program)
+		static void updateProgram(Program *program)
 		{
-			for (auto global : _globals)
+			ShaderGlobals& globals = instance();
+
+			for (auto &global : globals._globals)
 			{
 				global.second->update(program);
 			}
-		}
-
-		static Globals& globals()
-		{
-			static Globals globals;
-			return globals;
 		}
 	};
 }

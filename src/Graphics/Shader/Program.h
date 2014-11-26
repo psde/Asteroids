@@ -12,7 +12,7 @@
 
 namespace Graphics
 {
-	class Globals;
+	class ShaderGlobals;
 	class Manager;
 
 	class Program
