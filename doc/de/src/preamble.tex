@@ -1,0 +1,73 @@
+%% UTF-8 File Encoding
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+
+%% Language settings
+\usepackage[ngerman]{babel}
+
+\usepackage{fullpage}
+\usepackage{graphicx}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{placeins}
+\usepackage{wrapfig}
+\usepackage{url}
+\usepackage[raiselinks=true, bookmarks=true, bookmarksopenlevel=1, bookmarksopen=true, bookmarksnumbered=true, hyperindex=true, plainpages=false, pdfpagelabels=true]{hyperref}
+\usepackage{fancyhdr}
+\usepackage[nottoc]{tocbibind}
+\usepackage[usenames, dvipsnames]{color}
+\usepackage{xcolor}
+\usepackage{textcomp} 
+\usepackage{fancybox}
+\usepackage{mathtools}
+\usepackage{csquotes}
+
+\graphicspath{{images/}}
+
+\usepackage{setspace}
+\setstretch{1.4}
+
+\usepackage[a4paper]{geometry}
+\geometry{left=3.25cm,right=2.5cm,top=3.5cm,bottom=3.5cm,head=14.5pt,headsep=4ex}
+
+\usepackage[pdftex]{thumbpdf}
+\pdfcompresslevel=9
+
+\setcounter{secnumdepth}{3}
+\setcounter{tocdepth}{3}
+
+\parindent 0cm
+\parskip1.5ex plus0.5ex minus0.5ex
+\clubpenalty = 10000
+\widowpenalty = 10000
+\displaywidowpenalty = 10000
+
+%% Caption configurations
+\usepackage{caption}
+\DeclareCaptionFont{white}{\color{white}}
+\DeclareCaptionFormat{listing}{\colorbox{gray}{\parbox{\textwidth}{#1#2#3}}}
+\captionsetup{font=small}
+%\captionsetup[lstlisting]{format=listing,labelfont=white,textfont=white}
+\definecolor{lightgray}{rgb}{.9,.9,.9}
+\definecolor{darkgray}{rgb}{.4,.4,.4}
+\definecolor{purple}{rgb}{0.65, 0.12, 0.82}
+
+%% Contents in pdf bookmark list
+%% uses etoolbox
+\makeatletter
+\pretocmd{\tableofcontents}{%
+  \if@openright\cleardoublepage\else\clearpage\fi
+  \pdfbookmark[0]{\contentsname}{toc}%
+}{}{}%
+\makeatother
+
+\usepackage{lmodern}
+
+\usepackage[activate={true,nocompatibility},final,tracking=true,kerning=true,spacing=true,factor=1100,stretch=10,shrink=10]{microtype}
+\microtypecontext{spacing=nonfrench}
+
+\pagestyle{fancy}
+\renewcommand{\chaptermark}[1]{\markboth{\thechapter.\ #1}{}}
+\fancyhf{}
+\fancyhead[LE,RO]{{\headfont\thepage}}
+\fancyhead[LO]{\headfont\nouppercase{\rightmark}}

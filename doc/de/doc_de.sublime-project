@@ -1,0 +1,44 @@
+{
+    "settings":
+    {
+        "spell_check": true,
+        "dictionary": "Packages/User/German_de_DE.dic",
+    },
+	"folders":
+	[
+		{
+			"follow_symlinks": true,
+			"path": ".",
+			"file_exclude_patterns": [".*.tmp", "*.log", "*.tpt", "*.tdo", "*.lol", "*.bcf", "*.run.xml", "*.acn", "*.acr", "*.alg", "*.brf", "*.glg", "*.glo", "*.gls", "*.idx", "*.ilg", "*.ind", "*.ist", "*.aux", "*.out", "*.lof", "*.lot", "*.bbl", "*.blg", "*.toc", "*.tpl", "*.synctex.gz"]
+		}
+	],
+    "build_systems":
+    [
+        {
+            "name": "make fast",
+            "cmd": ["make fast"],
+            "working_dir": "$project_path",
+            "path": "/usr/local/bin:/usr/bin/:/bin/",
+            "shell": true,
+
+            "windows":
+            {
+                "cmd": ["do-make.bat", "fast"],
+                "path": ""
+            }
+        },
+        {
+            "name": "make full",
+            "cmd": ["make clean && make full"],
+            "working_dir": "$project_path",
+            "path": "/usr/local/bin:/usr/bin/:/bin/",
+            "shell": true,
+
+            "windows":
+            {
+                "cmd": ["do-make.bat", "full"],
+                "path": ""
+            }
+        }
+    ]
+}

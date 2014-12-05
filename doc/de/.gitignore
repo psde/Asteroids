@@ -1,0 +1,19 @@
+# Latex stuff
+*.lof
+*.lot
+*.aux
+*.bbl
+*.blg
+*.brf
+*.out
+*.log
+*.toc
+*.tpt
+*.ppt
+*.synctex.gz
+
+out/*
+
+doc_de.pdf
+
+*.sublime-workspace
