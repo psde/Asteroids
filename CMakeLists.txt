@@ -13,7 +13,7 @@ set(APPLICATION_NAME ${PROJECT_NAME})
 include("UserDefinitions.cmake" OPTIONAL)
 
 # CMakeScripts
-set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/CMakeScripts ${CMAKE_MODULE_PATH})
+set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake ${CMAKE_MODULE_PATH})
 
 # GLEW
 find_package(GLEW REQUIRED)
@@ -54,5 +54,5 @@ if(MSVC)
     message(STATUS "Detected MSVC")
 	set(MSVC_WORKING_DIRECTORY "${PROJECT_SOURCE_DIR}")
     file(MAKE_DIRECTORY  "${CMAKE_BINARY_DIR}/src/asteroids/")
-    configure_file("${PROJECT_SOURCE_DIR}/templates/asteroids.vcxproj.user.in" "${CMAKE_BINARY_DIR}/src/asteroids.vcxproj.user")
+    configure_file("${PROJECT_SOURCE_DIR}/cmake/VisualStudio/asteroids.vcxproj.user.in" "${CMAKE_BINARY_DIR}/src/asteroids.vcxproj.user")
 endif()
