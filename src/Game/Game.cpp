@@ -32,6 +32,8 @@ namespace Game
 	void Game::loadLevel()
 	{
 		_ship.reset();
+
+		// TODO: This will leak memory
 		_asteroids.clear();
 		_emitter.reset();
 		for (int i = 0; i < 2 + _level; ++i)
@@ -317,6 +319,9 @@ namespace Game
 			_asteroids.push_back(new Asteroid(size, pos + (dir * asteroidSize / 2.f), dir));
 			_asteroids.push_back(new Asteroid(size, pos + (-dir * asteroidSize / 2.f), -dir));
 		}
+
+		// Delete asteroid
+		delete asteroid;
 	}
 
 	void Game::update(float timeDelta)
