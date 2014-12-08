@@ -31,7 +31,7 @@ namespace Game
 
 		std::shared_ptr<Graphics::Window> _window;
 
-		std::vector<Asteroid*> _asteroids;
+		std::vector<std::shared_ptr<Asteroid>> _asteroids;
 		std::vector<std::shared_ptr<Projectile>> _projectiles;
 		std::unique_ptr<UFO> _ufo;
 
@@ -51,7 +51,7 @@ namespace Game
 		GameState _state;
 		float _stateTime;
 
-		void destroyAsteroid(Asteroid *asteroid, bool addPoints);
+		void destroyAsteroid(std::shared_ptr<Asteroid>& asteroid, bool addPoints);
 		void loadLevel();
 		void updateState(float timeDelta);
 		void reset();

@@ -32,13 +32,11 @@ namespace Game
 	void Game::loadLevel()
 	{
 		_ship.reset();
-
-		// TODO: This will leak memory
 		_asteroids.clear();
 		_emitter.reset();
 		for (int i = 0; i < 2 + _level; ++i)
 		{
-			_asteroids.push_back(new Asteroid());
+			_asteroids.push_back(std::make_shared<Asteroid>());
 		}
 
 		if (_asteroids.size() > 0)
@@ -132,7 +130,7 @@ namespace Game
 
 	void Game::resolveCollisions()
 	{
-		std::vector<std::pair<Asteroid*, bool>> destroyedAsteroids;
+		std::vector<std::pair<std::shared_ptr<Asteroid>, bool>> destroyedAsteroids;
 
 		// Resolve Ufo -> Player collision
 		if (_ufo &&  _ufo->collidesWith(_ship))
@@ -183,7 +181,7 @@ namespace Game
 				if(projectile->isLaunched() == false)
 					continue;
 
-				bool collides = projectile->collidesWith(asteroid);
+				bool collides = projectile->collidesWith(asteroid.get());
 				if(collides)
 				{
 					// Destroy asteroid, add score if projectile is friendly
@@ -201,7 +199,7 @@ namespace Game
 			if(asteroid->isDestroyed())
 				continue;
 
-			if (_ufo && _ufo->collidesWith(asteroid))
+			if (_ufo && _ufo->collidesWith(asteroid.get()))
 			{
 				// Destroy Ufo
 				_emitter.emitParticles(_ufo->getPhysicsComponent()->getPosition() + 12.5f, 5, 5);
@@ -217,7 +215,7 @@ namespace Game
 				continue;
 
 			// Resolve Asteroid -> Ship collision
-			if(_ship.collidesWith(asteroid))
+			if (_ship.collidesWith(asteroid.get()))
 			{
 				// Player is dead, set state and release particle cloud
 				_state = Game::Dead;
@@ -291,7 +289,7 @@ namespace Game
 		}
 	}
 
-	void Game::destroyAsteroid(Asteroid *asteroid, bool addPoints)
+	void Game::destroyAsteroid(std::shared_ptr<Asteroid>& asteroid, bool addPoints)
 	{
 		int size = asteroid->getAsteroidSize();
 		float asteroidSize = Asteroid::AsteroidSizes().at(size);
@@ -316,12 +314,9 @@ namespace Game
 			Math::vec2 dir = Math::normalize(asteroid->getPhysicsComponent()->getVelocity());
 
 			dir = Math::rotate(dir, 0.5f * Math::pi<float>());
-			_asteroids.push_back(new Asteroid(size, pos + (dir * asteroidSize / 2.f), dir));
-			_asteroids.push_back(new Asteroid(size, pos + (-dir * asteroidSize / 2.f), -dir));
+			_asteroids.push_back(std::make_shared<Asteroid>(size, pos + (dir * asteroidSize / 2.f), dir));
+			_asteroids.push_back(std::make_shared<Asteroid>(size, pos + (-dir * asteroidSize / 2.f), -dir));
 		}
-
-		// Delete asteroid
-		delete asteroid;
 	}
 
 	void Game::update(float timeDelta)
@@ -414,7 +409,7 @@ namespace Game
 
 	void Game::draw()
 	{
-		for (Asteroid* asteroid : _asteroids)
+		for (auto asteroid : _asteroids)
 		{
 			asteroid->draw();
 		}
