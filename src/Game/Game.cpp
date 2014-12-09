@@ -7,8 +7,6 @@
 
 #include "Math/Math.h"
 
-#include <GLFW/glfw3.h>
-
 namespace Game
 {
 	Game::Game(std::shared_ptr<Graphics::Window> window)

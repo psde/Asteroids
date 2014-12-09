@@ -5,8 +5,6 @@
 
 #include "Projectile.h"
 
-#include <GLFW/glfw3.h>
-
 namespace Game
 {
 	Projectile::Projectile(float lifetime, bool friendly)

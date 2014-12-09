@@ -1,12 +1,10 @@
 #include <iostream>
 #include <algorithm>
 
-#include <GL/glew.h>
-#include <GLFW/glfw3.h>
-
 #include "Math/Math.h"
 
 #include "Game/Game.h"
+#include "Graphics/Graphics.h"
 #include "Graphics/Window/Window.h"
 #include "Graphics/Shader/Globals.h"
 
@@ -28,7 +26,7 @@ int main(int argc, char** argv)
 
 	while (!window->shouldClose())
 	{
-		float currentTime = static_cast<float>(glfwGetTime());
+		float currentTime = Graphics::getTime();
 		float timeDelta = window->getTimeDelta();
 
 		// Perform physics simulation steps

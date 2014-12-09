@@ -5,8 +5,6 @@
 
 #include "UFO.h"
 
-#include <GLFW/glfw3.h>
-
 namespace Game
 {
 	UFO::UFO(float size)

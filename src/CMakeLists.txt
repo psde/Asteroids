@@ -1,3 +1,10 @@
+# Graphics sources
+list(APPEND SRC_GRAPHICS
+	Graphics/Graphics.h
+	Graphics/Graphics.cpp
+)
+SOURCE_GROUP("Graphics" FILES ${SRC_GRAPHICS})
+
 # Shader sources
 list(APPEND SRC_SHADER
 	Graphics/Shader/Globals.h
@@ -72,7 +79,7 @@ list(APPEND SRC_SOURCE
 )
 SOURCE_GROUP("Source" FILES ${SRC_SOURCE})
 
-list(APPEND SOURCES ${SRC_SHADER} ${SRC_GEOMETRY} ${SRC_WINDOW} ${SRC_MATH} ${SRC_GAME} ${SRC_COMPONENTS} ${SRC_SOURCE})
+list(APPEND SOURCES ${SRC_GRAPHICS} ${SRC_SHADER} ${SRC_GEOMETRY} ${SRC_WINDOW} ${SRC_MATH} ${SRC_GAME} ${SRC_COMPONENTS} ${SRC_SOURCE})
 
 add_definitions("-DGLEW_STATIC")
 

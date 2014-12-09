@@ -2,10 +2,9 @@
 #include <iostream>
 
 #include "Math/Math.h"
+#include "Graphics/Graphics.h"
 
 #include "Ship.h"
-
-#include <GLFW/glfw3.h>
 
 namespace Game
 {
@@ -151,14 +150,14 @@ namespace Game
 	{
 		_shader->use();
 
-		if (!(isInvincible() && std::fmod(glfwGetTime(), 0.1) >= 0.05))
+		if (!(isInvincible() && std::fmod(Graphics::getTime(), 0.1) >= 0.05))
 		for (int y = -1; y <= 1; ++y)
 		{
 			for (int x = -1; x <= 1; ++x)
 			{
 				_shader->uniform("position") = _physicsComponent.getPosition() + Math::vec2(800 * x, 600 * y);
 				_rotatedMesh->draw(Graphics::LINE_STRIP, 8, 0);
-				if (Math::length(_physicsComponent.getAcceleration()) > 0.f && std::fmod(glfwGetTime(), 0.2) >= 0.1)
+				if (Math::length(_physicsComponent.getAcceleration()) > 0.f && std::fmod(Graphics::getTime(), 0.2) >= 0.1)
 				{
 					_rotatedMesh->draw(Graphics::LINE_STRIP, 3, 8);
 				}

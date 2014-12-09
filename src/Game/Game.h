@@ -12,8 +12,6 @@
 #include "Projectile.h"
 #include "ParticleEmitter.h"
 
-struct GLFWwindow;
-
 namespace Game
 {
 	// Implements game play simulation.
