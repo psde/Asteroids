@@ -1,0 +1,2 @@
+set(GLFW3_ROOT "Y:/devel/libraries/glfw3")
+set(GLEW_ROOT "Y:/devel/libraries/glew-1.10.0")
