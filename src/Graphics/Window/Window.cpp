@@ -12,7 +12,6 @@ namespace Graphics
 	}
 
 	Window::Window(int width, int height)
-		: _time(0.0f)
 	{
 		glfwSetErrorCallback(error_callback);
 
@@ -79,18 +78,11 @@ namespace Graphics
 		glfwSwapBuffers(_glfwWindow);
 		glfwPollEvents();
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		_time.y = _time.x;
-		_time.x = static_cast<float>(glfwGetTime());
 
 		if (getKeyState(KEY_ESCAPE) == GLFW_PRESS)
 			glfwSetWindowShouldClose(_glfwWindow, GL_TRUE);
 	}
-
-	float Window::getTimeDelta()
-	{
-		return _time.x - _time.y;
-	}
-
+	
 	KeyState Window::getKeyState(Key key)
 	{
 		return static_cast<KeyState>(glfwGetKey(_glfwWindow, key));

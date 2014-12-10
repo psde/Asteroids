@@ -146,9 +146,7 @@ namespace Graphics
 	{
 	private:
 		GLFWwindow *_glfwWindow;
-
-		Math::vec2 _time;
-
+		
 	public:
 		Window(int width, int height);
 		~Window();
@@ -158,9 +156,7 @@ namespace Graphics
 		bool shouldClose();
 
 		void finishFrame();
-
-		float getTimeDelta();
-
+		
 		KeyState getKeyState(Key key);
 	};
 }
