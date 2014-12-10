@@ -18,17 +18,17 @@ namespace Components
 		PhysicsEuler();
 		~PhysicsEuler();
 
-		void reset(Math::vec2 position, Math::vec2 velocity);
+		void reset(Math::vec2 position, Math::vec2 velocity) override;
 
-		void setTerminalVelocity(float max) { _terminalVelocity = max; }
-		virtual float getTerminalVelocity() { return _terminalVelocity; }
+		void setTerminalVelocity(float max) override { _terminalVelocity = max; }
+		virtual float getTerminalVelocity() override { return _terminalVelocity; }
 
-		void update(float timeDelta);
-		void setAcceleration(Math::vec2 acceleration);
+		void update(float timeDelta) override;
+		void setAcceleration(Math::vec2 acceleration) override;
 
-		const Math::vec2 getPosition() const { return _position; }
-		const Math::vec2 getVelocity() const { return _velocity; }
-		const Math::vec2 getAcceleration() const { return _acceleration; }
+		const Math::vec2 getPosition() const override { return _position; }
+		const Math::vec2 getVelocity() const override { return _velocity; }
+		const Math::vec2 getAcceleration() const override { return _acceleration; }
 	};
 
 }

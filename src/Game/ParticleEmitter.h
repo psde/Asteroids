@@ -27,8 +27,8 @@ namespace Game
 
 		void update(float timeDelta);
 		void draw();
-		const Components::CollisionComponent* getCollisionComponent() const { return nullptr; }
-		const Components::PhysicsComponent* getPhysicsComponent() const { return &_physicsComponent; }
+		const Components::CollisionComponent* getCollisionComponent() const override { return nullptr; }
+		const Components::PhysicsComponent* getPhysicsComponent() const override { return &_physicsComponent; }
 
 		bool isDead() { return _remainingTime <= 0.f; }
 	};
@@ -45,9 +45,9 @@ namespace Game
 		void emitParticles(Math::vec2 position, float radius, int count);
 		void reset();
 
-		void update(float timeDelta);
-		void draw();
-		const Components::CollisionComponent* getCollisionComponent() const { return nullptr; }
-		const Components::PhysicsComponent* getPhysicsComponent() const { return nullptr; }
+		void update(float timeDelta) override;
+		void draw() override;
+		const Components::CollisionComponent* getCollisionComponent() const override { return nullptr; }
+		const Components::PhysicsComponent* getPhysicsComponent() const override { return nullptr; }
 	};
 }

@@ -44,16 +44,16 @@ namespace Game
 		Asteroid(int size, Math::vec2 position, Math::vec2 direction);
 
 		// Draws the asteroid at the current position
-		void draw();
+		void draw() override;
 
 		// Advances the asteroids simulation by the given time delta
-		void update(float delta);
+		void update(float delta) override;
 
 		// See GameObject
-		const Components::CollisionComponent* getCollisionComponent() const;
+		const Components::CollisionComponent* getCollisionComponent() const override;
 
 		// See GameObject
-		const Components::PhysicsComponent* getPhysicsComponent() const;
+		const Components::PhysicsComponent* getPhysicsComponent() const override;
 
 		// Returns the current asteroid size index
 		int getAsteroidSize();

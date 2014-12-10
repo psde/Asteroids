@@ -31,16 +31,16 @@ namespace Game
 		Projectile(float lifetime, bool friendly);
 
 		// Advances the projectile simulation by the given time step
-		void update(float delta);
+		void update(float delta) override;
 
 		// Draws the projectile at the current position
-		void draw();
+		void draw() override;
 
 		// See GameObject
-		const Components::CollisionComponent* getCollisionComponent() const;
+		const Components::CollisionComponent* getCollisionComponent() const override;
 
 		// See GameObject
-		const Components::PhysicsComponent* getPhysicsComponent() const;
+		const Components::PhysicsComponent* getPhysicsComponent() const override;
 
 		// Returns true if the projectile is currently in flight 
 		bool isLaunched();

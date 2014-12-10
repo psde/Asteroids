@@ -36,15 +36,15 @@ namespace Game
 		const std::shared_ptr<Projectile> shoot();
 
 		// Advances the ships simulation by the given time step
-		void update(float delta);
+		void update(float delta) override;
 
 		// Draws the UFO at its current position
-		void draw();
+		void draw() override;
 
 		// See GameObject
-		const Components::CollisionComponent* getCollisionComponent() const;
+		const Components::CollisionComponent* getCollisionComponent() const override;
 
 		// See GameObject
-		const Components::PhysicsComponent* getPhysicsComponent() const;
+		const Components::PhysicsComponent* getPhysicsComponent() const override;
 	};
 }

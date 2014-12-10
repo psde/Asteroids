@@ -58,15 +58,15 @@ namespace Game
 		bool isInvincible();
 
 		// Advances the ships simulation by the given time step
-		void update(float delta);
+		void update(float delta) override;
 
 		// Draws the ship at its current position
-		void draw();
+		void draw() override;
 
 		// See GameObject
-		const Components::CollisionComponent* getCollisionComponent() const;
+		const Components::CollisionComponent* getCollisionComponent() const override;
 
 		// See GameObject
-		const Components::PhysicsComponent* getPhysicsComponent() const;
+		const Components::PhysicsComponent* getPhysicsComponent() const override;
 	};
 }
