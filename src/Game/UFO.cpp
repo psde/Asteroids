@@ -56,7 +56,7 @@ namespace Game
 		};
 
 		_mesh.reset(new Graphics::Mesh(vertices, elements));
-		_colliderComponent.setCollisionMesh(_mesh.get());
+		_collisionComponent.setCollisionMesh(_mesh.get());
 
 		for (int i = 0; i < 1; i++)
 			_projectiles.push_back(std::make_shared<Projectile>(1.5f, false));
@@ -118,7 +118,7 @@ namespace Game
 			_reloadTime -= delta;
 		}
 
-		_colliderComponent.setPosition(_physicsComponent.getPosition());
+		_collisionComponent.setPosition(_physicsComponent.getPosition());
 	}
 
 	void UFO::draw()
@@ -135,9 +135,9 @@ namespace Game
 		}
 	}
 
-	const Components::ColliderComponent* UFO::getColliderComponent() const
+	const Components::CollisionComponent* UFO::getCollisionComponent() const
 	{
-		return &_colliderComponent;
+		return &_collisionComponent;
 	}
 
 	const Components::PhysicsComponent* UFO::getPhysicsComponent() const

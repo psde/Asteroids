@@ -8,7 +8,7 @@
 
 #include "GameObject.h"
 #include "Components/PhysicsRungeKutta.h"
-#include "Components/ColliderComponent.h"
+#include "Components/CollisionComponent.h"
 #include "Projectile.h"
 
 namespace Game
@@ -17,7 +17,7 @@ namespace Game
 	class UFO : public GameObject
 	{
 	private:
-		Components::ColliderComponent _colliderComponent;
+		Components::CollisionComponent _collisionComponent;
 		Components::PhysicsRungeKutta _physicsComponent;
 
 		std::unique_ptr<Graphics::Mesh> _mesh;
@@ -42,7 +42,7 @@ namespace Game
 		void draw();
 
 		// See GameObject
-		const Components::ColliderComponent* getColliderComponent() const;
+		const Components::CollisionComponent* getCollisionComponent() const;
 
 		// See GameObject
 		const Components::PhysicsComponent* getPhysicsComponent() const;

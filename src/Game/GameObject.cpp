@@ -1,6 +1,6 @@
 #include "GameObject.h"
 
-#include "Components/ColliderComponent.h"
+#include "Components/CollisionComponent.h"
 
 namespace Game
 {
@@ -11,9 +11,9 @@ namespace Game
 
 	bool GameObject::collidesWith(const GameObject* other)
 	{
-		if (getColliderComponent() == nullptr || other->getColliderComponent() == nullptr)
+		if (getCollisionComponent() == nullptr || other->getCollisionComponent() == nullptr)
 			return false;
 
-		return getColliderComponent()->collidesWith(other->getColliderComponent());
+		return getCollisionComponent()->collidesWith(other->getCollisionComponent());
 	}
 }

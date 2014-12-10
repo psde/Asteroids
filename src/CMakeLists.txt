@@ -62,8 +62,8 @@ SOURCE_GROUP("Game" FILES ${SRC_GAME})
 
 # Components sources
 list(APPEND SRC_COMPONENTS
-	Game/Components/ColliderComponent.h
-	Game/Components/ColliderComponent.cpp
+	Game/Components/CollisionComponent.h
+	Game/Components/CollisionComponent.cpp
 	Game/Components/PhysicsComponent.h
 	Game/Components/PhysicsComponent.cpp
 	Game/Components/PhysicsRungeKutta.h

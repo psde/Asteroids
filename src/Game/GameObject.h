@@ -2,7 +2,7 @@
 
 namespace Components
 {
-	class ColliderComponent;
+	class CollisionComponent;
 	class PhysicsComponent;
 }
 
@@ -21,8 +21,8 @@ namespace Game
 		// Draws the game object
 		virtual void draw() = 0;
 
-		// Returns a const pointer to the game objects ColliderComponent, if any. nullptr if none.
-		virtual const Components::ColliderComponent* getColliderComponent() const = 0;
+		// Returns a const pointer to the game objects CollisionComponent, if any. nullptr if none.
+		virtual const Components::CollisionComponent* getCollisionComponent() const = 0;
 
 		// Returns a const pointer to the game objects PhysicsComponent, if any. nullptr if none.
 		virtual const Components::PhysicsComponent* getPhysicsComponent() const = 0;

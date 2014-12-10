@@ -141,9 +141,9 @@ namespace Game
 			_rotating = 0;
 		}
 
-		_colliderComponent.setCollisionMesh(_rotatedMesh.get());
+		_collisionComponent.setCollisionMesh(_rotatedMesh.get());
 
-		_colliderComponent.setPosition(_physicsComponent.getPosition());
+		_collisionComponent.setPosition(_physicsComponent.getPosition());
 	}
 
 	void Ship::draw()
@@ -167,9 +167,9 @@ namespace Game
 		_moving = false;
 	}
 
-	const Components::ColliderComponent* Ship::getColliderComponent() const
+	const Components::CollisionComponent* Ship::getCollisionComponent() const
 	{
-		return &_colliderComponent;
+		return &_collisionComponent;
 	}
 
 	const Components::PhysicsComponent* Ship::getPhysicsComponent() const

@@ -1,20 +1,20 @@
-#include "ColliderComponent.h"
+#include "CollisionComponent.h"
 
 #include <cmath>
 #include <iostream>
 
 namespace Components
 {
-	ColliderComponent::ColliderComponent()
+	CollisionComponent::CollisionComponent()
 	{
 	}
 
-	void ColliderComponent::setCollisionMesh(Graphics::Mesh* mesh)
+	void CollisionComponent::setCollisionMesh(Graphics::Mesh* mesh)
 	{
 		_mesh = mesh;
 	}
 
-	bool ColliderComponent::collidesWithAABB(const ColliderComponent *other) const
+	bool CollisionComponent::collidesWithAABB(const CollisionComponent *other) const
 	{
 		for (int y = -1; y <= 1; ++y)
 		{
@@ -30,7 +30,7 @@ namespace Components
 		return false;
 	}
 
-	bool ColliderComponent::isIntersecting(Math::vec2 a, Math::vec2 b, Math::vec2 c, Math::vec2 d) const
+	bool CollisionComponent::isIntersecting(Math::vec2 a, Math::vec2 b, Math::vec2 c, Math::vec2 d) const
 	{
 		float denominator = ((b.x - a.x) * (d.y - c.y)) - ((b.y - a.y) * (d.x - c.x));
 		float numerator1 = ((a.y - c.y) * (d.x - c.x)) - ((a.x - c.x) * (d.y - c.y));
@@ -44,7 +44,7 @@ namespace Components
 		return (r >= 0 && r <= 1) && (s >= 0 && s <= 1);
 	}
 
-	bool ColliderComponent::collidesWith(const ColliderComponent *other) const
+	bool CollisionComponent::collidesWith(const CollisionComponent *other) const
 	{
 		if (collidesWithAABB(other) == false)
 			return false;

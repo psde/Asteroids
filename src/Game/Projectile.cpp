@@ -28,7 +28,7 @@ namespace Game
 		}
 
 		_mesh.reset(new Graphics::Mesh(vertices));
-		_colliderComponent.setCollisionMesh(_mesh.get());
+		_collisionComponent.setCollisionMesh(_mesh.get());
 	}
 
 	void Projectile::update(float delta)
@@ -39,7 +39,7 @@ namespace Game
 		_time -= delta;
 		_physicsComponent.update(delta);
 
-		_colliderComponent.setPosition(_physicsComponent.getPosition());
+		_collisionComponent.setPosition(_physicsComponent.getPosition());
 
 		if (_time <= 0.f)
 		{
@@ -61,9 +61,9 @@ namespace Game
 		}
 	}
 
-	const Components::ColliderComponent* Projectile::getColliderComponent() const
+	const Components::CollisionComponent* Projectile::getCollisionComponent() const
 	{
-		return &_colliderComponent;
+		return &_collisionComponent;
 	}
 
 	const Components::PhysicsComponent* Projectile::getPhysicsComponent() const

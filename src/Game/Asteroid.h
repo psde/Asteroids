@@ -8,7 +8,7 @@
 
 #include "GameObject.h"
 #include "Components/PhysicsEuler.h"
-#include "Components/ColliderComponent.h"
+#include "Components/CollisionComponent.h"
 
 namespace Game
 {
@@ -22,7 +22,7 @@ namespace Game
 		bool _destroyed;
 
 		Components::PhysicsEuler _physicsComponent;
-		Components::ColliderComponent _colliderComponent;
+		Components::CollisionComponent _collisionComponent;
 		float _rotation;
 
 		std::unique_ptr<Graphics::Mesh> _mesh;
@@ -50,7 +50,7 @@ namespace Game
 		void update(float delta);
 
 		// See GameObject
-		const Components::ColliderComponent* getColliderComponent() const;
+		const Components::CollisionComponent* getCollisionComponent() const;
 
 		// See GameObject
 		const Components::PhysicsComponent* getPhysicsComponent() const;
