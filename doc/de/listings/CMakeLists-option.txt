@@ -1,0 +1,24 @@
+option(graphics-api "Select the graphics API" "GLFW")
+
+set(use_glfw OFF)
+set(use_directx OFF)
+set(use_mantle OFF)
+
+if(graphics-api STREQUAL "GLFW")
+	set(use_glfw ON)
+elif(graphics-api STREQUAL "DIRECTX")
+	set(use_directx ON)
+elif(graphics-api STREQUAL "MANTLE")
+	set(use_mantle ON)
+else()
+	message(FATAL_ERROR "Unrecognized graphics api")
+endif()
+
+if(use_glfw)
+	# Add USE_GLFW definition to the compiler options
+	add_definitions("-DUSE_GLFW")
+	# Add GLFW specific files to source files
+	list(APPEND SOURCE_FILES "Graphics/Window/WindowImplGLFW.h")
+endif()
+
+# ...

@@ -93,10 +93,77 @@ Unter Windows kann die erstellte Visual Studio Solution mit Visual Studio 2013 g
 \subsection{Shaderverwaltung}
 \subsection{Zeichnen von Geometrie}
 \subsection{Physik}
+
+\mintedfile{cpp}{listings/mainloop.cpp}{asdasd}{lst:mainloop.cpp}
+
+
 \section{Spiel-Design}
 \subsection{Komponenten}
 
 \chapter{Ausblick}
 \section{Portierung auf andere Grafiksysteme}
+
+Das Grafiksystem ist unabhängig vom Spielecode. Alle OpenGL-Befehle werde von der Engine gekapselt, um das Portieren des Spiels auf andere Grafiksysteme wie Mantle oder DirectX zu vereinfachen. Da das Spiel auf OpenGL mithilfe von GLFW für die Fensterverwaltung und Tasteneingabe programmiert wurde befinden sich jedoch innerhalb der Engine Abhängigkeiten darauf. Jedoch wurden keine Konstanten aus OpenGL (wie \texttt{GL\_TRIANGLES} oder ähnliche) benutzt sondern in einem eigenem Enum verpackt.
+
+\mintedfile{cpp}{listings/Mesh.h}{Alle OpenGL-Enums wurden in eigenen Enums verpackt, sodass der Spielecode keine Verweise auf OpenGL hat, hier zu sehen am Beispiel von \texttt{src/Graphics/Geometry/Mesh.h}.}{lst:Mesh.h}
+
+Eine Variante um die Grafikengine auf ein anderes Grafiksystem zu portieren wird in diesem Kapitel vorgestellt. Mithilfe des Pimpl-Idioms (\textit{Pointer to Implementation}) kann das eigentliche Interface welches vom Spielecode benutzt wird unabhängig vom Grafiksystem verwendet werden und das Grafiksystem relativ einfach und schnell ausgetauscht werden, solange dies das Interface voll unterstützt. 
+
+\paragraph{Portierung mithilfe des Pimpl-Idioms}
+Anhand der Fensterverwaltung in der Engine kann die Idee des Pimpl-Idioms einfach verstanden werden. Angenommen in der Datei \texttt{Window.h} (siehe Listing \autoref{lst:pimpl/Window.h}) wird das Interface zur Fensterverwaltung definiert und kann so von dem Spielecode benutzt werden.
+
+\mintedfile{cpp}{listings/pimpl/Window.h}{\texttt{Window.h}: Definition des Interfaces ohne eigene Daten. Nur die Referenz auf die eigentliche Implementation ist vorhanden.}{lst:pimpl/Window.h}
+
+Wie man eindeutig sieht hat die Klasse \texttt{Window} keinerlei privaten Daten, die man bei einer Fensterverwaltung erwarten würde. Lediglich ein privater \texttt{unique\_ptr} auf die vorwärts-deklarierte Klasse \texttt{WindowImpl} ist vorhanden. Wenn der Spielecode nun die Datei \texttt{Window.h} inkludiert gibt es keine Möglichkeit auf die internen Daten Einfluss zu nehmen, da die komplette Implementierung in einer noch nicht spezifizierten und auch privaten Klasse liegt.
+
+Erst in der \texttt{Window.cpp} (siehe Listing \autoref{lst:pimpl/Window.cpp}) wird dieser Typ \texttt{WindowImpl} spezifiziert. Je nachdem welches Grafiksytem im Buildsystem ausgewählt wurde werden hier unterschiedliche Implementation angezogen und inkludiert. Da die \texttt{WindowImpl}-Klasse nun spezifiziert ist kann sie auch von der Fensterverwaltung verwendet werden. Im Konstruktor wird eine neue \texttt{WindowImpl}-Instanz erzeugt und als Member initialisiert. Alle Argumente werden der Implementation weitergereicht. Ähnlich werden auch Funktionen wie \texttt{getCursorPosition} einfach auf der eigentlichen Implementation aufgerufen und ggf. der Rückgabewert weitergereicht.
+
+\mintedfile{cpp}{listings/pimpl/Window.cpp}{\texttt{Window.cpp}: Das Interface wrappt sich um eine spezialisierte Implementationsklasse, welche im Konstruktor erstellt wird. Da die Implementation als \texttt{unique\_ptr} angelegt ist muss sich nicht um den Speicher gekümmert werden.}{lst:pimpl/Window.cpp}
+
+Für jedes unterstützte Grafiksystem muss also eine eigene Implementierung programmiert werden, welche dann von dem \texttt{Window} benutzt wird. Dabei ist zu beachten, dass nur eine Implementierung gleichzeitig mit dem Projekt kompiliert werden kann, da alle den gleichen Klassennamen haben.
+
+\mintedfile{cpp}{listings/pimpl/WindowImplGLFW.h}{\texttt{WindowImplGLFW.h}: Ein Beispiel für die Implementierungsdetails der Fensterverwaltung in GLFW. Da dies nicht Teil des öffentlichen Interfaces ist kann es nach belieben und ohne Rücksicht auf Rückwärtskompatibilität verändert werden. Hier als Header-Only-Implementierung zu Darstellungszwecken.}{lst:pimpl/WindowImplGLFW.h}
+
+Weiter Informationen zu dem Pimpl-Idiom befinden sich unter anderem hier:
+\begin{itemize}
+\item \url{http://www.gotw.ca/gotw/028.htm}
+\item \url{http://www.gotw.ca/gotw/024.htm}
+\item \url{http://en.wikibooks.org/wiki/C%2B%2B_Programming/Idioms#Pointer_To_Implementation_.28pImpl.29}
+\end{itemize}
+
+Das Pimpl-Idiom löst somit einen großen Teil des Portierungsaufwandes, da neue Grafiksysteme hinzugefügt werden können ohne das Interface zu verändern. Somit kann der Spielecode unverändert bleiben. Leider sind das Anfangs erwähnte \texttt{DrawMode}-Enum, welche vom Spielecode benutzt werden, nun immer noch eine direkte Referenz auf die OpenGL-Enums. Dies lässt sich jedoch einfach lösen, indem man im öffentlichen Teil des Interfaces komplett auf die OpenGL-Konstanten verzichtet. Die eigentliche Implementation kann dann selber entscheiden, wie sie damit umgehen möchte. Sie könnte zum Beispiel diese Enums wieder in OpenGL-Konstanten umwandeln, oder mit einer \texttt{switch}-Anweisungen alle Fälle abdecken. 
+
+Jedoch könnte auch argumentiert werden, dass man komplett auf das \texttt{DrawMode}-Enum verzichten sollte und dafür Funktionen wie \texttt{drawTriangles} und \texttt{drawLines} in das Interface einführen sollte. Das löst zwar einige Fälle und eliminiert somit einige Enums, jedoch gibt es zum Beispiel in der Fensterverwaltung (\texttt{src/Graphics/Window}) ein \texttt{Key}-Enum, der alle Tasten auf der Tastatur abbildet. Dieser könnte nur sehr schlecht als Funktionen abgebildet werden und muss dementsprechend erhalten bleiben.
+
+\paragraph{CMake-Unterstützung für mehrere Grafiksysteme}
+Da dieses Beispiel auf das Buildsystem angewiesen sind um die Definitionen wie zum Beispiel \texttt{USE\_GLFW} zu setzen, müssen auch die CMake-Skripts angepasst werden. Zum Beispiel könnte dafür eine Option \texttt{graphics-api} eingeführt werden.
+
+\mintedfile{cmake}{listings/CmakeLists-option.txt}{Ein Beispiel wie Optionen der \texttt{CMakeLists.txt} hinzugefügt werden können. Abhängig von den Optionen werden verschiedene Definitionen dem Compiler übergeben und verschiedene Dateien dem Projekt hinzugefügt.}{lst:CmakeLists-option.txt}
+
+Diese Option kann wie folgt mit \texttt{cmake} benutzt werden, hier wird beispielsweise Mantle als Grafiksystem ausgewählt:
+\clicommand{>~cmake~-DGRAPHICS-API=MANTLE~..}
+
+\paragraph{Alternativen zum Pimpl-Idiom}
+Eine Alternative zu dem Pimpl-Idiom sind \textit{Opaque-Pointer}, oder in Qt auch \textit{D-Pointer} genannt. Dieses Idiom versteckt interne Daten hinter einem anonymen \texttt{struct}, das nur aus der jeweiligen Implementatierung sichtbar ist. 
+
+Genau wie beim Pimpl-Idiom gibt es im Interface wieder keine privaten Daten, außer einen \texttt{unique\_ptr} auf einen forwärts-deklarierten \texttt{struct}.
+
+\mintedfile{cpp}{listings/dpointer/Window.h}{\texttt{Window.h}: Definition des Interfaces ohne eigene Daten. Nur die Referenz auf das private Datenstruct (der D-Pointer oder Opaque-Pointer)ist vorhanden.}{lst:dpointer/Window.h}
+
+Pro Grafikssystem gibt es nun eine Implementierung für dieses Interface. Um trotzdem die erforderlichen, privaten Member zu haben stecken diese nun in einem \texttt{struct}, welches nur in der Implementierung definiert wird.
+
+\mintedfile{cpp}{listings/dpointer/WindowGLFW.cpp}{\texttt{WindowGLFW.cpp}: Private Daten werden im \texttt{WindowDetail} gespeichert, welches nur in dieser Datei sichtbar und zugägnlich ist. Ansonsten wird das komplette Interface in dieser Datei implementiert.}{lst:dpointer/WindowGLFW.cpp}
+
+Das Buildsystem muss sich also darum kümmern die jeweils gewünschte Implementierung zu bauen. Genau wie beim Pimpl-Idiom auch ändert sich das Interface (und somit die Binärkompatibilität) nicht wenn sich die darunterliegende Implementierung ändert oder neue, private Member hinzukommen.
+
+Weiter Informationen zu Opaque-Pointer befinden sich unter anderem hier:
+\begin{itemize}
+\item \url{http://qt-project.org/wiki/Dpointer}
+\item \url{http://en.wikipedia.org/wiki/Opaque_pointer#C.2B.2B}
+\end{itemize}
+
 \section{Multithreading}
+
+
+
 \end{document}
