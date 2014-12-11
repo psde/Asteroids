@@ -89,18 +89,34 @@ Unter Linux und Mac OS X kann danach per \texttt{>~make} das Projekt gebaut werd
 Unter Windows kann die erstellte Visual Studio Solution mit Visual Studio 2013 geöffnet und das Projekt gebaut sowie gestartet werden. Die Einrichtung des korrekten Arbeitsverzeichnis hat CMake mithilfe einer Solution Template in \texttt{/cmake/VisualStudio/} übernommen und muss somit nicht von Hand erledigt werden.
 
 \section{Engine-Design}
+\subsection{Hauptschleife}
+
+\mintedfile{cpp}{listings/mainloop.cpp}{asdasd}{lst:mainloop.cpp}
+
 \subsection{Fensterverwaltung}
 \subsection{Shaderverwaltung}
 \subsection{Zeichnen von Geometrie}
-\subsection{Physik}
-
-\mintedfile{cpp}{listings/mainloop.cpp}{asdasd}{lst:mainloop.cpp}
 
 
 \section{Spiel-Design}
 \subsection{Komponenten}
 
+Die Spiele-Objekte sind nach einem Komponenten-System entworfen worden. Das bedeutet, das die Objekte nicht von einem oder mehreren Klassen ableiten, welche zum Beispiel Physik und Kollisionen implementieren, sondern eine Referenz auf eine eigene Komponente beinhalten. Damit lassen sich Mehrfachvererbungsprobleme wie das Diamanten-Problem umgehen und gleichzeitig sehr unterschiedliche Objekte realisieren.
+
+Im Moment gibt es nur zwei Komponenten-Typen, die Kollisions- und die Physik-Komponenten. Dieses System ist jedoch variabel und es lassen sich eine Vielzahl von weiteren Komponenten erdenken. So könnte zum Beispiel die Eingabe aus der \texttt{Game}-Klasse gelöst werden und in eine Eingabe-Komponente verschoben werden, welche dann vom Schiff benutzt wird. Auch sind verschieden starke KI-Komponenten für unterschiedliche UFO-Typen oder Schwierigkeitsgerade denkbar. Mit der Einführung einer KI-Komponente könnten selbst Asteroid eine KI erhalten, welche verschiedene Modis ausführen könnte. Zum Beispiel kann ein Asteroid sich um seine eigene Achse drehen, oder generell eine gekrümmte Flugbahn haben. Auch Gravitation könnte so abgebildet werden.
+
+Weitere Anregungen und Erläuterungen sind auch auf GameProgrammingPatterns.com\footnote{\url{http://gameprogrammingpatterns.com/component.html}} und im Blog von Ray Wenderlich\footnote{\url{http://www.raywenderlich.com/24878/introduction-to-component-based-architecture-in-games}} zu finden.
+
+\paragraph{Kollisions-Komponente}
+Damit Spielobjekte miteinander Kollidieren können kann jedes Objekt eine Kollisions-Komponente beinhalten. Im Moment gibt es nur eine Komponente, welche zuerst mit einem AABB-Test (Axis-aligned Bounding Box) schnell entscheiden kann, ob eine aufwändigere Linie-zu-Linien Kollision berechnet werden muss. Ist dies der Fall, wird jede Linie jedes Objektes gegen jede Line des anderen Objets miteinander auf einen Schnittpunkt getestet. Mit diesem Verfahren kann eine Pixelgenau Kollision, wie sie im Spiel erforderlich ist, erzielt werden.
+
+\paragraph{Physik-Komponenten}
+Für die Physik gibt es zwei unterschiedliche Komponenten. Für alle Objekte, die sich mit einer konstanten Geschwindigkeit bewegen reicht die Genauigkeit einer normalen Eulersche Integration aus. Da jedoch das spielergesteuerte Schiff keine konstante Geschwindigkeit hat und die Richtung sich oft ändert ist die numerische Genauigkeit der Euler-Komponente nicht mehr ausreichend. Dafür gibt es die etwas aufwändiger zu berechnende Runge-Kutta-Komponente, welche eine Runge-Kutta Integration der 4. Ordnung implementiert. Damit wird die Ungenauigkeit auf ein akzeptables Niveau gesenkt welches dem Spieler nicht mehr auffällt.
+
 \chapter{Ausblick}
+
+Diese Kapitel soll einen Ausblick auf Weiterentwicklungs-Potential in dem Engine- und Spieldesign geben.
+
 \section{Portierung auf andere Grafiksysteme}
 
 Das Grafiksystem ist unabhängig vom Spielecode. Alle OpenGL-Befehle werde von der Engine gekapselt, um das Portieren des Spiels auf andere Grafiksysteme wie Mantle oder DirectX zu vereinfachen. Da das Spiel auf OpenGL mithilfe von GLFW für die Fensterverwaltung und Tasteneingabe programmiert wurde befinden sich jedoch innerhalb der Engine Abhängigkeiten darauf. Jedoch wurden keine Konstanten aus OpenGL (wie \texttt{GL\_TRIANGLES} oder ähnliche) benutzt sondern in einem eigenem Enum verpackt.

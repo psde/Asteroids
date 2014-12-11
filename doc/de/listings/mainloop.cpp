@@ -1,21 +1,13 @@
-// Physics simulation
+const unsigned int maxPhysicsStepsPerFrame = 30;
 const float physicsTimeStep = 0.001f;
-const int maxPhysicsStepsPerFrame = 30;
 float accumulatedPhysicsTime = 0.f;
 
-float startTime = Graphics::getTime();
-float endTime = startTime;
-
-while (!window->shouldClose())
-{
-	float timeDelta = endTime - startTime;
-	startTime = Graphics::getTime();
-	
-	// Perform physics simulation steps
+while (!window->shouldClose()) {
 	unsigned int physicSteps = 0;
-	accumulatedPhysicsTime += timeDelta;
+	accumulatedPhysicsTime += getTimeDelta();
 	while (accumulatedPhysicsTime >= physicsTimeStep)
 	{
+		// Perform a single update
 		game.update(physicsTimeStep);
 		accumulatedPhysicsTime -= physicsTimeStep;
 		physicSteps++;
@@ -27,7 +19,5 @@ while (!window->shouldClose())
 	}
 
 	game.draw();
-
 	window->finishFrame();
-	endTime = Graphics::getTime();
 }
