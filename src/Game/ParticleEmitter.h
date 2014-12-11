@@ -36,7 +36,7 @@ namespace Game
 	class ParticleEmitter : public GameObject
 	{
 	private:
-		std::vector<Particle*> _particles;
+		std::vector<std::unique_ptr<Particle>> _particles;
 		std::shared_ptr<Graphics::Mesh> _mesh;
 
 	public:

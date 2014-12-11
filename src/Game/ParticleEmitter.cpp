@@ -68,16 +68,12 @@ namespace Game
 			pos = position + Math::vec2(offset(gen) * cos(t), offset(gen) * sin(t));
 
 			Math::vec2 dir = Math::normalize(pos - position);
-			_particles.push_back(new Particle(_mesh, pos, dir));
+			_particles.push_back(std::unique_ptr<Particle>(new Particle(_mesh, pos, dir)));
 		}
 	}
 
 	void ParticleEmitter::reset()
 	{
-		for(auto p : _particles)
-		{
-			delete p;
-		}
 		_particles.clear();
 	}
 
@@ -85,12 +81,11 @@ namespace Game
 	{
 		auto particleIterator = std::begin(_particles);
 		while (particleIterator != std::end(_particles)) {
-			auto particle = *particleIterator;
+			auto &particle = *particleIterator;
 			particle->update(timeDelta);
 
 			if (particle->isDead())
 			{
-				delete particle;
 				particleIterator = _particles.erase(particleIterator);
 			}
 			else
@@ -104,7 +99,7 @@ namespace Game
 	{
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-		for (auto p : _particles)
+		for (auto &p : _particles)
 		{
 			p->draw();
 		}
