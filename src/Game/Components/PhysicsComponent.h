@@ -24,7 +24,7 @@ namespace Components
 		virtual void setTerminalVelocity(float velocity) = 0;
 
 		// Returns the terminal velocity
-		virtual float getTerminalVelocity() = 0;
+		virtual float getTerminalVelocity() const = 0;
 
 		// Advances the physics simulation by given time delta
 		virtual void update(float timeDelta) = 0;

@@ -33,7 +33,7 @@ namespace Components
 		void reset(Math::vec2 position, Math::vec2 velocity) override;
 
 		void setTerminalVelocity(float max) override { _terminalVelocity = max; }
-		virtual float getTerminalVelocity() override { return _terminalVelocity; }
+		virtual float getTerminalVelocity() const override { return _terminalVelocity; }
 
 		void update(float timeDelta) override;
 		void setAcceleration(Math::vec2 acceleration) override;
