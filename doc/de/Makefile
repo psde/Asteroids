@@ -13,11 +13,14 @@ CP_CMD = cp $(OUTPUT_DIR)$(NAME).pdf .
 
 all: fast
 
-fast: $(SRC_FILES)
+dir:
+	mkdir -p out/
+
+fast: $(SRC_FILES) dir
 	  $(PDFLATEX) $(MAINTEX)
 	  $(CP_CMD)
 
-full: $(SRC_FILES) clean
+full: $(SRC_FILES) clean dir
 	  $(PDFLATEX) $(MAINTEX)
 	  $(PDFLATEX) $(MAINTEX)
 	  #$(BIBER) $(BIB_FILE)
