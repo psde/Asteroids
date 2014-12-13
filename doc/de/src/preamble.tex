@@ -23,6 +23,9 @@
 \usepackage{csquotes}
 \usepackage{dirtree}
 
+\usepackage{tikz}
+\usetikzlibrary{arrows, positioning, fit}
+
 \graphicspath{{images/}}
 
 \usepackage{setspace}
@@ -78,7 +81,7 @@
 \usemintedstyle{colorful} %https://raw.github.com/n1k0/SublimeHighlight/master/themes.png
 \newcommand{\mintedfileinput}[2]{
 \microtypesetup{protrusion=false}
-\inputminted[frame=lines,framesep=7pt,linenos=false,numbersep=6pt,baselinestretch=1,xleftmargin=10pt]{#1}{"../#2"}
+\inputminted[frame=lines,framesep=7pt,linenos=false,numbersep=6pt,baselinestretch=1,xleftmargin=10pt, tabsize=2]{#1}{"../#2"}
 \microtypesetup{protrusion=true}
 }
 

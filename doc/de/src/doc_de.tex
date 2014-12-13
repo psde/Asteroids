@@ -101,10 +101,19 @@ Unter Windows kann die erstellte Visual Studio Solution mit Visual Studio 2013 g
 
 \subsection{Fensterverwaltung}
 \subsection{Shaderverwaltung}
+
+\mintedfile{glsl}{listings/shader.glsl}{}{lst:shader.glsl}
+
 \subsection{Zeichnen von Geometrie}
 
 
 \section{Spiel-Design}
+
+\subsection{Objekte}
+
+\mintedfile{cpp}{listings/GameObject.h}{\texttt{src/Game/GameObject.h}: Base class for all game objects.}{lst:GameObject.h}
+
+
 \subsection{Komponenten}
 
 Die Spiele-Objekte sind nach einem Komponenten-System entworfen worden. Das bedeutet, das die Objekte nicht von einem oder mehreren Klassen ableiten, welche zum Beispiel Physik und Kollisionen implementieren, sondern eine Referenz auf eine eigene Komponente beinhalten. Damit lassen sich Mehrfachvererbungsprobleme wie das Diamanten-Problem umgehen und gleichzeitig sehr unterschiedliche Objekte realisieren.
@@ -125,7 +134,7 @@ Diese Kapitel soll einen Ausblick auf Weiterentwicklungs-Potential in dem Engine
 
 \section{Portierung auf andere Grafiksysteme}
 
-Das Grafiksystem ist unabhängig vom Spielecode. Alle OpenGL-Befehle werde von der Engine gekapselt, um das Portieren des Spiels auf andere Grafiksysteme wie Mantle oder DirectX zu vereinfachen. Da das Spiel auf OpenGL mithilfe von GLFW für die Fensterverwaltung und Tasteneingabe programmiert wurde befinden sich jedoch innerhalb der Engine Abhängigkeiten darauf. Jedoch wurden keine Konstanten aus OpenGL (wie \texttt{GL\_TRIANGLES} oder ähnliche) benutzt sondern in einem eigenem Enum verpackt.
+Das Grafiksystem ist unabhängig vom Spielecode. Alle OpenGL-Befehle werden von der Engine gekapselt, um das Portieren des Spiels auf andere Grafiksysteme wie SDL, Mantle oder DirectX zu vereinfachen. Da das Spiel auf OpenGL mithilfe von GLFW für die Fensterverwaltung und Tasteneingabe programmiert wurde befinden sich jedoch innerhalb der Engine Abhängigkeiten darauf. Jedoch wurden keine Konstanten aus OpenGL (wie \texttt{GL\_TRIANGLES} oder ähnliche) benutzt sondern in einem eigenem Enum verpackt.
 
 \mintedfile{cpp}{listings/Mesh.h}{Alle OpenGL-Enums wurden in eigenen Enums verpackt, sodass der Spielecode keine Verweise auf OpenGL hat, hier zu sehen am Beispiel von \texttt{src/Graphics/Geometry/Mesh.h}.}{lst:Mesh.h}
 
@@ -186,6 +195,7 @@ Weiter Informationen zu Opaque-Pointer befinden sich unter anderem hier:
 
 \section{Multithreading}
 
+\paragraph{Pipelining}
 
-
+\paragraph{Task Schedulers}
 \end{document}
