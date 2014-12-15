@@ -141,13 +141,13 @@ Das Grafiksystem ist unabhängig vom Spielecode. Alle OpenGL-Befehle werden von 
 Eine Variante um die Grafikengine auf ein anderes Grafiksystem zu portieren wird in diesem Kapitel vorgestellt. Mithilfe des Pimpl-Idioms (\textit{Pointer to Implementation}) kann das eigentliche Interface welches vom Spielecode benutzt wird unabhängig vom Grafiksystem verwendet werden und das Grafiksystem relativ einfach und schnell ausgetauscht werden, solange dies das Interface voll unterstützt. 
 
 \paragraph{Portierung mithilfe des Pimpl-Idioms}
-Anhand der Fensterverwaltung in der Engine kann die Idee des Pimpl-Idioms einfach verstanden werden. Angenommen in der Datei \texttt{Window.h} (siehe Listing \autoref{lst:pimpl/Window.h}) wird das Interface zur Fensterverwaltung definiert und kann so von dem Spielecode benutzt werden.
+Anhand der Fensterverwaltung in der Engine kann die Idee des Pimpl-Idioms einfach verstanden werden. Angenommen in der Datei \texttt{Window.h} (siehe Listing~\autoref{lst:pimpl/Window.h}) wird das Interface zur Fensterverwaltung definiert und kann so von dem Spielecode benutzt werden.
 
 \mintedfile{cpp}{listings/pimpl/Window.h}{\texttt{Window.h}: Definition des Interfaces ohne eigene Daten. Nur die Referenz auf die eigentliche Implementation ist vorhanden.}{lst:pimpl/Window.h}
 
 Wie man eindeutig sieht hat die Klasse \texttt{Window} keinerlei privaten Daten, die man bei einer Fensterverwaltung erwarten würde. Lediglich ein privater \texttt{unique\_ptr} auf die vorwärts-deklarierte Klasse \texttt{WindowImpl} ist vorhanden. Wenn der Spielecode nun die Datei \texttt{Window.h} inkludiert gibt es keine Möglichkeit auf die internen Daten Einfluss zu nehmen, da die komplette Implementierung in einer noch nicht spezifizierten und auch privaten Klasse liegt.
 
-Erst in der \texttt{Window.cpp} (siehe Listing \autoref{lst:pimpl/Window.cpp}) wird dieser Typ \texttt{WindowImpl} spezifiziert. Je nachdem welches Grafiksytem im Buildsystem ausgewählt wurde werden hier unterschiedliche Implementation angezogen und inkludiert. Da die \texttt{WindowImpl}-Klasse nun spezifiziert ist kann sie auch von der Fensterverwaltung verwendet werden. Im Konstruktor wird eine neue \texttt{WindowImpl}-Instanz erzeugt und als Member initialisiert. Alle Argumente werden der Implementation weitergereicht. Ähnlich werden auch Funktionen wie \texttt{getCursorPosition} einfach auf der eigentlichen Implementation aufgerufen und ggf. der Rückgabewert weitergereicht.
+Erst in der \texttt{Window.cpp} (siehe Listing~\autoref{lst:pimpl/Window.cpp}) wird dieser Typ \texttt{WindowImpl} spezifiziert. Je nachdem welches Grafiksytem im Buildsystem ausgewählt wurde werden hier unterschiedliche Implementation angezogen und inkludiert. Da die \texttt{WindowImpl}-Klasse nun spezifiziert ist kann sie auch von der Fensterverwaltung verwendet werden. Im Konstruktor wird eine neue \texttt{WindowImpl}-Instanz erzeugt und als Member initialisiert. Alle Argumente werden der Implementation weitergereicht. Ähnlich werden auch Funktionen wie \texttt{getCursorPosition} einfach auf der eigentlichen Implementation aufgerufen und ggf. der Rückgabewert weitergereicht.
 
 \mintedfile{cpp}{listings/pimpl/Window.cpp}{\texttt{Window.cpp}: Das Interface wrappt sich um eine spezialisierte Implementationsklasse, welche im Konstruktor erstellt wird. Da die Implementation als \texttt{unique\_ptr} angelegt ist muss sich nicht um den Speicher gekümmert werden.}{lst:pimpl/Window.cpp}
 
@@ -183,7 +183,7 @@ Genau wie beim Pimpl-Idiom gibt es im Interface wieder keine privaten Daten, au�
 
 Pro Grafikssystem gibt es nun eine Implementierung für dieses Interface. Um trotzdem die erforderlichen, privaten Member zu haben stecken diese nun in einem \texttt{struct}, welches nur in der Implementierung definiert wird.
 
-\mintedfile{cpp}{listings/dpointer/WindowGLFW.cpp}{\texttt{WindowGLFW.cpp}: Private Daten werden im \texttt{WindowDetail} gespeichert, welches nur in dieser Datei sichtbar und zugägnlich ist. Ansonsten wird das komplette Interface in dieser Datei implementiert.}{lst:dpointer/WindowGLFW.cpp}
+\mintedfile{cpp}{listings/dpointer/WindowGLFW.cpp}{\texttt{WindowGLFW.cpp}: Private Daten werden im \texttt{WindowDetail} gespeichert, welches nur in dieser Datei sichtbar und zugänglich ist. Ansonsten wird das komplette Interface in dieser Datei implementiert.}{lst:dpointer/WindowGLFW.cpp}
 
 Das Buildsystem muss sich also darum kümmern die jeweils gewünschte Implementierung zu bauen. Genau wie beim Pimpl-Idiom auch ändert sich das Interface (und somit die Binärkompatibilität) nicht wenn sich die darunterliegende Implementierung ändert oder neue, private Member hinzukommen.
 
@@ -195,11 +195,36 @@ Weiter Informationen zu Opaque-Pointer befinden sich unter anderem hier:
 
 \section{Multithreading}
 
+Multithreading hat mittlerweile in jedem großen Spiel Einzug gehalten um noch komplexere Welten und Grafiken in Echtzeit berechnen zu können. Auch in dem eher simplen Asteroids-Spiel gibt es Potential von mehreren Prozessorkernen zu profitieren.
+
+Dieses Kapitel sollen einige Möglichkeiten für den Einsatz von Multithreading im Asteroids-Spiel erläutert werden. Dabei soll die Physik-Komponente und das Zeichnen der Spielwelt separiert werden.
+
+In einer richtigen 3D-Engine wäre jedoch auch Multithreading in anderen Komponenten denkbar. So könnte zum Beispiel die Animation und inverse Kinematik von 3D-Objekten, aber auch die Entscheidung, welche Objekte sichtbar sind (Culling) auf mehrere Threads aufgeteilt werden.
+
 \subsection{Pipelining}
 
+\paragraph{Doppelpufferung \textit{Double Buffering}}
+
+Genau wie im Grafikbereich schon üblich kann eine Doppelpufferung die Performance drastisch erhöhen. Dabei wird das Konzept aus der Grafikwelt hier in die Physikkomponente übertragen. Jede Komponente hat zwei Puffer für ihre Position, wobei einer der beiden immer als Arbeitspuffer fungiert (\textit{Backbuffer}) und einer von der Grafikkomponente ausgelesen werden kann (\textit{Frontbuffer}). Um den neuen Zustand zu berechnen braucht die Physikkomponete jederzeit den vorherigen Zustand, welcher im Fronbuffer gespeichert wird. Da auch die Grafikkomponente genau wie die Physikkomponente nur aus diesem Puffer lesen und nicht in diesen Puffer schreiben entstehen an dieser Stelle keine Wettlaufsituationen. Der Backbuffer kann von der Physikkomponente ohne Synchronisation beschrieben werden, da die Grafikkomponente diesen Puffer nicht ausliest. Listing~\autoref{lst:Pipeline-Approach1.h} zeigt so einen Ansatz. Der aktuelle Zeiger auf den richtigen Frontbuffer wird dabei über ein \texttt{std::atomic<unsigned int>} gelöst, welchen den Index repräsentiert. Dabei muss aber mit entsprechenden Signalen drauf geachtet werden, dass der Physik-Thread nie mehr als einen Frame im Voraus berechnet, da es sonst zu Wettlaufsituationen kommen kann.
+
 \mintedfile{cpp}{listings/Pipeline-Approach1.h}{}{lst:Pipeline-Approach1.h}
+
+\paragraph{Separater Grafikzustand}
+
+Anstatt mit einem atomaren Index zwischen Front- und Backbuffer zu unterscheiden kann die Physikkomponente auch zu Beginn des Frames den alten Zustand kopieren und so der Grafikkomponente zur Verfügung stellen. In Listing~\autoref{lst:Pipeline-Approach2.h} ist dies anhand eines Beispiels zu sehen. Genau wie bei der Doppelpufferung muss auch hier drauf geachtet werden, dass die Physikkomponente nie mehr als einen Frame im Vorraus berechnet, da sonst der aktuell von der Grafikkomponente ausgelesen Zustand überschrieben wird. Es kann mit dieser Methode jedoch auf den atomaren Index verzichtet werden.
+
 \mintedfile{cpp}{listings/Pipeline-Approach2.h}{}{lst:Pipeline-Approach2.h}
 
-\subsection{Task Schedulers}
-\mintedfile{cpp}{listings/TaskScheduler.h}{}{lst:TaskScheduler.h}
+\subsection{Aufgabenplaner \textit{(Task Schedulers)}}
+
+Eine weitere Möglichkeit wäre die eigentlich unabhängig voneinander stattfindenen Physikberechnungen der Spielobjekte in kleine Aufgaben (\textit{Tasks}) aufzuteilen und diese dann parallel abzuarbeiten. Dazu ist ein Aufgabenplaner \text{Task Scheduler} nötig, welcher alle Aufgaben zu Beginn eines Frames zusammenträgt und dann in mehreren Threads abarbeitet.
+
+Listing~\autoref{lst:TaskScheduler.h} zeigt eine Beispielimplementation eines solchen Task Schedulers. In der \texttt{update}-Methode der Physikkomponenten wird zuerst überprüft, ob ein Neuberechnen der Position notwendig ist. Sollte dies der Fall sein so wird dem Phsyik-Scheduler eine Referenz auf die \texttt{updateWorker}-Methode (als \texttt{std::function}) per \texttt{schedule} überreicht. Dieser trägt auf diese Weise alle in diesem Frame zu erledigende Tasks von allen Physikkomponenten zusammen. Nun wird die \texttt{work()}-Methode aufgerufen und jeder einzelne Task wird asynchron per \texttt{std::async} aufgerufen. Da natürlich bei vielen Komponenten die Anzahl der Aufgaben leicht die Anzahl der Prozessorkerne überschreiten kann sollte hier drauf geachtet werden, dass immer nur eine begrenzte Anzahl an Tasks gleichzeitig laufen. Es ist davon auszugehen, das jeder Task einzeln betrachtet kaum Rechenleistung braucht und somit auch ein kleiner Overhead in der Verwaltung der Threads entstehen kann. Hier muss also mit der richtigen Anzahl an simultanen Threads experimentiert werden.
+
+\mintedfile{cpp}{listings/TaskScheduler.h}{Ein Beispiel für einen Task Scheduler, der alle Tasks der Physikkomponenten zusammenträgt und dann parallel abarbeitet.}{lst:TaskScheduler.h}
+
+\subsection{Dedizierter Thread}
+Wenn größere Mengen Daten zur Laufzeit nachgeladen werden müssen (\textit{Streaming}) bietet sich die Verwendung eines dedizierten Threads an. Bei einem Spiel mit einer offenen Spielwelt wird meist nicht die gesamte Spielwelt im Speicher gehalten sondern nur der aktuell vom Spieler unmittelbar erreichbare Teil. Falls der Spieler sich nun an den Rand dieses geladenen Teils bewegt wird der dedizierierte Thread aufgeweckt und lädt im Hintergrund einen neuen Teil der Spielwelt nach, sodass der Spieler ohne Ladezeiten oder Ruckler von einen Teil der Welt in den nächsten Teil der Welt bewegen kann. Der Thread wird danach wieder schlafen gelegt und wartet darauf, den nächsten Teil der Welt nachzuladen.
+
+In dem Asteroid-Spiel ist diese Art von Multithreading jedoch nicht anwendbar, da keine großen Datenmengen zur Laufzeit nachgeladen werden müssen.
 \end{document}
