@@ -95,24 +95,54 @@ Unter Linux und Mac OS X kann danach per \texttt{>~make} das Projekt gebaut werd
 Unter Windows kann die erstellte Visual Studio Solution mit Visual Studio 2013 geöffnet und das Projekt gebaut sowie gestartet werden. Die Einrichtung des korrekten Arbeitsverzeichnis hat CMake mithilfe einer Solution Template in \texttt{/cmake/VisualStudio/} übernommen und muss somit nicht von Hand erledigt werden.
 
 \section{Engine-Design}
+
+Die Engine wurde komplett für das Asteroids-Spiel entworfen. Es wurden von Anfang an Entscheidungen getroffen, welche die Portabilität der Engine auf allen Plattformen sicherstellt. Auch wird das zugrundeliegende Grafiksystem abstrahiert um eine Portierung zu vereinfachen. In diesem Abschnitt sollen einige Kernaspekte vorgestellt und erläutert werden. 
+
 \subsection{Hauptschleife}
 
-\mintedfile{cpp}{listings/mainloop.cpp}{asdasd}{lst:mainloop.cpp}
+Der große Unterschied von Videospielen zu ``normalen'' Programmen liegt nicht zuletzt in dem Vorhandensein einer Hauptschleife, welche erst mit Beenden des Spiels terminiert. Listing \autoref{lst:mainloop.cpp} zeigt die Hauptschleife des Asteroids-Spiels.
+
+In dieser Hauptschleife wird zuerst das aktuelle Zeitdelta berechnet. Dieses Zeitdelta repräsentiert die Dauer der Verarbeitung des letzten Bildes. Um genau 60 Bilder pro Sekunde auszugeben muss dieses Delta genau 16,66 ms groß sein. Danach wird die Physik und Spiellogik aller Spielobjekte berechnet. Da die Simulation mit festen Zeitabständen berechnet werden muss wird das aktuelle Zeitdelta zu dem akkumulierten Zeitdelta hinzugefügt. Anhand dieser akkumulierten Zeit wird die Simulation nun so oft aufgerufen und der Simulationsschritt von der akkumulierten Zeit abgezogen bis diese kleiner eines Simulationsschritt ist. Da auf langsameren Rechnern diese Simulation zu viel Zeit in Anspruch nehmen kann und damit das Zeitdelta des nächsten Schrittes vergrößert wird, was wieder die Anzahl der Simulationsschritte erhöht, gibt es ein Limit von 30 Schritten pro ausgegebenen Bild. Dies führt zwar dazu, dass das Spiel insgesamt langsamer läuft, aber andererseits würde der Spieler ansonsten schon nach wenigen ausgegebenen Bildern ein Stillstand des Programms feststellen.
+
+Anschließend werden alle Spielobjekte und die Benutzeroberfläche gezeichnet. Zum Schluss wird das fertige Bild auf dem Bildschirm angezeigt.
+
+\mintedfile{cpp}{listings/mainloop.cpp}{\texttt{src/main.cpp}: Die Hauptschleife des Spiels, welche sich unter anderem um die korrekte Simulation der Spiellogik kümmert indem diese mit festen Zeitschritten aufgerufen wird. So wird der Fehler der Physiksimulation minimiert und eine konstante Simulationsgeschwindigkeit erreicht.}{lst:mainloop.cpp}
 
 \subsection{Fensterverwaltung}
+
+Die Fensterverwaltung ist im Kern nur ein dünne API-Schicht für GLFWwindow, welches eine C-Bibliothek ist. Die \texttt{Window}-Klasse kümmert sich um das Erstellen eines Fensters beliebiger Größe und verwaltet den OpenGL-Kontext. Auch Tastatureingaben und die Mausposition werden hier verarbeitet und dem Spiel zur Verfügung gestellt.
+
+\mintedfile{cpp}{listings/Window.h}{\texttt{src/Graphics/Window/Window.h}: Abstraktion des \texttt{GLFWwindow} und die Bereitstellung von Tastatureingaben sowie Mausposition.}{lst:Window.h}
+
 \subsection{Shaderverwaltung}
 
-\mintedfile{glsl}{listings/shader.glsl}{}{lst:shader.glsl}
+Da im OpenGL 3 Core Profile keine alten OpenGL-Befehle gültig sind und somit auch die Benutztung von Shadern vorgeschrieben ist, muss die Engine auch Shader unterstützen. Dazu sind die Shader simpel gehalten und Vertex- sowie Fragmentshader werden zusammen in einer Datei definiert und per \texttt{\#ifdef} entsprechend geschützt. Listing~\autoref{lst:shader.glsl} zeig so einen Beispielshader, bei dem Vertex- und Fragmentshader zusammen definiert werden. 
+
+\mintedfile{glsl}{listings/shader.glsl}{In diesem Beispielshader sind Vertex- und Fragmentshader kombiniert in einer Datei.}{lst:shader.glsl}
+
+Damit bestimmte Definitionen und Funktionen von allen Shadern benutzt werden können wird vor jedem Shader noch die \texttt{data/shader/global.glsl} inkludiert. Dies geschieht automatisch. In dieser Datei wird zum Beispiel die Funktion \texttt{generateProjection} definiert, welche die aktuelle Projektionsmatrix berechnet. Auch wird dort das Speicherlayout fest definiert. So ist zum Beispiel die Position der Eckpunkte immer auf Speicherstelle 0.
 
 \subsection{Zeichnen von Geometrie}
 
+Zum Zeichnen von Geometrie existiert eine \texttt{Mesh}-Klasse. Diese übernimmt nicht nur das Zeichnen einer festen 2D-Geometrie, sondern kann diese auch rotieren und skalieren. Auch die Hüllkörper (\textit{Bounding Box}) der Geometrie wird von dieser Klasse berechnet.
+
+Intern wird dazu eine OpenGL Vertex Array Object benutzt (VAO), welcher aus einem Vertex Buffer Object (VBO) und einen Element Buffer Object (EBO) besteht. Das VAO fasst das VBO und EBO zusammen mit den eingestellten Attributen und Zustände in einem Objekt zusammen, so dass zum Zeichnen nur noch das VAO aktiviert werden muss. Das VBO speichert alle Eckpunkte (\textit{Vertices}) und das EBO speichert die Reihenfolge der Eckpunkte in der eigentlichen Geometrie.
+
+Die Geometrie kann sowohl ganz gezeichnet werden, als auch nur Teile davon. Dies wird zum Beispiel bei der Flamme des Antriebs beim Spielerschiff benutzt, welche eigentlich Teil der Schiffsgeometrie ist aber nur beim Beschleunigen angezeigt wird.
 
 \section{Spiel-Design}
 
+Das Ziel des Spiels ist es, alle Asteroiden eines Levels komplett zu zerstören. Dazu kann das Spielerschiff Projektile verschießen, wobei die Anzahl der maximal aktiven Projektile begrenzt sind. Wenn das Level nach einer bestimmten Zeit nicht komplett von Asteroiden befreit wurde, erscheint ein UFO, welches auf den Spieler schießt. Pro abgeschossenen Asteroiden und UFO erhält der Spieler Punkte. Nach je 1000 Punkte erhält der Spieler ein neues Leben. Kollidiert der Spieler mit einem Asteroid oder einem (eigenen oder gegnerischen) Projektil verliert der Spieler ein Leben. Solange der Spieler noch Leben übrig hat erscheint der Spieler in der Mitte des Spielfeldes neu und ist für eine Zeit lang unverwundbar. Die Nummer der Asteroiden steigt mit jedem bestandenen Level.
+
 \subsection{Objekte}
 
-\mintedfile{cpp}{listings/GameObject.h}{\texttt{src/Game/GameObject.h}: Base class for all game objects.}{lst:GameObject.h}
+Alle Objekte im Spiel erben von der \texttt{GameObject}-Klasse (siehe Listing \autoref{lst:GameObject.h}). Diese Klasse stellt die grundlegenden Funktionen jedes Spielobjektes bei, wie die \texttt{update}-Methode, welche die Logik des Objets implementiert. Auch wird das Objekt so per \texttt{draw}-Methode gezeichnet.
 
+Jedes Objekt entscheidet selber ob es eine Physik- und Kollisionskomponente besitzt. So sind die Methoden \texttt{getCollisionComponent} und \texttt{getPhysicsComponent} zu implementieren. Dabei kann eine Referenz auf die jeweilige Komponente zurückgegeben werden, oder aber ein \texttt{nullptr}, wenn diese Komponente nicht benutzt wird.
+
+Die Kollision zweier Komponenten wird in der Basisklasse anhand der Kollisionskomponente berechnet.
+
+\mintedfile{cpp}{listings/GameObject.h}{\texttt{src/Game/GameObject.h}: Basisklasse für alle Spieleobjekte, von der jedes Objekt ableiten muss. Es implementiert Kollisionsabfragen und gibt das Interface für das Zeichnen und Updaten vor.}{lst:GameObject.h}
 
 \subsection{Komponenten}
 
