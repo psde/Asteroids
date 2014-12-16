@@ -69,7 +69,7 @@ Unter Linux sind diese Abhängigkeiten meist im jeweiligen Paket-Manager verfüg
 Auch ist ein C++11-fähiger Compiler notwendig. Dies ist unter Linux/Mac OS X \texttt{gcc} in Version 4.7 oder höher sowie \texttt{clang} in Version 3.0 oder höher und unter Microsoft Windows \texttt{Visual Studio 2013} oder höher. Zusätzlich wird noch eine Grafikkarte inklusiver passender Treiber benötigt die mit dem OpenGL 3 Core Profile kompatibel sind.
 
 \section{Buildsystem}
-Zum Bauen des Projekts wird CMake verwendet. CMake erzeugt aus den Skriptdatein (\texttt{CMakeFiles.txt}) Makefiles und Projektdateien für eine Reihe von IDEs. Im Zuge der Entwicklung wurde das sowohl mit der Visual Studio Solution, Sublime Text Projekt und GNU Makefiles gearbeitet.  
+Zum Bauen des Projekts wird CMake verwendet. CMake erzeugt aus den Skriptdateien (\texttt{CMakeFiles.txt}) Makefiles und Projektdateien für eine Reihe von IDEs. Im Zuge der Entwicklung wurden sowohl mit der Visual Studio Solution, Sublime Text Projekt und den GNU Makefiles gearbeitet.  
 
 \subsection{Einrichten von CMake}
 \label{cmake-setup}
@@ -88,8 +88,10 @@ Um die Projektdateien zu bauen öffnet man am einfachsten die Konsole und wechse
 Anstatt \texttt{>~cmake ..} zu benutzen kann auch mit \texttt{>~cmake-gui} eine grafische Oberfläche ausgeführt werden, über welche nun CMake eingerichtet werden kann. Falls CMake die Abhänigkeiten GLFW oder GLEW nicht finden kann so wird dies als Fehler ausgegeben und die Ausführung abgebrochen. In diesem Fall muss eine \texttt{UserDefinitions.cmake} erstellt werden oder die Pfadangaben in einer vorhandenen überprüft werde (siehe \autoref{cmake-setup}).
 
 \paragraph{Linux und Mac OS X}
-Unter Linux und Mac OS X kann danach per \texttt{>~make} das Projekt gebaut werden. Das Spiel benötigt zum Ausführen Zugriff auf die Shader-Quelldateien, welche sich in \texttt{/data/shader/} befinden. Da das Spiel diese Shader-Dateien relativ zum aktuellen Arbeitsverzeichnis erwartet, muss das Spiel im Hauptverzeichnis gestartet werden:
+Unter Linux und Mac OS X kann danach per \texttt{>~make} das Projekt gebaut werden. Das Spiel benötigt zum Ausführen Zugriff auf die Shader-Quelldateien, welche sich in \texttt{data/shader/} befinden. Da das Spiel diese Shader-Dateien relativ zum aktuellen Arbeitsverzeichnis erwartet, muss das Spiel im Hauptverzeichnis gestartet werden:
 \clicommand{>~cd ~..\\ >~./build/src/asteroids}
+
+Das Spiel wurde auch unter FreeBSD ohne Anpassungen des Quellcodes erfolgreich kompiliert und gespielt.
 
 \paragraph{Windows}
 Unter Windows kann die erstellte Visual Studio Solution mit Visual Studio 2013 geöffnet und das Projekt gebaut sowie gestartet werden. Die Einrichtung des korrekten Arbeitsverzeichnis hat CMake mithilfe einer Solution Template in \texttt{/cmake/VisualStudio/} übernommen und muss somit nicht von Hand erledigt werden.
@@ -102,7 +104,9 @@ Die Engine wurde komplett für das Asteroids-Spiel entworfen. Es wurden von Anfa
 
 Der große Unterschied von Videospielen zu ``normalen'' Programmen liegt nicht zuletzt in dem Vorhandensein einer Hauptschleife, welche erst mit Beenden des Spiels terminiert. Listing \autoref{lst:mainloop.cpp} zeigt die Hauptschleife des Asteroids-Spiels.
 
-In dieser Hauptschleife wird zuerst das aktuelle Zeitdelta berechnet. Dieses Zeitdelta repräsentiert die Dauer der Verarbeitung des letzten Bildes. Um genau 60 Bilder pro Sekunde auszugeben muss dieses Delta genau 16,66 ms groß sein. Danach wird die Physik und Spiellogik aller Spielobjekte berechnet. Da die Simulation mit festen Zeitabständen berechnet werden muss wird das aktuelle Zeitdelta zu dem akkumulierten Zeitdelta hinzugefügt. Anhand dieser akkumulierten Zeit wird die Simulation nun so oft aufgerufen und der Simulationsschritt von der akkumulierten Zeit abgezogen bis diese kleiner eines Simulationsschritt ist. Da auf langsameren Rechnern diese Simulation zu viel Zeit in Anspruch nehmen kann und damit das Zeitdelta des nächsten Schrittes vergrößert wird, was wieder die Anzahl der Simulationsschritte erhöht, gibt es ein Limit von 30 Schritten pro ausgegebenen Bild. Dies führt zwar dazu, dass das Spiel insgesamt langsamer läuft, aber andererseits würde der Spieler ansonsten schon nach wenigen ausgegebenen Bildern ein Stillstand des Programms feststellen.
+In dieser Hauptschleife wird zuerst das aktuelle Zeitdelta berechnet. Dieses Zeitdelta repräsentiert die Dauer der Verarbeitung des letzten Bildes. Um nun genau 60 Bilder pro Sekunde auszugeben müsste dieses Delta exakt 16,66 ms groß sein. Danach wird die Physik und Spiellogik aller Spielobjekte berechnet. Um den numerischen Fehler in der Physiksimulation sowie der Kollisionsabfrage und generell Darstellungsfehler zu vermeiden muss die Simulation mit festen Zeitschritten berechnet werden. Dazu wird das Zeitdelta zuerst auf eine Variable addiert, welche das gesamte Zeitbudget speichert. So werden auch Zeitdeltas berücksichtigt die kleiner als der feste Zeitschritt sind.
+
+Anhand dieses gesamten Zeitbudgets werden dann so viele Simulationsschritte berechnet wie möglich sind. Dazu wird nach jedem Simulationsschritt der feste Zeitschritt von dem Zeitbudget abgezogen, und die Simulation so oft wiederholt solange das Zeitbudget größer als der feste Zeitschritt ist. Da auf langsameren Rechnern diese Simulation jedoch insgesamt zu viel Zeit in Anspruch nehmen kann und damit das Zeitdelta des nächsten Bildes vergrößert wird, was wiederum die Anzahl der Simulationsschritte erhöht, gibt es ein Limit von 30 Schritten pro ausgegebenen Bild. Dies führt zwar dazu, dass das Spiel insgesamt langsamer läuft, aber andererseits würde der Spieler ansonsten schon nach wenigen ausgegebenen Bildern ein Stillstand des Programms feststellen. Mehr Informationen sind auch im Blog von Glenn Fiedler\footnote{\url{http://gafferongames.com/game-physics/fix-your-timestep/}} zu finden.
 
 Anschließend werden alle Spielobjekte und die Benutzeroberfläche gezeichnet. Zum Schluss wird das fertige Bild auf dem Bildschirm angezeigt.
 
@@ -110,17 +114,17 @@ Anschließend werden alle Spielobjekte und die Benutzeroberfläche gezeichnet. Z
 
 \subsection{Fensterverwaltung}
 
-Die Fensterverwaltung ist im Kern nur ein dünne API-Schicht für GLFWwindow, welches eine C-Bibliothek ist. Die \texttt{Window}-Klasse kümmert sich um das Erstellen eines Fensters beliebiger Größe und verwaltet den OpenGL-Kontext. Auch Tastatureingaben und die Mausposition werden hier verarbeitet und dem Spiel zur Verfügung gestellt.
+Die Fensterverwaltung ist im Kern nur ein dünne API-Schicht für GLFWwindow, welches eine C-Bibliothek ist. Die \texttt{Window}-Klasse kümmert sich um das Erstellen eines Fensters beliebiger Größe und verwaltet den OpenGL-Kontext. Auch Tastatureingaben und die Mausposition werden hier verarbeitet und dem Spielcode zur Verfügung gestellt.
 
 \mintedfile{cpp}{listings/Window.h}{\texttt{src/Graphics/Window/Window.h}: Abstraktion des \texttt{GLFWwindow} und die Bereitstellung von Tastatureingaben sowie Mausposition.}{lst:Window.h}
 
 \subsection{Shaderverwaltung}
 
-Da im OpenGL 3 Core Profile keine alten OpenGL-Befehle gültig sind und somit auch die Benutztung von Shadern vorgeschrieben ist, muss die Engine auch Shader unterstützen. Dazu sind die Shader simpel gehalten und Vertex- sowie Fragmentshader werden zusammen in einer Datei definiert und per \texttt{\#ifdef} entsprechend geschützt. Listing~\autoref{lst:shader.glsl} zeig so einen Beispielshader, bei dem Vertex- und Fragmentshader zusammen definiert werden. 
+Da im OpenGL 3 Core Profile keine alten OpenGL-Befehle (\textit{Fixed-Function} Befehle) verfügbar sind und somit auch die Benutzung von Shadern vorgeschrieben ist, muss die Engine Shader unterstützen. Dazu sind die Shader simpel gehalten und Vertex- sowie Fragmentshader werden zusammen in einer Datei definiert und per \texttt{\#ifdef} entsprechend geschützt. Listing~\autoref{lst:shader.glsl} zeig so einen Beispielshader, bei dem Vertex- und Fragmentshader zusammen definiert werden. 
 
 \mintedfile{glsl}{listings/shader.glsl}{In diesem Beispielshader sind Vertex- und Fragmentshader kombiniert in einer Datei.}{lst:shader.glsl}
 
-Damit bestimmte Definitionen und Funktionen von allen Shadern benutzt werden können wird vor jedem Shader noch die \texttt{data/shader/global.glsl} inkludiert. Dies geschieht automatisch. In dieser Datei wird zum Beispiel die Funktion \texttt{generateProjection} definiert, welche die aktuelle Projektionsmatrix berechnet. Auch wird dort das Speicherlayout fest definiert. So ist zum Beispiel die Position der Eckpunkte immer auf Speicherstelle 0.
+Damit bestimmte Definitionen und Funktionen von allen Shadern benutzt werden können wird vor jedem Shader die Datei \texttt{data/shader/global.glsl} inkludiert. Dies geschieht automatisch. In dieser Datei wird zum Beispiel die Funktion \texttt{generateProjection} definiert, welche die aktuelle Projektionsmatrix berechnet. Auch wird dort das Speicherlayout fest definiert. So ist zum Beispiel die Position der Eckpunkte immer auf Speicherstelle \texttt{0}.
 
 \subsection{Zeichnen von Geometrie}
 
@@ -132,31 +136,31 @@ Die Geometrie kann sowohl ganz gezeichnet werden, als auch nur Teile davon. Dies
 
 \section{Spiel-Design}
 
-Das Ziel des Spiels ist es, alle Asteroiden eines Levels komplett zu zerstören. Dazu kann das Spielerschiff Projektile verschießen, wobei die Anzahl der maximal aktiven Projektile begrenzt sind. Wenn das Level nach einer bestimmten Zeit nicht komplett von Asteroiden befreit wurde, erscheint ein UFO, welches auf den Spieler schießt. Pro abgeschossenen Asteroiden und UFO erhält der Spieler Punkte. Nach je 1000 Punkte erhält der Spieler ein neues Leben. Kollidiert der Spieler mit einem Asteroid oder einem (eigenen oder gegnerischen) Projektil verliert der Spieler ein Leben. Solange der Spieler noch Leben übrig hat erscheint der Spieler in der Mitte des Spielfeldes neu und ist für eine Zeit lang unverwundbar. Die Nummer der Asteroiden steigt mit jedem bestandenen Level.
+Das Ziel des Spiels ist es, alle Asteroiden eines Levels komplett zu zerstören. Dazu kann das Spielerschiff Projektile verschießen, wobei die Anzahl der maximal aktiven Projektile begrenzt sind. Wenn das Level nach einer bestimmten Zeit nicht komplett von Asteroiden befreit wurde, erscheint ein UFO, welches auf den Spieler schießt. Pro abgeschossenen Asteroiden und UFO erhält der Spieler Punkte. Nach je 1000 Punkte erhält der Spieler ein neues Leben. Kollidiert der Spieler mit einem Asteroid oder einem (eigenen oder gegnerischen) Projektil verliert der Spieler ein Leben. Solange der Spieler noch Leben übrig hat erscheint der Spieler in der Mitte des Spielfeldes neu und ist für eine Zeit lang unverwundbar. Die Nummer der Asteroiden und somit auch die Schwierigkeitsstufe steigt mit jedem bestandenen Level.
 
 \subsection{Objekte}
 
-Alle Objekte im Spiel erben von der \texttt{GameObject}-Klasse (siehe Listing \autoref{lst:GameObject.h}). Diese Klasse stellt die grundlegenden Funktionen jedes Spielobjektes bei, wie die \texttt{update}-Methode, welche die Logik des Objets implementiert. Auch wird das Objekt so per \texttt{draw}-Methode gezeichnet.
+Alle Objekte im Spiel erben von der \texttt{GameObject}-Klasse (siehe Listing~\autoref{lst:GameObject.h}). Diese Klasse stellt die grundlegenden Funktionen jedes Spielobjektes bereit, wie etwa die \texttt{update}-Methode, welche die Logik des Objets implementiert. Auch wird das Objekt so per \texttt{draw}-Methode gezeichnet.
 
-Jedes Objekt entscheidet selber ob es eine Physik- und Kollisionskomponente besitzt. So sind die Methoden \texttt{getCollisionComponent} und \texttt{getPhysicsComponent} zu implementieren. Dabei kann eine Referenz auf die jeweilige Komponente zurückgegeben werden, oder aber ein \texttt{nullptr}, wenn diese Komponente nicht benutzt wird.
+Jedes Objekt entscheidet selbst ob es eine Physik- und Kollisionskomponente besitzt. So sind auch die Methoden \texttt{getCollisionComponent} und \texttt{getPhysicsComponent} zu implementieren. Dabei kann eine Referenz auf die jeweilige Komponente zurückgegeben werden oder aber ein \texttt{nullptr}, wenn diese Komponente nicht benutzt wird.
 
-Die Kollision zweier Komponenten wird in der Basisklasse anhand der Kollisionskomponente berechnet.
+Die Kollision zweier Komponenten wird in der Basisklasse anhand der Kollisionskomponente berechnet. Sollte ein Objekt keine Kollisionskomponente besitzen so kann kein anderes Objekt mit ihm kollidieren.
 
 \mintedfile{cpp}{listings/GameObject.h}{\texttt{src/Game/GameObject.h}: Basisklasse für alle Spieleobjekte, von der jedes Objekt ableiten muss. Es implementiert Kollisionsabfragen und gibt das Interface für das Zeichnen und Updaten vor.}{lst:GameObject.h}
 
 \subsection{Komponenten}
 
-Die Spiele-Objekte sind nach einem Komponenten-System entworfen worden. Das bedeutet, das die Objekte nicht von einem oder mehreren Klassen ableiten, welche zum Beispiel Physik und Kollisionen implementieren, sondern eine Referenz auf eine eigene Komponente beinhalten. Damit lassen sich Mehrfachvererbungsprobleme wie das Diamanten-Problem umgehen und gleichzeitig sehr unterschiedliche Objekte realisieren.
+Die Spiele-Objekte sind nach einem Komponenten-System entworfen worden. Das bedeutet, das die Objekte nicht von mehreren Klassen ableiten, welche zum Beispiel Physik und Kollisionen implementieren, sondern eine Referenz auf eine eigene Komponente beinhalten. Damit lassen sich Mehrfachvererbungsprobleme wie das Diamanten-Problem umgehen und gleichzeitig sehr unterschiedliche Objekte realisieren.
 
 Im Moment gibt es nur zwei Komponenten-Typen, die Kollisions- und die Physik-Komponenten. Dieses System ist jedoch variabel und es lassen sich eine Vielzahl von weiteren Komponenten erdenken. So könnte zum Beispiel die Eingabe aus der \texttt{Game}-Klasse gelöst werden und in eine Eingabe-Komponente verschoben werden, welche dann vom Schiff benutzt wird. Auch sind verschieden starke KI-Komponenten für unterschiedliche UFO-Typen oder Schwierigkeitsgerade denkbar. Mit der Einführung einer KI-Komponente könnten selbst Asteroid eine KI erhalten, welche verschiedene Modis ausführen könnte. Zum Beispiel kann ein Asteroid sich um seine eigene Achse drehen, oder generell eine gekrümmte Flugbahn haben. Auch Gravitation könnte so abgebildet werden.
 
 Weitere Anregungen und Erläuterungen sind auch auf GameProgrammingPatterns.com\footnote{\url{http://gameprogrammingpatterns.com/component.html}} und im Blog von Ray Wenderlich\footnote{\url{http://www.raywenderlich.com/24878/introduction-to-component-based-architecture-in-games}} zu finden.
 
 \paragraph{Kollisions-Komponente}
-Damit Spielobjekte miteinander Kollidieren können kann jedes Objekt eine Kollisions-Komponente beinhalten. Im Moment gibt es nur eine Komponente, welche zuerst mit einem AABB-Test (Axis-aligned Bounding Box) schnell entscheiden kann, ob eine aufwändigere Linie-zu-Linien Kollision berechnet werden muss. Ist dies der Fall, wird jede Linie jedes Objektes gegen jede Line des anderen Objets miteinander auf einen Schnittpunkt getestet. Mit diesem Verfahren kann eine Pixelgenau Kollision, wie sie im Spiel erforderlich ist, erzielt werden.
+Damit Spielobjekte miteinander Kollidieren können kann jedes Objekt eine Kollisions-Komponente beinhalten. Im Moment gibt es nur eine Komponente, welche zuerst mit einem AABB-Test (Axis-aligned Bounding Box) schnell entscheiden kann, ob eine aufwändigere Linie-zu-Linien Kollision berechnet werden muss. Ist dies der Fall, wird jede Linie jedes Objektes gegen jede Line des anderen Objets miteinander auf einen Schnittpunkt getestet. Mit diesem Verfahren kann eine pixelgenau Kollision, wie sie im Spiel erforderlich ist, erzielt werden.
 
 \paragraph{Physik-Komponenten}
-Für die Physik gibt es zwei unterschiedliche Komponenten. Für alle Objekte, die sich mit einer konstanten Geschwindigkeit bewegen reicht die Genauigkeit einer normalen Eulersche Integration aus. Da jedoch das spielergesteuerte Schiff keine konstante Geschwindigkeit hat und die Richtung sich oft ändert ist die numerische Genauigkeit der Euler-Komponente nicht mehr ausreichend. Dafür gibt es die etwas aufwändiger zu berechnende Runge-Kutta-Komponente, welche eine Runge-Kutta Integration der 4. Ordnung implementiert. Damit wird die Ungenauigkeit auf ein akzeptables Niveau gesenkt welches dem Spieler nicht mehr auffällt.
+Für die Physik gibt es zwei unterschiedliche Komponenten. Für alle Objekte, die sich mit einer konstanten Geschwindigkeit bewegen reicht die Genauigkeit einer normalen Eulersche Integration aus. Da jedoch das spielergesteuerte Schiff keine konstante Geschwindigkeit hat und die Richtung sich oft ändert ist die numerische Genauigkeit der Euler-Komponente nicht mehr ausreichend. Dafür gibt es die etwas aufwändiger zu berechnende Runge-Kutta-Komponente, welche eine Runge-Kutta Integration der 4. Ordnung implementiert. Damit wird die Ungenauigkeit auf ein akzeptables Niveau gesenkt welche dem Spieler nicht mehr auffällt.
 
 \chapter{Ausblick}
 
@@ -192,12 +196,12 @@ Weiter Informationen zu dem Pimpl-Idiom befinden sich unter anderem hier:
 \item \url{http://en.wikibooks.org/wiki/C%2B%2B_Programming/Idioms#Pointer_To_Implementation_.28pImpl.29}
 \end{itemize}
 
-Das Pimpl-Idiom löst somit einen großen Teil des Portierungsaufwandes, da neue Grafiksysteme hinzugefügt werden können ohne das Interface zu verändern. Somit kann der Spielecode unverändert bleiben. Leider sind das Anfangs erwähnte \texttt{DrawMode}-Enum, welche vom Spielecode benutzt werden, nun immer noch eine direkte Referenz auf die OpenGL-Enums. Dies lässt sich jedoch einfach lösen, indem man im öffentlichen Teil des Interfaces komplett auf die OpenGL-Konstanten verzichtet. Die eigentliche Implementation kann dann selber entscheiden, wie sie damit umgehen möchte. Sie könnte zum Beispiel diese Enums wieder in OpenGL-Konstanten umwandeln, oder mit einer \texttt{switch}-Anweisungen alle Fälle abdecken. 
+Das Pimpl-Idiom löst somit einen großen Teil des Portierungsaufwandes, da neue Grafiksysteme hinzugefügt werden können ohne das Interface zu verändern. Somit kann der Spielecode unverändert bleiben. Leider ist das Anfangs erwähnte \texttt{DrawMode}-Enum, welches vom Spielecode benutzt wird, nun noch immer eine direkte Referenz auf die OpenGL-Konstanten. Dies lässt sich jedoch einfach lösen, indem man im öffentlichen Teil des Interfaces komplett auf die OpenGL-Konstanten verzichtet. Die eigentliche Implementation kann dann selber entscheiden, wie sie damit umgehen möchte. Sie könnte zum Beispiel diese Enums wieder in OpenGL-Konstanten umwandeln, oder mit einer \texttt{switch}-Anweisungen alle Fälle abdecken. 
 
 Jedoch könnte auch argumentiert werden, dass man komplett auf das \texttt{DrawMode}-Enum verzichten sollte und dafür Funktionen wie \texttt{drawTriangles} und \texttt{drawLines} in das Interface einführen sollte. Das löst zwar einige Fälle und eliminiert somit einige Enums, jedoch gibt es zum Beispiel in der Fensterverwaltung (\texttt{src/Graphics/Window}) ein \texttt{Key}-Enum, der alle Tasten auf der Tastatur abbildet. Dieser könnte nur sehr schlecht als Funktionen abgebildet werden und muss dementsprechend erhalten bleiben.
 
 \paragraph{CMake-Unterstützung für mehrere Grafiksysteme}
-Da dieses Beispiel auf das Buildsystem angewiesen sind um die Definitionen wie zum Beispiel \texttt{USE\_GLFW} zu setzen, müssen auch die CMake-Skripts angepasst werden. Zum Beispiel könnte dafür eine Option \texttt{graphics-api} eingeführt werden.
+Da dieses Beispiel auf das Buildsystem angewiesen sind um die Definitionen wie zum Beispiel \texttt{USE\_GLFW} zu setzen, müssen auch die CMake-Skripts angepasst werden. Zum Beispiel könnte dafür eine Option \texttt{graphics-api} eingeführt werden. Siehe Listing~\autoref{lst:CmakeLists-option.txt}.
 
 \mintedfile{cmake}{listings/CmakeLists-option.txt}{Ein Beispiel wie Optionen der \texttt{CMakeLists.txt} hinzugefügt werden können. Abhängig von den Optionen werden verschiedene Definitionen dem Compiler übergeben und verschiedene Dateien dem Projekt hinzugefügt.}{lst:CmakeLists-option.txt}
 
@@ -207,7 +211,7 @@ Diese Option kann wie folgt mit \texttt{cmake} benutzt werden, hier wird beispie
 \paragraph{Alternativen zum Pimpl-Idiom}
 Eine Alternative zu dem Pimpl-Idiom sind \textit{Opaque-Pointer}, oder in Qt auch \textit{D-Pointer} genannt. Dieses Idiom versteckt interne Daten hinter einem anonymen \texttt{struct}, das nur aus der jeweiligen Implementatierung sichtbar ist. 
 
-Genau wie beim Pimpl-Idiom gibt es im Interface wieder keine privaten Daten, außer einen \texttt{unique\_ptr} auf einen forwärts-deklarierten \texttt{struct}.
+Genau wie beim Pimpl-Idiom gibt es im Interface wieder keine privaten Daten, außer einen \texttt{unique\_ptr} auf einen forwärts-deklarierten \texttt{struct}.  Siehe Listing~\autoref{lst:dpointer/Window.h}.
 
 \mintedfile{cpp}{listings/dpointer/Window.h}{\texttt{Window.h}: Definition des Interfaces ohne eigene Daten. Nur die Referenz auf das private Datenstruct (der D-Pointer oder Opaque-Pointer)ist vorhanden.}{lst:dpointer/Window.h}
 
@@ -215,7 +219,7 @@ Pro Grafikssystem gibt es nun eine Implementierung für dieses Interface. Um tro
 
 \mintedfile{cpp}{listings/dpointer/WindowGLFW.cpp}{\texttt{WindowGLFW.cpp}: Private Daten werden im \texttt{WindowDetail} gespeichert, welches nur in dieser Datei sichtbar und zugänglich ist. Ansonsten wird das komplette Interface in dieser Datei implementiert.}{lst:dpointer/WindowGLFW.cpp}
 
-Das Buildsystem muss sich also darum kümmern die jeweils gewünschte Implementierung zu bauen. Genau wie beim Pimpl-Idiom auch ändert sich das Interface (und somit die Binärkompatibilität) nicht wenn sich die darunterliegende Implementierung ändert oder neue, private Member hinzukommen.
+Das Buildsystem muss sich also darum kümmern die jeweils gewünschte Implementierung zu bauen. Genau wie beim Pimpl-Idiom auch ändert sich das Interface (und somit die Binärkompatibilität) nicht wenn sich die darunterliegende Implementierung geändert wird oder neue, private Member hinzukommen.
 
 Weiter Informationen zu Opaque-Pointer befinden sich unter anderem hier:
 \begin{itemize}
@@ -233,17 +237,21 @@ In einer richtigen 3D-Engine wäre jedoch auch Multithreading in anderen Kompone
 
 \subsection{Pipelining}
 
-\paragraph{Doppelpufferung \textit{Double Buffering}}
+\paragraph{Doppelpufferung (\textit{Double Buffering})}
 
-Genau wie im Grafikbereich schon üblich kann eine Doppelpufferung die Performance drastisch erhöhen. Dabei wird das Konzept aus der Grafikwelt hier in die Physikkomponente übertragen. Jede Komponente hat zwei Puffer für ihre Position, wobei einer der beiden immer als Arbeitspuffer fungiert (\textit{Backbuffer}) und einer von der Grafikkomponente ausgelesen werden kann (\textit{Frontbuffer}). Um den neuen Zustand zu berechnen braucht die Physikkomponete jederzeit den vorherigen Zustand, welcher im Fronbuffer gespeichert wird. Da auch die Grafikkomponente genau wie die Physikkomponente nur aus diesem Puffer lesen und nicht in diesen Puffer schreiben entstehen an dieser Stelle keine Wettlaufsituationen. Der Backbuffer kann von der Physikkomponente ohne Synchronisation beschrieben werden, da die Grafikkomponente diesen Puffer nicht ausliest. Listing~\autoref{lst:Pipeline-Approach1.h} zeigt so einen Ansatz. Der aktuelle Zeiger auf den richtigen Frontbuffer wird dabei über ein \texttt{std::atomic<unsigned int>} gelöst, welchen den Index repräsentiert. Dabei muss aber mit entsprechenden Signalen drauf geachtet werden, dass der Physik-Thread nie mehr als einen Frame im Voraus berechnet, da es sonst zu Wettlaufsituationen kommen kann.
+Genau wie im Grafikbereich schon üblich kann eine Doppelpufferung die Performance im Spiel- und Physikcode drastisch erhöhen. Dabei wird das Konzept aus der Grafikwelt hier in die Physikkomponente übertragen. Jede Komponente hat zwei Puffer für ihre Position, wobei einer der beiden immer als Arbeitspuffer fungiert (\textit{Backbuffer}) und einer von der Grafikkomponente ausgelesen werden kann (\textit{Frontbuffer}). Um den neuen Zustand zu berechnen braucht die Physikkomponete jederzeit den vorherigen Zustand, welcher im Fronbuffer gespeichert wird. Da auch die Grafikkomponente genau wie die Physikkomponente nur aus diesem Puffer lesen und nicht in diesen Puffer schreiben entstehen an dieser Stelle keine Wettlaufsituationen. Der Backbuffer kann von der Physikkomponente ohne Synchronisation beschrieben werden, da die Grafikkomponente diesen Puffer nicht ausliest. Listing~\autoref{lst:Pipeline-Approach1.h} zeigt so einen Ansatz. Der aktuelle Zeiger auf den richtigen Frontbuffer wird dabei über ein \texttt{std::atomic<unsigned int>} gelöst, welchen den Index repräsentiert. Dabei muss aber mit entsprechenden Signalen drauf geachtet werden, dass der Physik-Thread nie mehr als einen Frame im Voraus berechnet, da es sonst zu Wettlaufsituationen kommen kann.
 
 \mintedfile{cpp}{listings/Pipeline-Approach1.h}{}{lst:Pipeline-Approach1.h}
+
+\clearpage
 
 \paragraph{Separater Grafikzustand}
 
 Anstatt mit einem atomaren Index zwischen Front- und Backbuffer zu unterscheiden kann die Physikkomponente auch zu Beginn des Frames den alten Zustand kopieren und so der Grafikkomponente zur Verfügung stellen. In Listing~\autoref{lst:Pipeline-Approach2.h} ist dies anhand eines Beispiels zu sehen. Genau wie bei der Doppelpufferung muss auch hier drauf geachtet werden, dass die Physikkomponente nie mehr als einen Frame im Vorraus berechnet, da sonst der aktuell von der Grafikkomponente ausgelesen Zustand überschrieben wird. Es kann mit dieser Methode jedoch auf den atomaren Index verzichtet werden.
 
 \mintedfile{cpp}{listings/Pipeline-Approach2.h}{}{lst:Pipeline-Approach2.h}
+
+\clearpage
 
 \subsection{Aufgabenplaner \textit{(Task Schedulers)}}
 
