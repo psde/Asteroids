@@ -19,8 +19,6 @@ namespace Game
 
 	void Game::reset()
 	{
-		_lives = 3;
-		_score = 0;
 		_level = 0;
 		_state = Game::LevelTransition;
 
@@ -29,7 +27,7 @@ namespace Game
 
 	void Game::loadLevel()
 	{
-		_ship.reset();
+		_ship.resetPosition();
 		_asteroids.clear();
 		_emitter.reset();
 		for (int i = 0; i < 2 + _level; ++i)
@@ -39,30 +37,6 @@ namespace Game
 
 		_ufo.reset();
 		_ufoTime = 20.f;
-	}
-
-	void Game::addToScore(int points)
-	{
-		if (_score + points >= 10000)
-		{
-			_score -= 10000;
-			_lives += 3;
-		}
-		else
-		{
-			for (int i = 1000; i < 9000; i+=1000)
-			{
-				if (_score < i && _score + points >= i)
-				{
-					_lives++;
-				}
-			}
-		}
-
-		if (_lives > 6)
-			_lives = 6;
-
-		_score += points;
 	}
 
 	void Game::updateState(float timeDelta)
@@ -76,7 +50,7 @@ namespace Game
 				{
 					if (_state == Game::WaitingForRespawn)
 					{
-						_ship.reset();
+						_ship.resetPosition();
 						_ship.makeInvincible();
 					}
 					_state = Game::Playing;
@@ -99,13 +73,13 @@ namespace Game
 				}
 				break;
 			case Dead:
-				if (_lives <= 0)
+				if (_ship.getLives() <= 0)
 				{
 					_state = Game::GameOver;
 				}
 				else
 				{
-					_lives--;
+					_ship.removeLive();
 					_state = Game::WaitingForRespawn;
 					_stateTime = 2.f;
 				}
@@ -210,7 +184,7 @@ namespace Game
 
 				// Add to score if projectile originated from player 
 				if (projectile->isFriendly())
-					addToScore(500);
+					_ship.addScore(500);
 				
 				// Reload projectile
 				projectile->reload();
@@ -265,7 +239,7 @@ namespace Game
 
 		// Add to score if needed
 		if (addPoints)
-			addToScore((Asteroid::AsteroidSizes().size() - size) * 100);
+			_ship.addScore((Asteroid::AsteroidSizes().size() - size) * 100);
 
 		// Emitt particle cloud
 		_emitter.emitParticles(pos, asteroidSize / 2.f, static_cast<int>(asteroidSize));
@@ -292,7 +266,7 @@ namespace Game
 		// Cheats!
 		if (_window->getKeyState(Graphics::KEY_DELETE) == Graphics::KEY_PRESS)
 		{
-			_lives = 3;
+			//_lives = 3;
 			_asteroids.clear();
 		}
 
@@ -411,7 +385,7 @@ namespace Game
 			}
 
 			_fontRenderer.draw(Math::vec2(10, 35), "LIVES", 17.f);
-			for (int i = 0; i < _lives; i++)
+			for (unsigned int i = 0; i < _ship.getLives(); i++)
 			{
 				Components::PhysicsComponent *component = const_cast<Components::PhysicsComponent*>(_livesRenderer.getPhysicsComponent());
 				component->reset(Math::vec2(110.f + i * 15.f, 32.f), Math::vec2(0));
@@ -419,7 +393,7 @@ namespace Game
 			}
 
 			std::stringstream scoress;
-			scoress << "SCORE " << std::setw(4) << std::setfill('0') << _score;
+			scoress << "SCORE " << std::setw(4) << std::setfill('0') << _ship.getScore();
 			std::string score = scoress.str();
 			_fontRenderer.draw(Math::vec2(10, 10), score, 17.f);
 

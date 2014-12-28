@@ -42,9 +42,7 @@ namespace Game
 
 		float _ufoTime;
 
-		int _lives;
 		int _level;
-		int _score;
 
 		GameState _state;
 		float _stateTime;

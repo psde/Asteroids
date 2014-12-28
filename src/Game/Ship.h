@@ -31,6 +31,9 @@ namespace Game
 		float _reloadTime;
 		float _invicibility;
 
+		unsigned int _lives;
+		unsigned int _score;
+
 		std::vector<std::shared_ptr<Projectile>> _projectiles;
 
 	public:
@@ -49,7 +52,7 @@ namespace Game
 		void rotate(int rotation);
 
 		// Resets the ship to its inital position, killing its velocity
-		void reset();
+		void resetPosition();
 
 		// Makes the ship invincible for a short period 
 		void makeInvincible();
@@ -68,5 +71,11 @@ namespace Game
 
 		// See GameObject
 		const Components::PhysicsComponent* getPhysicsComponent() const override;
+
+		void addScore(unsigned int points);
+		unsigned int getScore() { return _score; }
+
+		void removeLive() { _lives--; }
+		unsigned int getLives() { return _lives; }
 	};
 }

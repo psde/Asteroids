@@ -16,6 +16,8 @@ namespace Game
 		, _rotating(0)
 		, _reloadTime(0.f)
 		, _invicibility(0.f)
+		, _lives(3)
+		, _score(0)
 	{
 		_physicsComponent.setTerminalVelocity(225.f);
 
@@ -44,10 +46,10 @@ namespace Game
 		for (int i = 0; i < 5; i++)
 			_projectiles.push_back(std::make_shared<Projectile>(2.f, true));
 
-		reset();
+		resetPosition();
 	}
 
-	void Ship::reset()
+	void Ship::resetPosition()
 	{
 		_physicsComponent.reset(Math::vec2(400.0f - _size / 2.f, 300 - _size / 2.f), Math::vec2(0.f));
 		_physicsComponent.setAcceleration(Math::vec2(0.f, 0.f));
@@ -175,5 +177,29 @@ namespace Game
 	const Components::PhysicsComponent* Ship::getPhysicsComponent() const
 	{
 		return &_physicsComponent;
+	}
+
+	void Ship::addScore(unsigned int points)
+	{
+		if (_score + points >= 10000)
+		{
+			_score -= 10000;
+			_lives += 3;
+		}
+		else
+		{
+			for (unsigned int i = 1000; i < 9000; i+=1000)
+			{
+				if (_score < i && _score + points >= i)
+				{
+					_lives++;
+				}
+			}
+		}
+
+		if (_lives > 6)
+			_lives = 6;
+
+		_score += points;
 	}
 }
