@@ -37,13 +37,6 @@ namespace Game
 			_asteroids.push_back(std::make_shared<Asteroid>());
 		}
 
-		if (_asteroids.size() > 0)
-		{
-			//auto a = _asteroids.at(0);
-			//Components::PhysicsComponent *component = const_cast<Components::PhysicsComponent*>(a->getPhysicsComponent());
-			//component->reset(Math::vec2(400, 580), Math::vec2(0));
-		}
-
 		_ufo.reset();
 		_ufoTime = 20.f;
 	}
@@ -142,29 +135,6 @@ namespace Game
 			_emitter.emitParticles(_ship.getPhysicsComponent()->getPosition() + 12.5f, 5, 5);
 		}
 
-		// Resolve Asteroids -> Asteroids collisions
-		/*for (auto asteroidA : _asteroids)
-		{
-			if(asteroidA->isDestroyed())
-				continue;
-
-			for (auto asteroidB : _asteroids)
-			{
-				if(asteroidB->isDestroyed() || asteroidA == asteroidB)
-					continue;
-
-				bool collides = asteroidA->collidesWith(*asteroidB);
-
-				if(collides)
-				{
-					asteroidA->destroy();
-					destroyedAsteroids.push_back({ asteroidA, false });
-					asteroidB->destroy();
-					destroyedAsteroids.push_back({ asteroidB, false });
-				}
-			}
-		}*/
-
 		// Resolve Asteroids -> Everything collisions
 		for (auto asteroid : _asteroids)
 		{
@@ -188,7 +158,7 @@ namespace Game
 
 					projectile->reload();
 
-					// The asteroid was destroyed, none of the oter projectiles can harm it
+					// The asteroid was destroyed, none of the other projectiles can harm it
 					break;
 				}
 			}
@@ -355,9 +325,6 @@ namespace Game
 			}
 			_ship.rotate(rotation);
 		}
-
-		//Components::PhysicsComponent *component = const_cast<Components::PhysicsComponent*>(_ship.getPhysicsComponent());
-		//component->reset(_window->getCursorPosition() - Math::vec2(10), Math::vec2(0));
 
 		if (_state != Game::GameOver && _state != Game::WaitingForRespawn && _state != Game::WaitingForStart)
 		{
