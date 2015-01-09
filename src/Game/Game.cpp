@@ -7,14 +7,76 @@
 
 #include "Math/Math.h"
 
+#include "Graphics/Graphics.h"
+#include "Graphics/Window/Window.h"
+#include "Graphics/Shader/Globals.h"
+
 namespace Game
 {
-	Game::Game(std::shared_ptr<Graphics::Window> window)
-		: _window(window)
+	Game::Game()
+		: _window(new Graphics::Window(800, 600))
 		, _livesRenderer(22.5f)
 		, _stateTime(0.f)
 	{
 		reset();
+		loop();
+	}
+
+	void Game::loop()
+	{
+		float last_frametime = 0.f;
+		const float frametime_max = 0.1f;
+		float accumulatedDrawingTime = 0.0;
+		int frames = 0;
+
+		// Physics simulation
+		float accumulatedPhysicsTime = 0.f;
+		const float physicsTimeStep = 0.001f;
+		int physicSteps = 0;
+		const int maxPhysicsStepsPerFrame = 30;
+
+
+		float startTime = Graphics::getTime();
+		float endTime = startTime;
+
+		while (!_window->shouldClose())
+		{
+			float timeDelta = endTime - startTime;
+			startTime = Graphics::getTime();
+
+			// Perform physics simulation steps
+			physicSteps = 0;
+			accumulatedPhysicsTime += timeDelta;
+			while (accumulatedPhysicsTime >= physicsTimeStep)
+			{
+				update(physicsTimeStep);
+				accumulatedPhysicsTime -= physicsTimeStep;
+				physicSteps++;
+
+				// Do not freeze the game when physics simulation can't keep up
+				// but slow down the game instead
+				if (physicSteps >= maxPhysicsStepsPerFrame)
+					break;
+			}
+
+			Graphics::ShaderGlobals::update<float>("time", endTime);
+			Graphics::ShaderGlobals::update<Math::vec2>("windowDimensions", _window->getWindowDimensions());
+
+			draw();
+
+			accumulatedDrawingTime += timeDelta;
+			frames++;
+			if (endTime > last_frametime + frametime_max)
+			{
+				std::cout << "time/frame: " << (accumulatedDrawingTime / (double)frames) * 1000.0f << "ms (" << frames << " frames, " << physicSteps << " physic steps)" << std::endl;
+				last_frametime = endTime;
+				accumulatedDrawingTime = 0.0f;
+				frames = 0;
+			}
+
+			_window->finishFrame();
+			endTime = Graphics::getTime();
+		}
 	}
 
 	void Game::reset()

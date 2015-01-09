@@ -55,11 +55,13 @@ namespace Game
 
 		void resolveCollisions();
 
-	public:
-		Game(std::shared_ptr<Graphics::Window> window);
+		void loop();
 
 		void update(float timeDelta);
 
 		void draw();
+	public:
+		Game();
+
 	};
 }
