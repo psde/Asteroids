@@ -5,8 +5,7 @@
 namespace Components
 {
 	PhysicsRungeKutta::PhysicsRungeKutta()
-		: _acceleration(0.f)
-		, _terminalVelocity(0.f)
+		: PhysicsComponent()
 	{
 
 	}
@@ -22,41 +21,31 @@ namespace Components
 		_state.velocity = velocity;
 	}
 
-	void PhysicsRungeKutta::setAcceleration(Math::vec2 acceleration)
+	PhysicsState PhysicsRungeKutta::evaluate(const PhysicsState &initial)
 	{
-		_acceleration = acceleration;
-	}
-
-	Math::vec2 PhysicsRungeKutta::acceleration(const State &/*state*/)
-	{
-		return _acceleration;
-	}
-
-	PhysicsRungeKutta::State PhysicsRungeKutta::evaluate(const State &initial)
-	{
-		State output;
+		PhysicsState output;
 		output.position = initial.velocity;
-		output.velocity = acceleration(initial);
+		output.velocity = _acceleration;
 		return output;
 	}
 
-	PhysicsRungeKutta::State PhysicsRungeKutta::evaluate(const State &initial, float dt, const State &d)
+	PhysicsState PhysicsRungeKutta::evaluate(const PhysicsState &initial, float dt, const PhysicsState &d)
 	{
-		State state;
+		PhysicsState state;
 		state.position = initial.position + d.position*dt;
 		state.velocity = initial.velocity + d.velocity*dt;
-		State output;
+		PhysicsState output;
 		output.position = state.velocity;
-		output.velocity = acceleration(state);
+		output.velocity = _acceleration;
 		return output;
 	}
 
-	void PhysicsRungeKutta::integrate(State &state, float dt)
+	void PhysicsRungeKutta::integrate(PhysicsState &state, float dt)
 	{
-		State a = evaluate(state);
-		State b = evaluate(state, dt*0.5f, a);
-		State c = evaluate(state, dt*0.5f, b);
-		State d = evaluate(state, dt, c);
+		PhysicsState a = evaluate(state);
+		PhysicsState b = evaluate(state, dt*0.5f, a);
+		PhysicsState c = evaluate(state, dt*0.5f, b);
+		PhysicsState d = evaluate(state, dt, c);
 
 		const Math::vec2 dxdt = 1.0f / 6.0f * (a.position + 2.0f*(b.position + c.position) + d.position);
 		const Math::vec2 dvdt = 1.0f / 6.0f * (a.velocity + 2.0f*(b.velocity + c.velocity) + d.velocity);
@@ -69,7 +58,7 @@ namespace Components
 	{
 		integrate(_state, timeDelta);
 
-		applyTerminalVelocity(_state.velocity);
-		performWrapAround(_state.position);
+		applyTerminalVelocity(_state);
+		performWrapAround(_state);
 	}
 }

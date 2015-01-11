@@ -370,9 +370,7 @@ namespace Game
 		if (_state != Game::WaitingForStart)
 		{
 			_emitter.update(timeDelta);
-
 			
-
 			for (auto asteroid : _asteroids)
 			{
 				asteroid->update(timeDelta);

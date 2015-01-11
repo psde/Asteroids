@@ -70,6 +70,7 @@ list(APPEND SRC_COMPONENTS
 	Game/Components/PhysicsRungeKutta.cpp
 	Game/Components/PhysicsEuler.h
 	Game/Components/PhysicsEuler.cpp
+	Game/Components/PhysicsState.h
 )
 SOURCE_GROUP("Game\\Components" FILES ${SRC_COMPONENTS})
 

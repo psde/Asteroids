@@ -5,10 +5,7 @@
 namespace Components
 {
 	PhysicsEuler::PhysicsEuler()
-		: _position(0.f)
-		, _velocity(0.f)
-		, _acceleration(0.f)
-		, _terminalVelocity(0.f)
+		: PhysicsComponent()
 	{
 
 	}
@@ -20,21 +17,16 @@ namespace Components
 
 	void PhysicsEuler::reset(Math::vec2 position, Math::vec2 velocity)
 	{
-		_position = position;
-		_velocity = velocity;
-	}
-
-	void PhysicsEuler::setAcceleration(Math::vec2 acceleration)
-	{
-		_acceleration = acceleration;
+		_state.position = position;
+		_state.velocity = velocity;
 	}
 
 	void PhysicsEuler::update(float timeDelta)
 	{
-		_position += _velocity * timeDelta;
-		_velocity += _acceleration * timeDelta;
+		_state.position += _state.velocity * timeDelta;
+		_state.velocity += _acceleration * timeDelta;
 
-		applyTerminalVelocity(_velocity);
-		performWrapAround(_position);
+		applyTerminalVelocity(_state);
+		performWrapAround(_state);
 	}
 }

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Math/Math.h"
+#include "PhysicsState.h"
 
 namespace Components
 {
@@ -10,10 +11,19 @@ namespace Components
 	{
 	protected:
 
-		void performWrapAround(Math::vec2 &position);
-		void applyTerminalVelocity(Math::vec2 &velocity);
+		void performWrapAround(PhysicsState &state);
+		void applyTerminalVelocity(PhysicsState &state);
+
+		PhysicsState _state;
+		Math::vec2 _acceleration;
+		float _terminalVelocity;
 
 	public:
+		PhysicsComponent()
+			: _acceleration(0.0f)
+			, _terminalVelocity(0.0f)
+		{}
+
 		// Virtual (but empty) deconstructor
 		virtual ~PhysicsComponent() {};
 
@@ -21,24 +31,27 @@ namespace Components
 		virtual void reset(Math::vec2 position, Math::vec2 velocity) = 0;
 
 		// Sets the terminal veloicyt to given velocity
-		virtual void setTerminalVelocity(float velocity) = 0;
+		void setTerminalVelocity(float max) { _terminalVelocity = max; }
 
 		// Returns the terminal velocity
-		virtual float getTerminalVelocity() const = 0;
+		float getTerminalVelocity() const { return _terminalVelocity; }
 
 		// Advances the physics simulation by given time delta
 		virtual void update(float timeDelta) = 0;
 
 		// Sets the acceleration
-		virtual void setAcceleration(Math::vec2 acceleration) = 0;
+		void setAcceleration(Math::vec2 acceleration) { _acceleration = acceleration; }
 
-		// Returns the current position
-		virtual const Math::vec2 getPosition() const = 0;
+		// Returns the current physics state
+		const PhysicsState getState() const { return _state; }
 
-		// Returns the current velocity
-		virtual const Math::vec2 getVelocity() const = 0;
+		// Returns the current physics states position
+		const Math::vec2 getPosition() const { return _state.position; }
+
+		// Returns the current physics states velocity
+		const Math::vec2 getVelocity() const { return _state.velocity; }
 
 		// Returns the current acceleration
-		virtual const Math::vec2 getAcceleration() const = 0;
+		const Math::vec2 getAcceleration() const { return _acceleration; }
 	};
 }
