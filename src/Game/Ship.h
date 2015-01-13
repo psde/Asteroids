@@ -77,5 +77,6 @@ namespace Game
 
 		void removeLive() { _lives--; }
 		unsigned int getLives() { return _lives; }
+		void resetLives() { _lives = 3; }
 	};
 }

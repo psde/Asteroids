@@ -16,9 +16,10 @@ namespace Game
 		, _rotating(0)
 		, _reloadTime(0.f)
 		, _invicibility(0.f)
-		, _lives(3)
 		, _score(0)
 	{
+		resetLives();
+
 		_physicsComponent.setTerminalVelocity(225.f);
 
 		std::vector<Math::vec2> vertices = {

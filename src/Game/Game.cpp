@@ -83,6 +83,7 @@ namespace Game
 	{
 		_level = 0;
 		_state = Game::LevelTransition;
+		_ship.resetLives();
 
 		loadLevel();
 	}
@@ -219,7 +220,7 @@ namespace Game
 				continue;
 
 			// Resolve Asteroid -> Ship collision
-			if (_ship.collidesWith(asteroid.get()))
+			if (_ship.collidesWith(asteroid.get()) && _state == Game::Playing)
 			{
 				// Player is dead, set state and release particle cloud
 				_state = Game::Dead;
@@ -252,7 +253,7 @@ namespace Game
 				projectile->reload();
 			}
 
-			if (projectile->collidesWith(_ship))
+			if (projectile->collidesWith(_ship) && _state == Game::Playing)
 			{
 				// Player is dead, set state and release particle cloud
 				_state = Game::Dead;
