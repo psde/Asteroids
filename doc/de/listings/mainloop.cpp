@@ -18,6 +18,6 @@ while (!window->shouldClose()) {
 			break;
 	}
 
-	game.draw();
+	draw();
 	window->finishFrame();
 }

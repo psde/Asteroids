@@ -21,3 +21,12 @@ mat4 generateProjection()
 	);
 	return m;
 }
+
+mat2 generateScale(float size)
+{
+	mat2 scale = mat2(
+		size, 0.0,
+		0.0, size
+	);
+	return scale;
+}

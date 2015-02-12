@@ -49,8 +49,6 @@ namespace Components
 		if (collidesWithAABB(other) == false)
 			return false;
 		
-		//std::cout << "AABB" << std::endl;
-
 		auto myVertices = _mesh->vertices();
 		auto otherVertices = other->_mesh->vertices();
 

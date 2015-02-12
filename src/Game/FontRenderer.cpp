@@ -16,7 +16,7 @@ namespace Game
 	}
 
 	FontRenderer::FontRenderer()
-		: _shader(Graphics::Program::getProgram("data/shader/font.glsl"))
+		: _shader(Graphics::Program::getProgram("data/shader/entity.glsl"))
 	{
 
 		std::vector<Math::vec2> vertices;

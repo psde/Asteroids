@@ -130,7 +130,7 @@ namespace Game
 
 		_destroyed = false;
 		_size = size;
-		_shader = Graphics::Program::getProgram("data/shader/asteroid.glsl");
+		_shader = Graphics::Program::getProgram("data/shader/entity.glsl");
 		_rotation = rotation(gen);
 
 		Math::vec2 velocity = direction * Math::vec2(vel2(gen) + 30.f);
@@ -157,6 +157,7 @@ namespace Game
 	void Asteroid::draw()
 	{
 		_shader->use();
+		_shader->uniform("size") = 1.0f;
 
 		for (int y = -1; y <= 1; ++y)
 		{

@@ -9,7 +9,7 @@
 namespace Game
 {
 	Ship::Ship(float size)
-		: _shader(Graphics::Program::getProgram("data/shader/ship.glsl"))
+		: _shader(Graphics::Program::getProgram("data/shader/entity.glsl"))
 		, _size(size)
 		, _rotation(0.f)
 		, _moving(false)
@@ -152,6 +152,7 @@ namespace Game
 	void Ship::draw()
 	{
 		_shader->use();
+		_shader->uniform("size") = 1.0f;
 
 		if (!(isInvincible() && std::fmod(Graphics::getTime(), 0.1) >= 0.05))
 		for (int y = -1; y <= 1; ++y)

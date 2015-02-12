@@ -8,7 +8,7 @@
 namespace Game
 {
 	UFO::UFO(float size)
-		: _shader(Graphics::Program::getProgram("data/shader/ship.glsl"))
+		: _shader(Graphics::Program::getProgram("data/shader/entity.glsl"))
 		, _size(size)
 		, _reloadTime(0.f)
 	{
@@ -124,6 +124,7 @@ namespace Game
 	void UFO::draw()
 	{
 		_shader->use();
+		_shader->uniform("size") = 1.0f;
 
 		for (int y = -1; y <= 1; ++y)
 		{

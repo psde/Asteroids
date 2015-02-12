@@ -167,9 +167,12 @@ namespace Game
 			_emitter.emitParticles(_ufo->getPhysicsComponent()->getPosition() + 12.5f, 5, 5);
 			_ufo = nullptr;
 
-			// Player is dead, set state and release particle cloud
-			_state = Game::Dead;
-			_emitter.emitParticles(_ship.getPhysicsComponent()->getPosition() + 12.5f, 5, 5);
+			if (_ship.isInvincible() == false)
+			{
+				// Player is dead, set state and release particle cloud
+				_state = Game::Dead;
+				_emitter.emitParticles(_ship.getPhysicsComponent()->getPosition() + 12.5f, 5, 5);
+			}
 		}
 
 		// Resolve Asteroids -> Everything collisions
@@ -220,11 +223,14 @@ namespace Game
 				continue;
 
 			// Resolve Asteroid -> Ship collision
-			if (_ship.collidesWith(asteroid.get()) && _state == Game::Playing)
+			if (_state == Game::Playing && _ship.collidesWith(asteroid.get()))
 			{
-				// Player is dead, set state and release particle cloud
-				_state = Game::Dead;
-				_emitter.emitParticles(_ship.getPhysicsComponent()->getPosition() + 12.5f, 5, 5);
+				if (_ship.isInvincible() == false)
+				{
+					// Player is dead, set state and release particle cloud
+					_state = Game::Dead;
+					_emitter.emitParticles(_ship.getPhysicsComponent()->getPosition() + 12.5f, 5, 5);
+				}
 
 				// Destroy asteroid and don't add to score
 				asteroid->destroy();
@@ -253,11 +259,14 @@ namespace Game
 				projectile->reload();
 			}
 
-			if (projectile->collidesWith(_ship) && _state == Game::Playing)
+			if (_state == Game::Playing && projectile->collidesWith(_ship))
 			{
-				// Player is dead, set state and release particle cloud
-				_state = Game::Dead;
-				_emitter.emitParticles(_ship.getPhysicsComponent()->getPosition() + 12.5f, 5, 5);
+				if (_ship.isInvincible() == false)
+				{
+					// Player is dead, set state and release particle cloud
+					_state = Game::Dead;
+					_emitter.emitParticles(_ship.getPhysicsComponent()->getPosition() + 12.5f, 5, 5);
+				}
 				projectile->reload();
 			}
 		}

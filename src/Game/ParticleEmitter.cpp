@@ -31,7 +31,7 @@ namespace Game
 		_shader->use();
 
 		_shader->uniform("remainingTime") = _remainingTime;
-		_shader->uniform("particleSize") = _particleSize;
+		_shader->uniform("size") = _particleSize;
 		_shader->uniform("position") = _physicsComponent.getPosition();
 		_mesh->draw(Graphics::LINE_STRIP);
 	}
@@ -97,12 +97,9 @@ namespace Game
 
 	void ParticleEmitter::draw()
 	{
-		glEnable(GL_BLEND);
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		for (auto &p : _particles)
 		{
 			p->draw();
 		}
-		glDisable(GL_BLEND);
 	}
 }

@@ -8,7 +8,7 @@
 namespace Game
 {
 	Projectile::Projectile(float lifetime, bool friendly)
-		: _shader(Graphics::Program::getProgram("data/shader/ship.glsl"))
+		: _shader(Graphics::Program::getProgram("data/shader/entity.glsl"))
 		, _launched(false)
 		, _time(0.f)
 		, _lifetime(lifetime)
@@ -50,6 +50,7 @@ namespace Game
 	void Projectile::draw()
 	{
 		_shader->use();
+		_shader->uniform("size") = 1.0f;
 
 		for (int y = -1; y <= 1; ++y)
 		{
