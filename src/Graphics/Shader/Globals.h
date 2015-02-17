@@ -11,7 +11,7 @@
 
 namespace Graphics
 {
-	namespace {
+	namespace Impl {
 		class ShaderGlobalBase
 		{
 		public:
@@ -43,7 +43,7 @@ namespace Graphics
 	class ShaderGlobals
 	{
 	private:
-		std::unordered_map<std::string, std::shared_ptr<ShaderGlobalBase>> _globals;
+		std::unordered_map<std::string, std::shared_ptr<Impl::ShaderGlobalBase>> _globals;
 
 		ShaderGlobals() {};
 		
@@ -59,14 +59,14 @@ namespace Graphics
 		{
 			ShaderGlobals& globals = instance();
 
-			std::shared_ptr<ShaderGlobalBase> &entry = globals._globals[name];
+			std::shared_ptr<Impl::ShaderGlobalBase> &entry = globals._globals[name];
 
 			if (!entry)
 			{
-				entry = std::make_shared<ShaderGlobal<T>>(name, val);
+				entry = std::make_shared<Impl::ShaderGlobal<T>>(name, val);
 			}
 
-			std::shared_ptr<ShaderGlobal<T>> global = std::dynamic_pointer_cast<ShaderGlobal<T>>(entry);
+			std::shared_ptr<Impl::ShaderGlobal<T>> global = std::dynamic_pointer_cast<Impl::ShaderGlobal<T>>(entry);
 			global->updateValue(val);
 		}
 
