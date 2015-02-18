@@ -96,6 +96,12 @@ Das Spiel wurde auch unter FreeBSD ohne Anpassungen des Quellcodes erfolgreich k
 \paragraph{Windows}
 Unter Windows kann die erstellte Visual Studio Solution mit Visual Studio 2013 geöffnet und das Projekt gebaut sowie gestartet werden. Die Einrichtung des korrekten Arbeitsverzeichnis hat CMake mithilfe einer Solution Template in \texttt{/cmake/VisualStudio/} übernommen und muss somit nicht von Hand erledigt werden.
 
+\section{Abhängigkeits Graph}
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=\textwidth]{../graphs/dependency1.png}
+\end{figure}
+
 \section{Engine-Design}
 
 Die Engine wurde komplett für das Asteroids-Spiel entworfen. Es wurden von Anfang an Entscheidungen getroffen, welche die Portabilität der Engine auf allen Plattformen sicherstellt. Auch wird das zugrundeliegende Grafiksystem abstrahiert um eine Portierung zu vereinfachen. In diesem Abschnitt sollen einige Kernaspekte vorgestellt und erläutert werden. 
