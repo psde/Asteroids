@@ -13,11 +13,9 @@
 namespace Graphics
 {
 	class ShaderGlobals;
-	class Manager;
 
 	class Program
 	{
-		friend class Manager;
 	private:
 
 		GLuint _shaderProgram;
