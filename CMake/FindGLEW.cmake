@@ -13,13 +13,14 @@ FIND_PATH(GLEW_INCLUDE_DIR GL/glew.h
     PATHS
     /usr/include/
     /usr/local/include/
-    /usr/include/GL
-    /usr/local/include/GL
+    /usr/include/GL/
+    /usr/local/include/GL/
     ${GLEW_ROOT}/include/
+	${GLEW_ROOT}/include/GL/
 )
 
 FIND_LIBRARY(GLEW_LIBRARY 
-    NAMES glew32s libGLEW.so
+    NAMES glew32s libGLEW.so libGLEW.a
     DOC "Absolute path to GLEW library."
     HINTS 
     $ENV{GLEW_ROOT}
@@ -28,6 +29,7 @@ FIND_LIBRARY(GLEW_LIBRARY
     /usr/local/lib
     /usr/lib
     ${GLEW_ROOT}/lib/Release/Win32
+	${GLEW_ROOT}/lib
 )
 
 GET_FILENAME_COMPONENT(GLEW_LIBRARY_DIR ${GLEW_LIBRARY} PATH)

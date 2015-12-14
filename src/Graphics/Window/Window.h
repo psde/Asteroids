@@ -152,6 +152,7 @@ namespace Graphics
 		~Window();
 
 		Math::vec2 getWindowDimensions();
+		Math::vec2 getFramebufferDimensions();
 		Math::vec2 getCursorPosition();
 		bool shouldClose();
 

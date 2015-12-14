@@ -22,10 +22,11 @@ namespace Graphics
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 		glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-		glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
+		glfwWindowHint(GLFW_RESIZABLE, GL_TRUE);
 		glfwWindowHint(GLFW_SAMPLES, 8);
 
 		_glfwWindow = glfwCreateWindow(width, height, "Asteroids!", nullptr, nullptr);
+		glfwSetWindowAspectRatio(_glfwWindow, 4, 3);
 		if (!_glfwWindow)
 		{
 			glfwTerminate();
@@ -46,7 +47,7 @@ namespace Graphics
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
-		Math::vec2 dimensions(getWindowDimensions());
+		Math::vec2 dimensions(getFramebufferDimensions());
 		glViewport(0, 0, static_cast<GLsizei>(dimensions.x), static_cast<GLsizei>(dimensions.y));
 	}
 
@@ -60,6 +61,13 @@ namespace Graphics
 	{
 		int x, y;
 		glfwGetWindowSize(_glfwWindow, &x, &y);
+		return Math::vec2(x, y);
+	}
+
+	Math::vec2 Window::getFramebufferDimensions()
+	{
+		int x, y;
+		glfwGetFramebufferSize(_glfwWindow, &x, &y);
 		return Math::vec2(x, y);
 	}
 
