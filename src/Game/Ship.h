@@ -33,20 +33,13 @@ namespace Game
 
 		std::vector<std::shared_ptr<Projectile>> _projectiles;
 
-	public:
-		// Creates a ship with the given size
-		Ship(float size = 27.5f);
-
 		// Tries to shoot a projectile. If succeeded, a valid shared_ptr<Projectile>
 		// is returned, nullptr otherwise.
 		const std::shared_ptr<Projectile> shoot();
 
-		// Tells the ship to accelerate in the next simulation step
-		void accelerate();
-
-		// Tells the ship to rotate in the next simulation step by the given direction.
-		// 1 means clockwise, -1 counter-clockwise, all other values are ignored
-		void rotate(int rotation);
+	public:
+		// Creates a ship with the given size
+		Ship(float size = 27.5f);
 
 		// Resets the ship to its inital position, killing its velocity
 		void resetPosition();
@@ -62,6 +55,9 @@ namespace Game
 
 		// Draws the ship at its current position
 		void draw() override;
+
+		// Handles input. Returns valid shared_ptr<Projectile> if shot was released
+		const std::shared_ptr<Projectile> handleInput();
 
 		void addScore(unsigned int points);
 		unsigned int getScore() { return _score; }

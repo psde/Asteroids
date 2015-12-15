@@ -15,7 +15,7 @@
 namespace Game
 {
 	Game::Game()
-		: _window(new Graphics::Window(1200, 900))
+		: _window(&Graphics::Window::instance())
 		, _livesRenderer(22.5f)
 		, _stateTime(0.f)
 	{
@@ -26,7 +26,7 @@ namespace Game
 	void Game::loop()
 	{
 		float last_frametime = 0.f;
-		const float frametime_max = 0.5f;
+		const float frametime_max = 1.0f;
 		float accumulatedDrawingTime = 0.0;
 		int frames = 0;
 
@@ -34,11 +34,10 @@ namespace Game
 		float accumulatedPhysicsTime = 0.f;
 		const float physicsTimeStep = 0.001f;
 		int physicSteps = 0;
-		const int maxPhysicsStepsPerFrame = 30;
+		const int maxPhysicsStepsPerFrame = 15;
 
-
-		float startTime = Graphics::getTime();
-		float endTime = startTime;
+		auto startTime = Graphics::getTime();
+		auto endTime = startTime;
 
 		while (!_window->shouldClose())
 		{
@@ -61,8 +60,8 @@ namespace Game
 			}
 
 			Graphics::ShaderGlobals::update<float>("time", endTime);
-			auto ratio = _window->getWindowDimensions().x / 800.0;
-			Graphics::ShaderGlobals::update<Math::vec2>("windowDimensions", _window->getWindowDimensions() / ratio);
+			auto ratio = _window->windowDimensions().x / 800.0;
+			Graphics::ShaderGlobals::update<Math::vec2>("windowDimensions", _window->windowDimensions() / ratio);
 
 			draw();
 
@@ -336,31 +335,11 @@ namespace Game
 		// Input
 		if (_state == Game::Playing || _state == Game::LevelTransition)
 		{
-			if (_window->getKeyState(Graphics::KEY_UP) == Graphics::KeyState::Press)
+			auto projectile = _ship.handleInput();
+			if (projectile)
 			{
-				_ship.accelerate();
+				_projectiles.push_back(projectile);
 			}
-
-			int rotation = 0;
-			if (_window->getKeyState(Graphics::KEY_LEFT) == Graphics::KeyState::Press)
-			{
-				rotation = -1;
-			}
-			else if (_window->getKeyState(Graphics::KEY_RIGHT) == Graphics::KeyState::Press)
-			{
-				rotation = 1;
-			}
-
-			if (_window->getKeyState(Graphics::KEY_SPACE) == Graphics::KeyState::Press)
-			{
-				auto projectile = _ship.shoot();
-
-				if (projectile)
-				{
-					_projectiles.push_back(projectile);
-				}
-			}
-			_ship.rotate(rotation);
 		}
 
 		if (_state != Game::GameOver && _state != Game::WaitingForRespawn && _state != Game::WaitingForStart)

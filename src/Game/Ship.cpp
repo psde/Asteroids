@@ -3,6 +3,7 @@
 
 #include "Math/Math.h"
 #include "Graphics/Graphics.h"
+#include "Graphics/Window/Window.h"
 
 #include "Ship.h"
 
@@ -73,16 +74,6 @@ namespace Game
 	bool Ship::isInvincible()
 	{
 		return _invicibility > 0.f;
-	}
-
-	void Ship::accelerate()
-	{
-		_moving = true;
-	}
-
-	void Ship::rotate(int rotation)
-	{
-		_rotating = rotation;
 	}
 
 	const std::shared_ptr<Projectile> Ship::shoot()
@@ -194,5 +185,29 @@ namespace Game
 			_lives = 6;
 
 		_score += points;
+	}
+
+	const std::shared_ptr<Projectile> Ship::handleInput()
+	{
+		auto& window = Graphics::Window::instance();
+		if (window.getKeyState(Graphics::KEY_UP) == Graphics::KeyState::Press)
+		{
+			_moving = true;
+		}
+
+		if (window.getKeyState(Graphics::KEY_LEFT) == Graphics::KeyState::Press)
+		{
+			_rotating = -1;
+		}
+		else if (window.getKeyState(Graphics::KEY_RIGHT) == Graphics::KeyState::Press)
+		{
+			_rotating = 1;
+		}
+
+		if (window.getKeyState(Graphics::KEY_SPACE) == Graphics::KeyState::Press)
+		{
+			return shoot();
+		}
+		return nullptr;
 	}
 }

@@ -27,7 +27,8 @@ namespace Game
 			LevelTransition
 		};
 
-		std::shared_ptr<Graphics::Window> _window;
+		//std::shared_ptr<Graphics::Window> _window;
+		Graphics::Window* _window;
 
 		std::vector<std::shared_ptr<Asteroid>> _asteroids;
 		std::vector<std::shared_ptr<Projectile>> _projectiles;

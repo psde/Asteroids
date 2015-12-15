@@ -147,9 +147,10 @@ namespace Graphics
 	private:
 		GLFWwindow *_glfwWindow;
 
+		Window(int width, int height);
 		
 	public:
-		Window(int width, int height);
+		static Window& instance();
 		~Window();
 
 		Window(const Window&) = delete;
@@ -157,10 +158,10 @@ namespace Graphics
 		Window operator=(const Window&) = delete;
 		Window operator=(Window&&) = delete;
 
-		Math::vec2 getWindowDimensions();
-		Math::vec2 getFramebufferDimensions();
-		Math::vec2 getCursorPosition();
-		bool shouldClose();
+		Math::vec2 windowDimensions() const;
+		Math::vec2 framebufferDimensions() const;
+		Math::vec2 cursorPosition() const;
+		bool shouldClose() const;
 
 		void finishFrame();
 		

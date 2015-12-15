@@ -69,6 +69,7 @@ namespace Graphics
 		source << _content;
 
 		_shader = glCreateShader(_type);
+		std::cout << _type << " -> " << _shader << std::endl;
 		std::string s = source.str();
 		const char *src = s.c_str();
 		glShaderSource(_shader, 1, &src, NULL);
