@@ -5,10 +5,11 @@
 namespace Game
 {
 	Particle::Particle(std::shared_ptr<Graphics::Mesh> mesh, Math::vec2 position, Math::vec2 direction)
-		: _shader(Graphics::Program::getProgram("data/shader/particle.glsl"))
+		: GameObject(nullptr, new Components::PhysicsEuler())
+		, _shader(Graphics::Program::getProgram("data/shader/particle.glsl"))
 		, _mesh(mesh)
 	{
-		_physicsComponent.reset(position, direction * 10.f);
+		_physicsComponent->reset(position, direction * 10.f);
 
 		std::random_device rd;
 		std::mt19937 gen(rd());
@@ -21,8 +22,8 @@ namespace Game
 
 	void Particle::update(float timeDelta)
 	{
-		_physicsComponent.update(timeDelta);
-		_physicsComponent.setAcceleration(Math::vec2(-1.f));
+		_physicsComponent->update(timeDelta);
+		_physicsComponent->setAcceleration(Math::vec2(-1.f));
 		_remainingTime -= timeDelta;
 	}
 
@@ -32,11 +33,12 @@ namespace Game
 
 		_shader->uniform("remainingTime") = _remainingTime;
 		_shader->uniform("size") = _particleSize;
-		_shader->uniform("position") = _physicsComponent.getPosition();
+		_shader->uniform("position") = _physicsComponent->getPosition();
 		_mesh->draw(Graphics::LINE_STRIP);
 	}
 
 	ParticleEmitter::ParticleEmitter()
+		: GameObject()
 	{
 		// Preload shader so it does not happen mid-game
 		auto shader = Graphics::Program::getProgram("data/shader/particle.glsl");

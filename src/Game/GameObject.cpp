@@ -4,6 +4,14 @@
 
 namespace Game
 {
+	GameObject::GameObject(Components::CollisionComponent *collision,
+						   Components::PhysicsComponent *physics)
+		: _collisionComponent(collision)
+		, _physicsComponent(physics)
+	{
+
+	}
+
 	bool GameObject::collidesWith(const GameObject& other)
 	{
 		return collidesWith(&other);
@@ -15,5 +23,15 @@ namespace Game
 			return false;
 
 		return getCollisionComponent()->collidesWith(other->getCollisionComponent());
+	}
+
+	const Components::CollisionComponent *GameObject::getCollisionComponent() const
+	{
+		return _collisionComponent;
+	}
+
+	const Components::PhysicsComponent *GameObject::getPhysicsComponent() const
+	{
+		return _physicsComponent;
 	}
 }

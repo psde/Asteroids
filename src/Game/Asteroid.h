@@ -21,8 +21,6 @@ namespace Game
 		float _meshSize;
 		bool _destroyed;
 
-		Components::PhysicsEuler _physicsComponent;
-		Components::CollisionComponent _collisionComponent;
 		float _rotation;
 
 		std::unique_ptr<Graphics::Mesh> _mesh;
@@ -48,12 +46,6 @@ namespace Game
 
 		// Advances the asteroids simulation by the given time delta
 		void update(float delta) override;
-
-		// See GameObject
-		const Components::CollisionComponent* getCollisionComponent() const override;
-
-		// See GameObject
-		const Components::PhysicsComponent* getPhysicsComponent() const override;
 
 		// Returns the current asteroid size index
 		int getAsteroidSize();

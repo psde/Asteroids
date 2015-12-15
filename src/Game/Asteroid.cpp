@@ -94,6 +94,7 @@ namespace Game
 	{}
 
 	Asteroid::Asteroid(int size)
+		: GameObject(new Components::CollisionComponent(), new Components::PhysicsEuler())
 	{
 		std::random_device rd;
 		std::mt19937 gen(rd());
@@ -115,6 +116,7 @@ namespace Game
 	}
 
 	Asteroid::Asteroid(int size, Math::vec2 position, Math::vec2 direction)
+		: GameObject(new Components::CollisionComponent(), new Components::PhysicsEuler())
 	{
 		init(size, position, direction);
 	}
@@ -137,21 +139,21 @@ namespace Game
 
 		velocity *= (Asteroid::AsteroidSizes().size() - static_cast<float>(size));
 
-		_physicsComponent.reset(position, velocity);
+		_physicsComponent->reset(position, velocity);
 
 		_meshSize = AsteroidSizes().at(_size) + sizeOffset(gen);
 		_mesh = generateAsteroid(_meshSize);
 		_mesh = std::move(_mesh->rotate(_rotation, Math::vec2(_meshSize / 2.0f)));
 
 		std::unique_ptr<Graphics::Mesh> collision(new Graphics::Mesh(*_mesh.get()));
-		_collisionComponent.setCollisionMesh(_mesh.get());
+		_collisionComponent->setCollisionMesh(_mesh.get());
 	}
 
 	void Asteroid::update(float delta)
 	{
-		_physicsComponent.update(delta);
+		_physicsComponent->update(delta);
 
-		_collisionComponent.setPosition(_physicsComponent.getPosition());
+		_collisionComponent->setPosition(_physicsComponent->getPosition());
 	}
 
 	void Asteroid::draw()
@@ -163,7 +165,7 @@ namespace Game
 		{
 			for (int x = -1; x <= 1; ++x)
 			{
-				_shader->uniform("position") = _physicsComponent.getPosition() + Math::vec2(800 * x, 600 * y);
+				_shader->uniform("position") = _physicsComponent->getPosition() + Math::vec2(800 * x, 600 * y);
 				_mesh->draw(Graphics::LINE_LOOP);
 			}
 		}
@@ -172,15 +174,5 @@ namespace Game
 	int Asteroid::getAsteroidSize()
 	{
 		return _size;
-	}
-
-	const Components::CollisionComponent* Asteroid::getCollisionComponent() const
-	{
-		return &_collisionComponent;
-	}
-
-	const Components::PhysicsComponent* Asteroid::getPhysicsComponent() const
-	{
-		return &_physicsComponent;
 	}
 }

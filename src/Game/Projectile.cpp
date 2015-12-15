@@ -8,13 +8,14 @@
 namespace Game
 {
 	Projectile::Projectile(float lifetime, bool friendly)
-		: _shader(Graphics::Program::getProgram("data/shader/entity.glsl"))
+		: GameObject(new Components::CollisionComponent(), new Components::PhysicsEuler())
+		, _shader(Graphics::Program::getProgram("data/shader/entity.glsl"))
 		, _launched(false)
 		, _time(0.f)
 		, _lifetime(lifetime)
 		, _friendly(friendly)
 	{
-		_physicsComponent.reset(Math::vec2(0.f), Math::vec2(0.f));
+		_physicsComponent->reset(Math::vec2(0.f), Math::vec2(0.f));
 
 		float size = 1.15f;
 
@@ -28,7 +29,7 @@ namespace Game
 		}
 
 		_mesh.reset(new Graphics::Mesh(vertices));
-		_collisionComponent.setCollisionMesh(_mesh.get());
+		_collisionComponent->setCollisionMesh(_mesh.get());
 	}
 
 	void Projectile::update(float delta)
@@ -37,9 +38,9 @@ namespace Game
 			return;
 
 		_time -= delta;
-		_physicsComponent.update(delta);
+		_physicsComponent->update(delta);
 
-		_collisionComponent.setPosition(_physicsComponent.getPosition());
+		_collisionComponent->setPosition(_physicsComponent->getPosition());
 
 		if (_time <= 0.f)
 		{
@@ -56,20 +57,10 @@ namespace Game
 		{
 			for (int x = -1; x <= 1; ++x)
 			{
-				_shader->uniform("position") = _physicsComponent.getPosition() + Math::vec2(800 * x, 600 * y);
+				_shader->uniform("position") = _physicsComponent->getPosition() + Math::vec2(800 * x, 600 * y);
 				_mesh->draw(Graphics::LINE_STRIP);
 			}
 		}
-	}
-
-	const Components::CollisionComponent* Projectile::getCollisionComponent() const
-	{
-		return &_collisionComponent;
-	}
-
-	const Components::PhysicsComponent* Projectile::getPhysicsComponent() const
-	{
-		return &_physicsComponent;
 	}
 
 	bool Projectile::isLaunched()
@@ -81,12 +72,12 @@ namespace Game
 	{
 		_launched = true;
 		_time = _lifetime;
-		_physicsComponent.reset(position, direction * 275.f);
+		_physicsComponent->reset(position, direction * 275.f);
 	}
 
 	void Projectile::reload()
 	{
 		_launched = false;
-		_physicsComponent.reset(Math::vec2(0.f), Math::vec2(0.f));
+		_physicsComponent->reset(Math::vec2(0.f), Math::vec2(0.f));
 	}
 }

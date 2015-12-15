@@ -8,13 +8,14 @@
 namespace Game
 {
 	UFO::UFO(float size)
-		: _shader(Graphics::Program::getProgram("data/shader/entity.glsl"))
+		: GameObject(new Components::CollisionComponent(), new Components::PhysicsRungeKutta())
+		, _shader(Graphics::Program::getProgram("data/shader/entity.glsl"))
 		, _size(size)
 		, _reloadTime(0.f)
 	{
-		_physicsComponent.setTerminalVelocity(225.f);
+		_physicsComponent->setTerminalVelocity(225.f);
 
-		_physicsComponent.reset(Math::vec2(200, 200), Math::vec2(10.f));
+		_physicsComponent->reset(Math::vec2(200, 200), Math::vec2(10.f));
 		_movementTimeRemaining = 0.f;
 
 		/*
@@ -56,7 +57,7 @@ namespace Game
 		};
 
 		_mesh.reset(new Graphics::Mesh(vertices, elements));
-		_collisionComponent.setCollisionMesh(_mesh.get());
+		_collisionComponent->setCollisionMesh(_mesh.get());
 
 		for (int i = 0; i < 1; i++)
 			_projectiles.push_back(std::make_shared<Projectile>(1.5f, false));
@@ -85,9 +86,9 @@ namespace Game
 			std::mt19937 gen(rd());
 			std::uniform_real_distribution<float> rotation(-1.75f, 1.75f);
 
-			Math::vec2 norm = Math::normalize(_physicsComponent.getVelocity());
+			Math::vec2 norm = Math::normalize(_physicsComponent->getVelocity());
 			Math::vec2 dir = Math::rotate(Math::vec2(1.f, 0.f), std::atan2(norm.x, norm.y) + (float)rotation(gen));
-			Math::vec2 position = _physicsComponent.getPosition() + Math::vec2(_size / 2.f) + (dir * (float)_size / 2.f);
+			Math::vec2 position = _physicsComponent->getPosition() + Math::vec2(_size / 2.f) + (dir * (float)_size / 2.f);
 			projectile->shoot(position, dir);
 			_reloadTime = 2.f;
 		}
@@ -97,7 +98,7 @@ namespace Game
 
 	void UFO::update(float delta)
 	{
-		_physicsComponent.update(delta);
+		_physicsComponent->update(delta);
 
 		_movementTimeRemaining -= delta;
 		if(_movementTimeRemaining <= 0.f)
@@ -106,10 +107,10 @@ namespace Game
 			std::mt19937 gen(rd());
 			std::uniform_real_distribution<float> rotation(-0.25f, 0.25f);
 
-			Math::vec2 norm = Math::normalize(_physicsComponent.getVelocity());
+			Math::vec2 norm = Math::normalize(_physicsComponent->getVelocity());
 			Math::vec2 direction = Math::rotate(Math::vec2(1.f, 0.f), std::atan2(norm.x, norm.y) + (float)rotation(gen));
 
-			_physicsComponent.reset(_physicsComponent.getPosition(), direction * 150.f);
+			_physicsComponent->reset(_physicsComponent->getPosition(), direction * 150.f);
 			_movementTimeRemaining = 2.f;
 		}
 
@@ -118,7 +119,7 @@ namespace Game
 			_reloadTime -= delta;
 		}
 
-		_collisionComponent.setPosition(_physicsComponent.getPosition());
+		_collisionComponent->setPosition(_physicsComponent->getPosition());
 	}
 
 	void UFO::draw()
@@ -130,19 +131,9 @@ namespace Game
 		{
 			for (int x = -1; x <= 1; ++x)
 			{
-				_shader->uniform("position") = _physicsComponent.getPosition() + Math::vec2(800 * x, 600 * y);
+				_shader->uniform("position") = _physicsComponent->getPosition() + Math::vec2(800 * x, 600 * y);
 				_mesh->draw(Graphics::LINE_STRIP);
 			}
 		}
-	}
-
-	const Components::CollisionComponent* UFO::getCollisionComponent() const
-	{
-		return &_collisionComponent;
-	}
-
-	const Components::PhysicsComponent* UFO::getPhysicsComponent() const
-	{
-		return &_physicsComponent;
 	}
 }

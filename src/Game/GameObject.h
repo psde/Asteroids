@@ -11,9 +11,14 @@ namespace Game
 	// Base class for all game objects.
 	class GameObject
 	{
+	protected:
+		Components::CollisionComponent* _collisionComponent;
+		Components::PhysicsComponent* _physicsComponent;
+
 	public:
-		// Virtual (but empty) deconstructor
-		virtual ~GameObject() {};
+		GameObject(Components::CollisionComponent* c = nullptr, Components::PhysicsComponent* p = nullptr);
+
+		virtual ~GameObject() = default;
 
 		// Advances the game objects simulation by a given time step
 		virtual void update(float timeDelta) = 0;
@@ -22,10 +27,10 @@ namespace Game
 		virtual void draw() = 0;
 
 		// Returns a const pointer to the game objects CollisionComponent, if any. nullptr if none.
-		virtual const Components::CollisionComponent* getCollisionComponent() const = 0;
+		const Components::CollisionComponent* getCollisionComponent() const;
 
 		// Returns a const pointer to the game objects PhysicsComponent, if any. nullptr if none.
-		virtual const Components::PhysicsComponent* getPhysicsComponent() const = 0;
+		const Components::PhysicsComponent* getPhysicsComponent() const;
 
 		bool collidesWith(const GameObject& other);
 		bool collidesWith(const GameObject* other);

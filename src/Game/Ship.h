@@ -17,9 +17,6 @@ namespace Game
 	class Ship : public GameObject
 	{
 	private:
-		Components::CollisionComponent _collisionComponent;
-		Components::PhysicsRungeKutta _physicsComponent;
-
 		std::unique_ptr<Graphics::Mesh> _mesh;
 		std::unique_ptr<Graphics::Mesh> _rotatedMesh;
 		std::shared_ptr<Graphics::Program> _shader;
@@ -65,12 +62,6 @@ namespace Game
 
 		// Draws the ship at its current position
 		void draw() override;
-
-		// See GameObject
-		const Components::CollisionComponent* getCollisionComponent() const override;
-
-		// See GameObject
-		const Components::PhysicsComponent* getPhysicsComponent() const override;
 
 		void addScore(unsigned int points);
 		unsigned int getScore() { return _score; }

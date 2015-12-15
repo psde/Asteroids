@@ -9,7 +9,8 @@
 namespace Game
 {
 	Ship::Ship(float size)
-		: _shader(Graphics::Program::getProgram("data/shader/entity.glsl"))
+		: GameObject(new Components::CollisionComponent(), new Components::PhysicsRungeKutta())
+		, _shader(Graphics::Program::getProgram("data/shader/entity.glsl"))
 		, _size(size)
 		, _rotation(0.f)
 		, _moving(false)
@@ -20,7 +21,7 @@ namespace Game
 	{
 		resetLives();
 
-		_physicsComponent.setTerminalVelocity(225.f);
+		_physicsComponent->setTerminalVelocity(225.f);
 
 		std::vector<Math::vec2> vertices = {
 			Math::vec2(0.25f * _size, 0.90f * _size), // 0
@@ -52,8 +53,8 @@ namespace Game
 
 	void Ship::resetPosition()
 	{
-		_physicsComponent.reset(Math::vec2(400.0f - _size / 2.f, 300 - _size / 2.f), Math::vec2(0.f));
-		_physicsComponent.setAcceleration(Math::vec2(0.f, 0.f));
+		_physicsComponent->reset(Math::vec2(400.0f - _size / 2.f, 300 - _size / 2.f), Math::vec2(0.f));
+		_physicsComponent->setAcceleration(Math::vec2(0.f, 0.f));
 		_moving = false;
 		_invicibility = 0.f;
 		//_rotation = 0.f;
@@ -104,7 +105,7 @@ namespace Game
 		if (projectile)
 		{
 			Math::vec2 dir = Math::rotate(Math::vec2(0.f, -1.f), _rotation);
-			Math::vec2 position = _physicsComponent.getPosition() + Math::vec2(_size / 2.f) + (dir * (float)_size / 2.f);
+			Math::vec2 position = _physicsComponent->getPosition() + Math::vec2(_size / 2.f) + (dir * (float)_size / 2.f);
 			projectile->shoot(position, dir);
 			_reloadTime = 0.20f;
 		}
@@ -117,14 +118,14 @@ namespace Game
 		if (_moving)
 		{
 			float acceleration = 175.f;
-			_physicsComponent.setAcceleration(Math::rotate(Math::vec2(0.f, -acceleration), _rotation));
+			_physicsComponent->setAcceleration(Math::rotate(Math::vec2(0.f, -acceleration), _rotation));
 		}
 		else
 		{
-			_physicsComponent.setAcceleration(Math::vec2(0.f, 0.f));
+			_physicsComponent->setAcceleration(Math::vec2(0.f, 0.f));
 		}
 
-		_physicsComponent.update(delta);
+		_physicsComponent->update(delta);
 
 
 		if (_reloadTime > 0.f)
@@ -144,9 +145,9 @@ namespace Game
 			_rotating = 0;
 		}
 
-		_collisionComponent.setCollisionMesh(_rotatedMesh.get());
+		_collisionComponent->setCollisionMesh(_rotatedMesh.get());
 
-		_collisionComponent.setPosition(_physicsComponent.getPosition());
+		_collisionComponent->setPosition(_physicsComponent->getPosition());
 	}
 
 	void Ship::draw()
@@ -159,9 +160,9 @@ namespace Game
 		{
 			for (int x = -1; x <= 1; ++x)
 			{
-				_shader->uniform("position") = _physicsComponent.getPosition() + Math::vec2(800 * x, 600 * y);
+				_shader->uniform("position") = _physicsComponent->getPosition() + Math::vec2(800 * x, 600 * y);
 				_rotatedMesh->draw(Graphics::LINE_STRIP, 8, 0);
-				if (Math::length(_physicsComponent.getAcceleration()) > 0.f && std::fmod(Graphics::getTime(), 0.2) >= 0.1)
+				if (Math::length(_physicsComponent->getAcceleration()) > 0.f && std::fmod(Graphics::getTime(), 0.2) >= 0.1)
 				{
 					_rotatedMesh->draw(Graphics::LINE_STRIP, 3, 8);
 				}
@@ -169,16 +170,6 @@ namespace Game
 		}
 
 		_moving = false;
-	}
-
-	const Components::CollisionComponent* Ship::getCollisionComponent() const
-	{
-		return &_collisionComponent;
-	}
-
-	const Components::PhysicsComponent* Ship::getPhysicsComponent() const
-	{
-		return &_physicsComponent;
 	}
 
 	void Ship::addScore(unsigned int points)

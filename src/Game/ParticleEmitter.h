@@ -16,7 +16,6 @@ namespace Game
 	class Particle : public GameObject
 	{
 	private:
-		Components::PhysicsEuler _physicsComponent;
 		float _remainingTime;
 		float _particleSize;
 		std::shared_ptr<Graphics::Program> _shader;
@@ -27,8 +26,6 @@ namespace Game
 
 		void update(float timeDelta);
 		void draw();
-		const Components::CollisionComponent* getCollisionComponent() const override { return nullptr; }
-		const Components::PhysicsComponent* getPhysicsComponent() const override { return &_physicsComponent; }
 
 		bool isDead() { return _remainingTime <= 0.f; }
 	};
@@ -47,7 +44,5 @@ namespace Game
 
 		void update(float timeDelta) override;
 		void draw() override;
-		const Components::CollisionComponent* getCollisionComponent() const override { return nullptr; }
-		const Components::PhysicsComponent* getPhysicsComponent() const override { return nullptr; }
 	};
 }

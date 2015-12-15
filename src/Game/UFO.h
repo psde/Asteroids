@@ -17,9 +17,6 @@ namespace Game
 	class UFO : public GameObject
 	{
 	private:
-		Components::CollisionComponent _collisionComponent;
-		Components::PhysicsRungeKutta _physicsComponent;
-
 		std::unique_ptr<Graphics::Mesh> _mesh;
 		std::shared_ptr<Graphics::Program> _shader;
 
@@ -40,11 +37,5 @@ namespace Game
 
 		// Draws the UFO at its current position
 		void draw() override;
-
-		// See GameObject
-		const Components::CollisionComponent* getCollisionComponent() const override;
-
-		// See GameObject
-		const Components::PhysicsComponent* getPhysicsComponent() const override;
 	};
 }

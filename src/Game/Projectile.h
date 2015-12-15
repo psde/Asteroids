@@ -24,9 +24,6 @@ namespace Game
 		float _lifetime;
 		bool _friendly;
 
-		Components::CollisionComponent _collisionComponent;
-		Components::PhysicsEuler _physicsComponent;
-
 	public:
 		Projectile(float lifetime, bool friendly);
 
@@ -35,12 +32,6 @@ namespace Game
 
 		// Draws the projectile at the current position
 		void draw() override;
-
-		// See GameObject
-		const Components::CollisionComponent* getCollisionComponent() const override;
-
-		// See GameObject
-		const Components::PhysicsComponent* getPhysicsComponent() const override;
 
 		// Returns true if the projectile is currently in flight 
 		bool isLaunched();
