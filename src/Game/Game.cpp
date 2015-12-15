@@ -2,6 +2,7 @@
 #include <iomanip>
 #include <random>
 #include <iostream>
+#include <algorithm>
 
 #include "Game.h"
 
@@ -14,7 +15,7 @@
 namespace Game
 {
 	Game::Game()
-		: _window(new Graphics::Window(800, 600))
+		: _window(new Graphics::Window(1200, 900))
 		, _livesRenderer(22.5f)
 		, _stateTime(0.f)
 	{
@@ -25,7 +26,7 @@ namespace Game
 	void Game::loop()
 	{
 		float last_frametime = 0.f;
-		const float frametime_max = 0.1f;
+		const float frametime_max = 0.5f;
 		float accumulatedDrawingTime = 0.0;
 		int frames = 0;
 
@@ -60,7 +61,8 @@ namespace Game
 			}
 
 			Graphics::ShaderGlobals::update<float>("time", endTime);
-			Graphics::ShaderGlobals::update<Math::vec2>("windowDimensions", _window->getWindowDimensions());
+			auto ratio = _window->getWindowDimensions().x / 800.0;
+			Graphics::ShaderGlobals::update<Math::vec2>("windowDimensions", _window->getWindowDimensions() / ratio);
 
 			draw();
 
@@ -147,7 +149,8 @@ namespace Game
 					_stateTime = 2.f;
 				}
 			case GameOver:
-				if (_window->getKeyState(Graphics::KEY_ENTER) == Graphics::KEY_PRESS || _window->getKeyState(Graphics::KEY_KP_ENTER) == Graphics::KEY_PRESS)
+				if (_window->getKeyState(Graphics::KEY_ENTER) == Graphics::KeyState::Press
+					|| _window->getKeyState(Graphics::KEY_KP_ENTER) == Graphics::KeyState::Press)
 				{
 					reset();
 				}
@@ -248,7 +251,7 @@ namespace Game
 			if (_ufo && projectile->collidesWith(_ufo.get()))
 			{
 				// Destroy Ufo
-				_emitter.emitParticles(_ufo->getPhysicsComponent()->getPosition() + 12.5f, 5, 5);
+				_emitter.emitParticles(_ufo->getPhysicsComponent()->getPosition() + 12.5f, 5, 5 );
 				_ufo = nullptr;
 
 				// Add to score if projectile originated from player 
@@ -277,30 +280,16 @@ namespace Game
 		}
 
 		// Delete non-launched projectiles
-		for (auto projectile = std::begin(_projectiles); projectile != std::end(_projectiles); )
-		{
-			if ((*projectile)->isLaunched())
-			{
-				++projectile;
-			}
-			else
-			{
-				projectile = _projectiles.erase(projectile);
-			}
-		}
+		_projectiles.erase(std::remove_if(std::begin(_projectiles),
+										  std::end(_projectiles),
+										  [](const std::shared_ptr<Projectile>& d){ return !d->isLaunched(); }),
+						   std::end(_projectiles));
 
 		// Delete destroyed asteroids
-		for (auto asteroid = std::begin(_asteroids); asteroid != std::end(_asteroids); )
-		{
-			if ((*asteroid)->isDestroyed())
-			{
-				asteroid = _asteroids.erase(asteroid);
-			}
-			else
-			{
-				++asteroid;
-			}
-		}
+		_asteroids.erase(std::remove_if(std::begin(_asteroids),
+										std::end(_asteroids),
+										[](const std::shared_ptr<Asteroid>& d){ return d->isDestroyed(); }),
+						 std::end(_asteroids));
 	}
 
 	void Game::destroyAsteroid(std::shared_ptr<Asteroid>& asteroid, bool addPoints)
@@ -313,7 +302,7 @@ namespace Game
 		if (addPoints)
 			_ship.addScore((Asteroid::AsteroidSizes().size() - size) * 100);
 
-		// Emitt particle cloud
+		// Emit particle cloud
 		_emitter.emitParticles(pos, asteroidSize / 2.f, static_cast<int>(asteroidSize));
 
 		// Flag asteroid as destroyed
@@ -336,31 +325,33 @@ namespace Game
 	void Game::update(float timeDelta)
 	{
 		// Cheats!
-		if (_window->getKeyState(Graphics::KEY_DELETE) == Graphics::KEY_PRESS)
+		if (_window->getKeyState(Graphics::KEY_DELETE) == Graphics::KeyState::Press)
 		{
 			//_lives = 3;
 			_asteroids.clear();
 		}
 
 		updateState(timeDelta);
+
+		// Input
 		if (_state == Game::Playing || _state == Game::LevelTransition)
 		{
-			if (_window->getKeyState(Graphics::KEY_UP) == Graphics::KEY_PRESS)
+			if (_window->getKeyState(Graphics::KEY_UP) == Graphics::KeyState::Press)
 			{
 				_ship.accelerate();
 			}
 
 			int rotation = 0;
-			if (_window->getKeyState(Graphics::KEY_LEFT) == Graphics::KEY_PRESS)
+			if (_window->getKeyState(Graphics::KEY_LEFT) == Graphics::KeyState::Press)
 			{
 				rotation = -1;
 			}
-			else if (_window->getKeyState(Graphics::KEY_RIGHT) == Graphics::KEY_PRESS)
+			else if (_window->getKeyState(Graphics::KEY_RIGHT) == Graphics::KeyState::Press)
 			{
 				rotation = 1;
 			}
 
-			if (_window->getKeyState(Graphics::KEY_SPACE) == Graphics::KEY_PRESS)
+			if (_window->getKeyState(Graphics::KEY_SPACE) == Graphics::KeyState::Press)
 			{
 				auto projectile = _ship.shoot();
 

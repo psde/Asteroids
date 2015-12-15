@@ -21,6 +21,7 @@ namespace Game
 		std::unique_ptr<Graphics::Mesh> _mesh;
 
 		std::map<char, std::pair<int, int>> _characterLookup;
+		std::pair<int, int> _unknownCharacter;
 
 		std::shared_ptr<Graphics::Program> _shader;
 	public:

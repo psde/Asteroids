@@ -1,5 +1,4 @@
 #ifdef VERTEX
-
 uniform vec2 position;
 uniform float size = 1.0f;
 

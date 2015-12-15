@@ -89,7 +89,7 @@ namespace Graphics
 		glfwPollEvents();
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		if (getKeyState(KEY_ESCAPE) == GLFW_PRESS)
+		if (static_cast<int>(getKeyState(KEY_ESCAPE)) == GLFW_PRESS)
 			glfwSetWindowShouldClose(_glfwWindow, GL_TRUE);
 	}
 	

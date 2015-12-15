@@ -4,17 +4,6 @@
 
 namespace Game
 {
-	std::pair<int, int> addCharToElement(std::vector<GLuint> &elements, std::vector<GLuint> charElements)
-	{
-		int offset = elements.size();
-		int size = charElements.size();
-		for (auto c : charElements)
-		{
-			elements.push_back(c);
-		}
-		return std::pair<int, int>(size, offset);
-	}
-
 	FontRenderer::FontRenderer()
 		: _shader(Graphics::Program::getProgram("data/shader/entity.glsl"))
 	{
@@ -25,6 +14,17 @@ namespace Game
 			Math::vec2 vec(0.1f + 0.4f * (i % 3), 0.1f + 0.4f * (i / 3));
 			vertices.push_back(vec);
 		}
+
+		auto addCharToElement = [](std::vector<GLuint> &elements, std::vector<GLuint> charElements)
+		{
+			int offset = elements.size();
+			int size = charElements.size();
+			for (auto c : charElements)
+			{
+				elements.push_back(c);
+			}
+			return std::pair<int, int>(size, offset);
+		};
 
 		/* 0 1 2
 		   3 4 5
@@ -72,6 +72,7 @@ namespace Game
 		_characterLookup['X'] = addCharToElement(elements, { 0, 8, R, 6, 2 });
 		_characterLookup['Y'] = addCharToElement(elements, { 0, 4, 2, R, 4, 7 });
 		_characterLookup['Z'] = addCharToElement(elements, { 0, 2, 6, 8 });
+		_unknownCharacter = addCharToElement(elements, {0, 2, 8, 6, 0, 8, R, 2, 6});
 
 		// Also allow lower case characters, but use upper case
 		for (char c = 'A'; c <= 'Z'; c++)
@@ -91,11 +92,18 @@ namespace Game
 		{
 			_shader->uniform("position") = position;
 
-			auto it = _characterLookup.find(c);
-
-			if (it != std::end(_characterLookup))
+			if(c != ' ')
 			{
-				_mesh->draw(Graphics::LINE_STRIP, it->second.first, it->second.second);
+				auto it = _characterLookup.find(c);
+
+				if (it != std::end(_characterLookup))
+				{
+					_mesh->draw(Graphics::LINE_STRIP, it->second.first, it->second.second);
+				}
+				else
+				{
+					_mesh->draw(Graphics::LINE_STRIP, _unknownCharacter.first, _unknownCharacter.second);
+				}
 			}
 
 			position.x += size;

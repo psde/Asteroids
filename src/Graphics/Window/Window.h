@@ -10,11 +10,11 @@
 
 namespace Graphics
 {
-	enum KeyState
+	enum class KeyState
 	{
-		KEY_RELEASE = GLFW_RELEASE,
-		KEY_PRESS = GLFW_PRESS,
-		KEY_REPEAT = GLFW_REPEAT
+		Release = GLFW_RELEASE,
+		Press = GLFW_PRESS,
+		Repeat = GLFW_REPEAT
 	};
 
 	enum Key
@@ -146,10 +146,16 @@ namespace Graphics
 	{
 	private:
 		GLFWwindow *_glfwWindow;
+
 		
 	public:
 		Window(int width, int height);
 		~Window();
+
+		Window(const Window&) = delete;
+		Window(Window&&) = delete;
+		Window operator=(const Window&) = delete;
+		Window operator=(Window&&) = delete;
 
 		Math::vec2 getWindowDimensions();
 		Math::vec2 getFramebufferDimensions();
