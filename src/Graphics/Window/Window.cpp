@@ -25,15 +25,15 @@ namespace Graphics
 		glfwWindowHint(GLFW_RESIZABLE, GL_TRUE);
 		glfwWindowHint(GLFW_SAMPLES, 8);
 
-		_glfwWindow = glfwCreateWindow(width, height, "Asteroids!", nullptr, nullptr);
-		glfwSetWindowAspectRatio(_glfwWindow, 4, 3);
-		if (!_glfwWindow)
+		m_glfwWindow = glfwCreateWindow(width, height, "Asteroids!", nullptr, nullptr);
+		glfwSetWindowAspectRatio(m_glfwWindow, 4, 3);
+		if (!m_glfwWindow)
 		{
 			glfwTerminate();
 			exit(EXIT_FAILURE);
 		}
 
-		glfwMakeContextCurrent(_glfwWindow);
+		glfwMakeContextCurrent(m_glfwWindow);
 
 		glewExperimental = GL_TRUE;
 		GLenum err = glewInit();
@@ -50,7 +50,7 @@ namespace Graphics
 		Math::vec2 dimensions(framebufferDimensions());
 		glViewport(0, 0, static_cast<GLsizei>(dimensions.x), static_cast<GLsizei>(dimensions.y));
 
-		glfwSetWindowSizeCallback(_glfwWindow, [](GLFWwindow* window, int, int)
+		glfwSetWindowSizeCallback(m_glfwWindow, [](GLFWwindow* window, int, int)
 		{
 			int x, y;
 			glfwGetFramebufferSize(window, &x, &y);
@@ -66,48 +66,53 @@ namespace Graphics
 
 	Window::~Window()
 	{
-		glfwDestroyWindow(_glfwWindow);
+		glfwDestroyWindow(m_glfwWindow);
 		glfwTerminate();
 	}
 
 	Math::vec2 Window::windowDimensions() const
 	{
 		int x, y;
-		glfwGetWindowSize(_glfwWindow, &x, &y);
+		glfwGetWindowSize(m_glfwWindow, &x, &y);
 		return Math::vec2(x, y);
 	}
 
 	Math::vec2 Window::framebufferDimensions() const
 	{
 		int x, y;
-		glfwGetFramebufferSize(_glfwWindow, &x, &y);
+		glfwGetFramebufferSize(m_glfwWindow, &x, &y);
 		return Math::vec2(x, y);
 	}
 
 	Math::vec2 Window::cursorPosition() const
 	{
 		double x, y;
-		glfwGetCursorPos(_glfwWindow, &x, &y);
+		glfwGetCursorPos(m_glfwWindow, &x, &y);
 		return Math::vec2(x, y);
 	}
 
 	bool Window::shouldClose() const
 	{
-		return (glfwWindowShouldClose(_glfwWindow) != 0);
+		return (glfwWindowShouldClose(m_glfwWindow) != 0);
 	}
 
 	void Window::finishFrame()
 	{
-		glfwSwapBuffers(_glfwWindow);
+		glfwSwapBuffers(m_glfwWindow);
 		glfwPollEvents();
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		if (static_cast<int>(getKeyState(KEY_ESCAPE)) == GLFW_PRESS)
-			glfwSetWindowShouldClose(_glfwWindow, GL_TRUE);
+			glfwSetWindowShouldClose(m_glfwWindow, GL_TRUE);
 	}
 	
 	KeyState Window::getKeyState(Key key)
 	{
-		return static_cast<KeyState>(glfwGetKey(_glfwWindow, key));
+		return static_cast<KeyState>(glfwGetKey(m_glfwWindow, key));
+	}
+
+	float Window::time()
+	{
+		return static_cast<float>(glfwGetTime());
 	}
 }

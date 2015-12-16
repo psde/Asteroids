@@ -12,12 +12,12 @@ namespace Graphics
 	{
 		friend class Program;
 	private:
-		GLuint _shader;
+		GLuint m_shader;
 
-		std::string _name;
-		GLuint _type;
-		std::string _content;
-		std::string _global;
+		std::string m_name;
+		GLuint m_type;
+		std::string m_content;
+		std::string m_global;
 
 		std::string loadShaderfile(std::string filename);
 
@@ -27,8 +27,8 @@ namespace Graphics
 
 		bool load();
 		bool needsReload();
-		GLuint id() { return _shader; }
-		std::string name() { return _name; }
-		GLuint type() { return _type; }
+		GLuint id() { return m_shader; }
+		std::string name() { return m_name; }
+		GLuint type() { return m_type; }
 	};
 }

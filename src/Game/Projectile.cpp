@@ -9,13 +9,13 @@ namespace Game
 {
 	Projectile::Projectile(float lifetime, bool friendly)
 		: GameObject(new Components::CollisionComponent(), new Components::PhysicsEuler())
-		, _shader(Graphics::Program::getProgram("data/shader/entity.glsl"))
-		, _launched(false)
-		, _time(0.f)
-		, _lifetime(lifetime)
-		, _friendly(friendly)
+		, m_shader(Graphics::Program::getProgram("data/shader/entity.glsl"))
+		, m_launched(false)
+		, m_time(0.f)
+		, m_lifetime(lifetime)
+		, m_friendly(friendly)
 	{
-		_physicsComponent->reset(Math::vec2(0.f), Math::vec2(0.f));
+		m_physicsComponent->reset(Math::vec2(0.f), Math::vec2(0.f));
 
 		float size = 1.15f;
 
@@ -28,8 +28,8 @@ namespace Game
 			vertices.push_back(Math::vec2(sin(r), cos(r)) * size);
 		}
 
-		_mesh.reset(new Graphics::Mesh(vertices));
-		_collisionComponent->setCollisionMesh(_mesh.get());
+		m_mesh.reset(new Graphics::Mesh(vertices));
+		m_collisionComponent->setCollisionMesh(m_mesh.get());
 	}
 
 	void Projectile::update(float delta)
@@ -37,47 +37,47 @@ namespace Game
 		if(launched() == false)
 			return;
 
-		_time -= delta;
-		_physicsComponent->update(delta);
+		m_time -= delta;
+		m_physicsComponent->update(delta);
 
-		_collisionComponent->setPosition(_physicsComponent->getPosition());
+		m_collisionComponent->setPosition(m_physicsComponent->getPosition());
 
-		if (_time <= 0.f)
+		if (m_time <= 0.f)
 		{
-			_launched = false;
+			m_launched = false;
 		}
 	}
 
 	void Projectile::draw()
 	{
-		_shader->use();
-		_shader->uniform("size") = 1.0f;
+		m_shader->use();
+		m_shader->uniform("size") = 1.0f;
 
 		for (int y = -1; y <= 1; ++y)
 		{
 			for (int x = -1; x <= 1; ++x)
 			{
-				_shader->uniform("position") = _physicsComponent->getPosition() + Math::vec2(800 * x, 600 * y);
-				_mesh->draw(Graphics::DrawMode::LineStrip);
+				m_shader->uniform("position") = m_physicsComponent->getPosition() + Math::vec2(800 * x, 600 * y);
+				m_mesh->draw(Graphics::DrawMode::LineStrip);
 			}
 		}
 	}
 
 	bool Projectile::launched()
 	{
-		return _launched;
+		return m_launched;
 	}
 
 	void Projectile::shoot(Math::vec2 position, Math::vec2 direction)
 	{
-		_launched = true;
-		_time = _lifetime;
-		_physicsComponent->reset(position, direction * 275.f);
+		m_launched = true;
+		m_time = m_lifetime;
+		m_physicsComponent->reset(position, direction * 275.f);
 	}
 
 	void Projectile::reload()
 	{
-		_launched = false;
-		_physicsComponent->reset(Math::vec2(0.f), Math::vec2(0.f));
+		m_launched = false;
+		m_physicsComponent->reset(Math::vec2(0.f), Math::vec2(0.f));
 	}
 }

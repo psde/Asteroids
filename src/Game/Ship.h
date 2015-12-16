@@ -17,21 +17,21 @@ namespace Game
 	class Ship : public GameObject
 	{
 	private:
-		std::unique_ptr<Graphics::Mesh> _mesh;
-		std::unique_ptr<Graphics::Mesh> _rotatedMesh;
-		std::shared_ptr<Graphics::Program> _shader;
+		std::unique_ptr<Graphics::Mesh> m_mesh;
+		std::unique_ptr<Graphics::Mesh> m_rotatedMesh;
+		std::shared_ptr<Graphics::Program> m_shader;
 
-		float _size;
-		float _rotation;
-		bool _moving;
-		int _rotating;
-		float _reloadTime;
-		float _invicibility;
+		float m_size;
+		float m_rotation;
+		bool m_moving;
+		int m_rotating;
+		float m_reloadTime;
+		float m_invicibility;
 
-		unsigned int _lives;
-		unsigned int _score;
+		unsigned int m_lives;
+		unsigned int m_score;
 
-		std::vector<std::shared_ptr<Projectile>> _projectiles;
+		std::vector<std::shared_ptr<Projectile>> m_projectiles;
 
 		// Tries to shoot a projectile. If succeeded, a valid shared_ptr<Projectile>
 		// is returned, nullptr otherwise.
@@ -62,10 +62,10 @@ namespace Game
 		const std::shared_ptr<Projectile> handleInput();
 
 		void addScore(unsigned int points);
-		unsigned int score() { return _score; }
+		unsigned int score() { return m_score; }
 
-		void removeLive() { _lives--; }
-		unsigned int lives() { return _lives; }
-		void resetLives() { _lives = 3; }
+		void removeLive() { m_lives--; }
+		unsigned int lives() { return m_lives; }
+		void resetLives() { m_lives = 3; }
 	};
 }

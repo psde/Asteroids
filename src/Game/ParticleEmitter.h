@@ -16,10 +16,10 @@ namespace Game
 	class Particle : public GameObject
 	{
 	private:
-		float _remainingTime;
-		float _particleSize;
-		std::shared_ptr<Graphics::Program> _shader;
-		std::shared_ptr<Graphics::Mesh> _mesh;
+		float m_remainingTime;
+		float m_particleSize;
+		std::shared_ptr<Graphics::Program> m_shader;
+		std::shared_ptr<Graphics::Mesh> m_mesh;
 
 	public:
 		Particle(std::shared_ptr<Graphics::Mesh> mesh, Math::vec2 position, Math::vec2 direction);
@@ -27,14 +27,14 @@ namespace Game
 		void update(float timeDelta);
 		void draw();
 
-		bool isDead() { return _remainingTime <= 0.f; }
+		bool isDead() { return m_remainingTime <= 0.f; }
 	};
 
 	class ParticleEmitter : public GameObject
 	{
 	private:
-		std::vector<std::unique_ptr<Particle>> _particles;
-		std::shared_ptr<Graphics::Mesh> _mesh;
+		std::vector<std::unique_ptr<Particle>> m_particles;
+		std::shared_ptr<Graphics::Mesh> m_mesh;
 
 		ParticleEmitter();
 	public:

@@ -25,25 +25,24 @@ namespace Game
 			Dead,
 			WaitingForRespawn,
 			LevelTransition
-		};
+		} m_state;
 
-		Graphics::Window& _window;
-		ParticleEmitter& _emitter;
-		FontRenderer& _fontRenderer;
+		Graphics::Window& m_window;
+		ParticleEmitter& m_emitter;
+		FontRenderer& m_fontRenderer;
 
-		std::vector<std::shared_ptr<Asteroid>> _asteroids;
-		std::vector<std::shared_ptr<Projectile>> _projectiles;
-		std::unique_ptr<UFO> _ufo;
+		std::vector<std::shared_ptr<Asteroid>> m_asteroids;
+		std::vector<std::shared_ptr<Projectile>> m_projectiles;
+		std::unique_ptr<UFO> m_ufo;
 
-		Ship _ship;
-		Ship _livesRenderer;
+		Ship m_ship;
+		Ship m_remainingLives;
 
-		float _ufoTime;
+		float m_ufoTime;
 
-		int _level;
+		unsigned int m_level;
 
-		GameState _state;
-		float _stateTime;
+		float m_stateTime;
 
 		void destroyAsteroid(std::shared_ptr<Asteroid>& asteroid, bool addPoints);
 		void loadLevel();

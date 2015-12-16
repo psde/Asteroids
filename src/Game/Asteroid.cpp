@@ -132,55 +132,55 @@ namespace Game
 		std::uniform_real_distribution<float> rotation(0, 2.f * Math::pi<float>());
 		std::uniform_real_distribution<float> sizeOffset(0.f, 4.f);
 
-		_destroyed = false;
-		_size = size;
-		_shader = Graphics::Program::getProgram("data/shader/entity.glsl");
-		_rotation = rotation(gen);
+		m_destroyed = false;
+		m_size = size;
+		m_shader = Graphics::Program::getProgram("data/shader/entity.glsl");
+		m_rotation = rotation(gen);
 
 		Math::vec2 velocity = direction * Math::vec2(vel2(gen) + 30.f);
 
 		velocity *= (Asteroid::AsteroidSizes().size() - static_cast<float>(size));
 
-		_physicsComponent->reset(position, velocity);
+		m_physicsComponent->reset(position, velocity);
 
-		_meshSize = AsteroidSizes().at(_size) + sizeOffset(gen);
-		_mesh = generateAsteroid(_meshSize);
-		_mesh = std::move(_mesh->rotate(_rotation, Math::vec2(_meshSize / 2.0f)));
+		m_meshSize = AsteroidSizes().at(m_size) + sizeOffset(gen);
+		m_mesh = generateAsteroid(m_meshSize);
+		m_mesh = std::move(m_mesh->rotate(m_rotation, Math::vec2(m_meshSize / 2.0f)));
 
-		std::unique_ptr<Graphics::Mesh> collision(new Graphics::Mesh(*_mesh.get()));
-		_collisionComponent->setCollisionMesh(_mesh.get());
+		std::unique_ptr<Graphics::Mesh> collision(new Graphics::Mesh(*m_mesh.get()));
+		m_collisionComponent->setCollisionMesh(m_mesh.get());
 	}
 
 	void Asteroid::update(float delta)
 	{
-		_physicsComponent->update(delta);
+		m_physicsComponent->update(delta);
 
-		_collisionComponent->setPosition(_physicsComponent->getPosition());
+		m_collisionComponent->setPosition(m_physicsComponent->getPosition());
 	}
 
 	void Asteroid::draw()
 	{
-		_shader->use();
-		_shader->uniform("size") = 1.0f;
+		m_shader->use();
+		m_shader->uniform("size") = 1.0f;
 
 		for (int y = -1; y <= 1; ++y)
 		{
 			for (int x = -1; x <= 1; ++x)
 			{
-				_shader->uniform("position") = _physicsComponent->getPosition() + Math::vec2(800 * x, 600 * y);
-				_mesh->draw(Graphics::DrawMode::LineLoop);
+				m_shader->uniform("position") = m_physicsComponent->getPosition() + Math::vec2(800 * x, 600 * y);
+				m_mesh->draw(Graphics::DrawMode::LineLoop);
 			}
 		}
 	}
 
 	int Asteroid::asteroidSize()
 	{
-		return _size;
+		return m_size;
 	}
 
 	void Asteroid::destroy()
 	{
-		_destroyed = true;
+		m_destroyed = true;
 		float size = Asteroid::AsteroidSizes().at(asteroidSize());
 		auto pos = physicsComponent()->getPosition() + (size / 2.f);
 

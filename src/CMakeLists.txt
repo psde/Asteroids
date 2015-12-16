@@ -1,10 +1,3 @@
-# Graphics sources
-list(APPEND SRC_GRAPHICS
-	Graphics/Graphics.h
-	Graphics/Graphics.cpp
-)
-SOURCE_GROUP("Graphics" FILES ${SRC_GRAPHICS})
-
 # Shader sources
 list(APPEND SRC_SHADER
 	Graphics/Shader/Globals.h

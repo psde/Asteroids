@@ -18,12 +18,12 @@ namespace Game
 	{
 	private:
 
-		std::unique_ptr<Graphics::Mesh> _mesh;
+		std::unique_ptr<Graphics::Mesh> m_mesh;
 
-		std::map<char, std::pair<int, int>> _characterLookup;
-		std::pair<int, int> _unknownCharacter;
+		std::map<char, std::pair<int, int>> m_characterLookup;
+		std::pair<int, int> m_unknownCharacter;
 
-		std::shared_ptr<Graphics::Program> _shader;
+		std::shared_ptr<Graphics::Program> m_shader;
 
 		FontRenderer();
 	public:

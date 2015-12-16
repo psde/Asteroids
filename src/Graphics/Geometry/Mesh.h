@@ -21,14 +21,14 @@ namespace Graphics
 	class Mesh
 	{
 	private:
-		GLuint _vao, _vbo, _ebo;
+		GLuint m_vao, m_vbo, m_ebo;
 
-		bool _initialized;
+		bool m_initialized;
 
-		std::vector<Math::vec2> _vertices;
-		std::vector<GLuint> _indices;
+		std::vector<Math::vec2> m_vertices;
+		std::vector<GLuint> m_indices;
 
-		Math::vec4 _boundingBox;
+		Math::vec4 m_boundingBox;
 
 		void initializeMesh();
 		void deleteMesh();
@@ -46,6 +46,6 @@ namespace Graphics
 		std::unique_ptr<Mesh> rotate(float rotation, Math::vec2 center);
 		std::unique_ptr<Mesh> scale(Math::vec2 scaling);
 
-		const std::vector<Math::vec2> &vertices() const { return _vertices; }
+		const std::vector<Math::vec2> &vertices() const { return m_vertices; }
 	};
 }

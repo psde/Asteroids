@@ -8,18 +8,17 @@
 
 #include "Math/Math.h"
 
-#include "Graphics/Graphics.h"
 #include "Graphics/Window/Window.h"
 #include "Graphics/Shader/Globals.h"
 
 namespace Game
 {
 	Game::Game()
-		: _window(Graphics::Window::instance())
-		, _emitter(ParticleEmitter::instance())
-		, _fontRenderer(FontRenderer::instance())
-		, _livesRenderer(22.5f)
-		, _stateTime(0.f)
+		: m_window(Graphics::Window::instance())
+		, m_emitter(ParticleEmitter::instance())
+		, m_fontRenderer(FontRenderer::instance())
+		, m_remainingLives(22.5f)
+		, m_stateTime(0.f)
 	{
 		reset();
 		loop();
@@ -38,13 +37,13 @@ namespace Game
 		int physicSteps = 0;
 		const int maxPhysicsStepsPerFrame = 15;
 
-		auto startTime = Graphics::getTime();
+		auto startTime = m_window.time();
 		auto endTime = startTime;
 
-		while (!_window.shouldClose())
+		while (!m_window.shouldClose())
 		{
 			float timeDelta = endTime - startTime;
-			startTime = Graphics::getTime();
+			startTime = m_window.time();
 
 			// Perform physics simulation steps
 			physicSteps = 0;
@@ -62,7 +61,7 @@ namespace Game
 			}
 
 			Graphics::ShaderGlobals::update<float>("time", endTime);
-			auto dimensions = _window.windowDimensions();
+			auto dimensions = m_window.windowDimensions();
 			auto ratio = dimensions.x / 800.0;
 			Graphics::ShaderGlobals::update<Math::vec2>("windowDimensions", dimensions / ratio);
 
@@ -78,81 +77,81 @@ namespace Game
 				frames = 0;
 			}
 
-			_window.finishFrame();
-			endTime = Graphics::getTime();
+			m_window.finishFrame();
+			endTime = m_window.time();
 		}
 	}
 
 	void Game::reset()
 	{
-		_level = 0;
-		_state = Game::LevelTransition;
-		_ship.resetLives();
+		m_level = 0;
+		m_state = Game::LevelTransition;
+		m_ship.resetLives();
 
 		loadLevel();
 	}
 
 	void Game::loadLevel()
 	{
-		_ship.resetPosition();
-		_asteroids.clear();
-		_emitter.reset();
-		for (int i = 0; i < 2 + _level; ++i)
+		m_ship.resetPosition();
+		m_asteroids.clear();
+		m_emitter.reset();
+		for (decltype(m_level) i = 0; i < 2 + m_level; ++i)
 		{
-			_asteroids.push_back(std::make_shared<Asteroid>());
+			m_asteroids.push_back(std::make_shared<Asteroid>());
 		}
 
-		_ufo.reset();
-		_ufoTime = 20.f;
+		m_ufo.reset();
+		m_ufoTime = 20.f;
 	}
 
 	void Game::updateState(float timeDelta)
 	{
-		_stateTime -= timeDelta;
-		switch(_state)
+		m_stateTime -= timeDelta;
+		switch(m_state)
 		{
 			case WaitingForStart:
 			case WaitingForRespawn:
-				if (_stateTime <= 0.f)
+				if (m_stateTime <= 0.f)
 				{
-					if (_state == Game::WaitingForRespawn)
+					if (m_state == Game::WaitingForRespawn)
 					{
-						_ship.resetPosition();
-						_ship.makeInvincible();
+						m_ship.resetPosition();
+						m_ship.makeInvincible();
 					}
-					_state = Game::Playing;
+					m_state = Game::Playing;
 				}
 				break;
 			case LevelTransition:
-				if (_stateTime <= 0.f)
+				if (m_stateTime <= 0.f)
 				{
-					_state = Game::WaitingForStart;
-					_stateTime = 1.f;
-					_level++;
+					m_state = Game::WaitingForStart;
+					m_stateTime = 1.f;
+					m_level++;
 					loadLevel();
 				}
 				break;
 			case Playing:
-				if (_asteroids.size() == 0)
+				if (m_asteroids.size() == 0)
 				{
-					_state = Game::LevelTransition;
-					_stateTime = 2.f;
+					m_state = Game::LevelTransition;
+					m_stateTime = 2.f;
 				}
 				break;
 			case Dead:
-				if (_ship.lives() <= 0)
+				if (m_ship.lives() <= 0)
 				{
-					_state = Game::GameOver;
+					m_state = Game::GameOver;
 				}
 				else
 				{
-					_ship.removeLive();
-					_state = Game::WaitingForRespawn;
-					_stateTime = 2.f;
+					m_ship.removeLive();
+					m_state = Game::WaitingForRespawn;
+					m_stateTime = 2.f;
 				}
 			case GameOver:
-				if (_window.getKeyState(Graphics::KEY_ENTER) == Graphics::KeyState::Press
-					|| _window.getKeyState(Graphics::KEY_KP_ENTER) == Graphics::KeyState::Press)
+				if (m_window.getKeyState(Graphics::KEY_ENTER) == Graphics::KeyState::Press
+					|| m_window.getKeyState(Graphics::KEY_KP_ENTER) == Graphics::KeyState::Press)
 				{
 					reset();
 				}
@@ -166,29 +165,29 @@ namespace Game
 		std::vector<std::pair<std::shared_ptr<Asteroid>, bool>> destroyedAsteroids;
 
 		// Resolve Ufo -> Player collision
-		if (_ufo &&  _ufo->collidesWith(_ship))
+		if (m_ufo && m_ufo->collidesWith(m_ship))
 		{
 			// Destroy ufo
-			_ufo->destroy();
-			_ufo.reset(nullptr);
+			m_ufo->destroy();
+			m_ufo.reset(nullptr);
 
-			if (_ship.isInvincible() == false)
+			if (m_ship.isInvincible() == false)
 			{
 				// Player is dead, set state and release particle cloud
-				_state = Game::Dead;
-				_ship.destroy();
+				m_state = Game::Dead;
+				m_ship.destroy();
 			}
 		}
 
 		// Resolve Asteroids -> Everything collisions
-		for (auto asteroid : _asteroids)
+		for (auto asteroid : m_asteroids)
 		{
 			// If the asteroid is destroyed, we do not need to consider it
 			if(asteroid->isDestroyed())
 				continue;
 
 			// Resolve Asteroid -> Projectiles collisions
-			for(auto projectile : _projectiles)
+			for(auto projectile : m_projectiles)
 			{
 				// If the projectile is not launched, we do not need to consider it
 				if(projectile->launched() == false)
@@ -212,11 +211,11 @@ namespace Game
 			if(asteroid->isDestroyed())
 				continue;
 
-			if (_ufo && _ufo->collidesWith(asteroid.get()))
+			if (m_ufo && m_ufo->collidesWith(asteroid.get()))
 			{
 				// Destroy Ufo
-				_ufo->destroy();
-				_ufo.reset(nullptr);
+				m_ufo->destroy();
+				m_ufo.reset(nullptr);
 
 				// Destroy asteroid and don't add to score
 				asteroid->destroy();
@@ -228,13 +227,13 @@ namespace Game
 				continue;
 
 			// Resolve Asteroid -> Ship collision
-			if (_state == Game::Playing && _ship.collidesWith(asteroid.get()))
+			if (m_state == Game::Playing && m_ship.collidesWith(asteroid.get()))
 			{
-				if (_ship.isInvincible() == false)
+				if (m_ship.isInvincible() == false)
 				{
 					// Player is dead, set state and release particle cloud
-					_state = Game::Dead;
-					_ship.destroy();
+					m_state = Game::Dead;
+					m_ship.destroy();
 				}
 
 				// Destroy asteroid and don't add to score
@@ -244,33 +243,33 @@ namespace Game
 		}
 
 		// Resolve Projectile -> Ship/UFO collisions
-		for (auto projectile : _projectiles)
+		for (auto projectile : m_projectiles)
 		{
 			// If the projectile is not launched, we do not need to consider it
 			if (projectile->launched() == false)
 				continue;
 
-			if (_ufo && projectile->collidesWith(_ufo.get()))
+			if (m_ufo && projectile->collidesWith(m_ufo.get()))
 			{
 				// Destroy Ufo
-				_ufo->destroy();
-				_ufo.reset(nullptr);
+				m_ufo->destroy();
+				m_ufo.reset(nullptr);
 
 				// Add to score if projectile originated from player 
 				if (projectile->friendly())
-					_ship.addScore(500);
+					m_ship.addScore(500);
 				
 				// Reload projectile
 				projectile->reload();
 			}
 
-			if (_state == Game::Playing && projectile->collidesWith(_ship))
+			if (m_state == Game::Playing && projectile->collidesWith(m_ship))
 			{
-				if (_ship.isInvincible() == false)
+				if (m_ship.isInvincible() == false)
 				{
 					// Player is dead, set state and release particle cloud
-					_state = Game::Dead;
-					_ship.destroy();
+					m_state = Game::Dead;
+					m_ship.destroy();
 				}
 				projectile->reload();
 			}
@@ -282,16 +281,16 @@ namespace Game
 		}
 
 		// Delete non-launched projectiles
-		_projectiles.erase(std::remove_if(std::begin(_projectiles),
-										  std::end(_projectiles),
-										  [](const std::shared_ptr<Projectile>& d){ return !d->launched(); }),
-						   std::end(_projectiles));
+		m_projectiles.erase(std::remove_if(std::begin(m_projectiles),
+										   std::end(m_projectiles),
+										   [](const std::shared_ptr<Projectile>& d){ return !d->launched(); }),
+							std::end(m_projectiles));
 
 		// Delete destroyed asteroids
-		_asteroids.erase(std::remove_if(std::begin(_asteroids),
-										std::end(_asteroids),
-										[](const std::shared_ptr<Asteroid>& d){ return d->isDestroyed(); }),
-						 std::end(_asteroids));
+		m_asteroids.erase(std::remove_if(std::begin(m_asteroids),
+										 std::end(m_asteroids),
+										 [](const std::shared_ptr<Asteroid>& d){ return d->isDestroyed(); }),
+						  std::end(m_asteroids));
 	}
 
 	void Game::destroyAsteroid(std::shared_ptr<Asteroid>& asteroid, bool addPoints)
@@ -302,7 +301,7 @@ namespace Game
 
 		// Add to score if needed
 		if (addPoints)
-			_ship.addScore((Asteroid::AsteroidSizes().size() - size) * 100);
+			m_ship.addScore((Asteroid::AsteroidSizes().size() - size) * 100);
 
 		// Flag asteroid as destroyed
 		asteroid->destroy();
@@ -316,69 +315,69 @@ namespace Game
 			Math::vec2 dir = Math::normalize(asteroid->physicsComponent()->getVelocity());
 
 			dir = Math::rotate(dir, 0.5f * Math::pi<float>());
-			_asteroids.push_back(std::make_shared<Asteroid>(size, pos + (dir * asteroidSize / 2.f), dir));
-			_asteroids.push_back(std::make_shared<Asteroid>(size, pos + (-dir * asteroidSize / 2.f), -dir));
+			m_asteroids.push_back(std::make_shared<Asteroid>(size, pos + (dir * asteroidSize / 2.f), dir));
+			m_asteroids.push_back(std::make_shared<Asteroid>(size, pos + (-dir * asteroidSize / 2.f), -dir));
 		}
 	}
 
 	void Game::update(float timeDelta)
 	{
 		// Cheats!
-		if (_window.getKeyState(Graphics::KEY_DELETE) == Graphics::KeyState::Press)
+		if (m_window.getKeyState(Graphics::KEY_DELETE) == Graphics::KeyState::Press)
 		{
-			//_lives = 3;
-			_asteroids.clear();
+			//m_lives = 3;
+			m_asteroids.clear();
 		}
 
 		updateState(timeDelta);
 
 		// Input
-		if (_state == Game::Playing || _state == Game::LevelTransition)
+		if (m_state == Game::Playing || m_state == Game::LevelTransition)
 		{
-			auto projectile = _ship.handleInput();
+			auto projectile = m_ship.handleInput();
 			if (projectile)
 			{
-				_projectiles.push_back(projectile);
+				m_projectiles.push_back(projectile);
 			}
 		}
 
-		if (_state != Game::GameOver && _state != Game::WaitingForRespawn && _state != Game::WaitingForStart)
+		if (m_state != Game::GameOver && m_state != Game::WaitingForRespawn && m_state != Game::WaitingForStart)
 		{
-			_ship.update(timeDelta);
+			m_ship.update(timeDelta);
 		}
 
-		if (_state != Game::WaitingForStart)
+		if (m_state != Game::WaitingForStart)
 		{
-			_emitter.update(timeDelta);
+			m_emitter.update(timeDelta);
 			
-			for (auto asteroid : _asteroids)
+			for (auto asteroid : m_asteroids)
 			{
 				asteroid->update(timeDelta);
 			}
 
-			for (auto p : _projectiles)
+			for (auto p : m_projectiles)
 			{
 				p->update(timeDelta);
 			}
 
-			if (_ufo)
+			if (m_ufo)
 			{
-				_ufo->update(timeDelta);
-				auto projectile = _ufo->shoot();
+				m_ufo->update(timeDelta);
+				auto projectile = m_ufo->shoot();
 
 				if (projectile)
 				{
-					_projectiles.push_back(projectile);
+					m_projectiles.push_back(projectile);
 				}
 			}
 			else
 			{
-				_ufoTime -= timeDelta;
+				m_ufoTime -= timeDelta;
 
-				if (_ufoTime <= 0.f)
+				if (m_ufoTime <= 0.f)
 				{
-					_ufo.reset(new UFO());
-					_ufoTime = 20.f;
+					m_ufo.reset(new UFO());
+					m_ufoTime = 20.f;
 				}
 			}
 
@@ -388,59 +387,59 @@ namespace Game
 
 	void Game::draw()
 	{
-		for (auto asteroid : _asteroids)
+		for (auto asteroid : m_asteroids)
 		{
 			asteroid->draw();
 		}
 
-		if(_ufo)
-			_ufo->draw();
+		if(m_ufo)
+			m_ufo->draw();
 
-		if (_state != Game::Dead && _state != Game::WaitingForRespawn && _state != Game::GameOver)
-			_ship.draw();
+		if (m_state != Game::Dead && m_state != Game::WaitingForRespawn && m_state != Game::GameOver)
+			m_ship.draw();
 
-		for (auto p : _projectiles)
+		for (auto p : m_projectiles)
 		{
 			if (p->launched())
 				p->draw();
 		}
 
-		_emitter.draw();
+		m_emitter.draw();
 
 
-		if (_state == Game::GameOver)
+		if (m_state == Game::GameOver)
 		{
-			_fontRenderer.draw(Math::vec2(220, 260), "GAME OVER", 40.f);
-			_fontRenderer.draw(Math::vec2(210, 330), "PRESS RETURN TO PLAY AGAIN", 15.f);
+			m_fontRenderer.draw(Math::vec2(220, 260), "GAME OVER", 40.f);
+			m_fontRenderer.draw(Math::vec2(210, 330), "PRESS RETURN TO PLAY AGAIN", 15.f);
 		}
 		else
 		{
-			if (_state == Game::WaitingForStart)
+			if (m_state == Game::WaitingForStart)
 			{
-				_fontRenderer.draw(Math::vec2(310, 240), "GET READY", 20.f);
+				m_fontRenderer.draw(Math::vec2(310, 240), "GET READY", 20.f);
 			}
-			else if (_state == Game::LevelTransition)
+			else if (m_state == Game::LevelTransition)
 			{
-				_fontRenderer.draw(Math::vec2(260, 240), "CONGRATULATIONS", 20.f);
+				m_fontRenderer.draw(Math::vec2(260, 240), "CONGRATULATIONS", 20.f);
 			}
 
-			_fontRenderer.draw(Math::vec2(10, 35), "LIVES", 17.f);
-			for (unsigned int i = 0; i < _ship.lives(); i++)
+			m_fontRenderer.draw(Math::vec2(10, 35), "LIVES", 17.f);
+			for (unsigned int i = 0; i < m_ship.lives(); i++)
 			{
-				Components::PhysicsComponent *component = const_cast<Components::PhysicsComponent*>(_livesRenderer.physicsComponent());
+				Components::PhysicsComponent *component = const_cast<Components::PhysicsComponent*>(m_remainingLives.physicsComponent());
 				component->reset(Math::vec2(110.f + i * 15.f, 32.f), Math::vec2(0));
-				_livesRenderer.draw();
+				m_remainingLives.draw();
 			}
 
 			std::stringstream scoress;
-			scoress << "SCORE " << std::setw(4) << std::setfill('0') << _ship.score();
+			scoress << "SCORE " << std::setw(4) << std::setfill('0') << m_ship.score();
 			std::string score = scoress.str();
-			_fontRenderer.draw(Math::vec2(10, 10), score, 17.f);
+			m_fontRenderer.draw(Math::vec2(10, 10), score, 17.f);
 
 			std::stringstream levelss;
-			levelss << "LEVEL " << std::setw(2) << std::setfill('0') << _level;
+			levelss << "LEVEL " << std::setw(2) << std::setfill('0') << m_level;
 			std::string level = levelss.str();
-			_fontRenderer.draw(Math::vec2(660, 10), level, 17.f);
+			m_fontRenderer.draw(Math::vec2(660, 10), level, 17.f);
 		}
 	}
 }

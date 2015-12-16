@@ -12,8 +12,8 @@ namespace Game
 	class GameObject
 	{
 	protected:
-		Components::CollisionComponent* _collisionComponent;
-		Components::PhysicsComponent* _physicsComponent;
+		Components::CollisionComponent* m_collisionComponent;
+		Components::PhysicsComponent* m_physicsComponent;
 
 	public:
 		GameObject(Components::CollisionComponent* c, Components::PhysicsComponent* p);

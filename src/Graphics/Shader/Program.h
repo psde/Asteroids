@@ -18,13 +18,13 @@ namespace Graphics
 	{
 	private:
 
-		GLuint _shaderProgram;
-		bool _linked;
+		GLuint m_shaderProgram;
+		bool m_linked;
 
 		bool addShader(GLuint type, std::string file);
 
-		std::vector<std::shared_ptr<Shader>> _shaders;
-		std::map<std::string, GLuint> _uniformLocations;
+		std::vector<std::shared_ptr<Shader>> m_shaders;
+		std::map<std::string, GLuint> m_uniformLocations;
 
 		void link();
 

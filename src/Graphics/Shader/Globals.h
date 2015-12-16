@@ -22,20 +22,20 @@ namespace Graphics
 		class ShaderValue : public ShaderValueBase
 		{
 		private:
-			std::string _name;
-			T _val;
+			std::string m_name;
+			T m_val;
 
 		public:
-			ShaderValue(std::string name, T val) : _name(name), _val(val) { }
+			ShaderValue(std::string name, T val) : m_name(name), m_val(val) { }
 
 			void updateValue(T val)
 			{
-				_val = val;
+				m_val = val;
 			}
 
 			void update(Program *program)
 			{
-				(*program)[_name] = _val;
+				(*program)[m_name] = m_val;
 			}
 		};
 	}
@@ -43,7 +43,7 @@ namespace Graphics
 	class ShaderGlobals
 	{
 	private:
-		std::unordered_map<std::string, std::shared_ptr<Impl::ShaderValueBase>> _globals;
+		std::unordered_map<std::string, std::shared_ptr<Impl::ShaderValueBase>> m_globals;
 
 		ShaderGlobals() {};
 		
@@ -59,7 +59,7 @@ namespace Graphics
 		{
 			ShaderGlobals& globals = instance();
 
-			std::shared_ptr<Impl::ShaderValueBase> &entry = globals._globals[name];
+			std::shared_ptr<Impl::ShaderValueBase> &entry = globals.m_globals[name];
 
 			if (!entry)
 			{
@@ -74,7 +74,7 @@ namespace Graphics
 		{
 			ShaderGlobals& globals = instance();
 
-			for (auto &global : globals._globals)
+			for (auto &global : globals.m_globals)
 			{
 				global.second->update(program);
 			}

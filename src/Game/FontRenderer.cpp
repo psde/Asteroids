@@ -5,7 +5,7 @@
 namespace Game
 {
 	FontRenderer::FontRenderer()
-		: _shader(Graphics::Program::getProgram("data/shader/entity.glsl"))
+		: m_shader(Graphics::Program::getProgram("data/shader/entity.glsl"))
 	{
 
 		std::vector<Math::vec2> vertices;
@@ -33,54 +33,54 @@ namespace Game
 		auto R = Graphics::GeometryRestartIndex;
 
 		std::vector<GLuint> elements;
-		_characterLookup['0'] = addCharToElement(elements, { 0, 2, 8, 6, 0 });
-		_characterLookup['1'] = addCharToElement(elements, { 1, 7 });
-		_characterLookup['2'] = addCharToElement(elements, { 0, 2, 5, 3, 6, 8 });
-		_characterLookup['3'] = addCharToElement(elements, { 0, 2, 5, 3, R, 5, 8, 6 });
-		_characterLookup['4'] = addCharToElement(elements, { 0, 3, 5, 2, 8 });
-		_characterLookup['5'] = addCharToElement(elements, { 2, 0, 3, 5, 8, 6 });
-		_characterLookup['6'] = addCharToElement(elements, { 2, 0, 6, 8, 5, 3 });
-		_characterLookup['7'] = addCharToElement(elements, { 0, 2, 8 });
-		_characterLookup['8'] = addCharToElement(elements, { 3, 0, 2, 5, 3, 6, 8, 5 });
-		_characterLookup['9'] = addCharToElement(elements, { 5, 2, 0, 3, 5, 8 });
+		m_characterLookup['0'] = addCharToElement(elements, {0, 2, 8, 6, 0 });
+		m_characterLookup['1'] = addCharToElement(elements, {1, 7 });
+		m_characterLookup['2'] = addCharToElement(elements, {0, 2, 5, 3, 6, 8 });
+		m_characterLookup['3'] = addCharToElement(elements, {0, 2, 5, 3, R, 5, 8, 6 });
+		m_characterLookup['4'] = addCharToElement(elements, {0, 3, 5, 2, 8 });
+		m_characterLookup['5'] = addCharToElement(elements, {2, 0, 3, 5, 8, 6 });
+		m_characterLookup['6'] = addCharToElement(elements, {2, 0, 6, 8, 5, 3 });
+		m_characterLookup['7'] = addCharToElement(elements, {0, 2, 8 });
+		m_characterLookup['8'] = addCharToElement(elements, {3, 0, 2, 5, 3, 6, 8, 5 });
+		m_characterLookup['9'] = addCharToElement(elements, {5, 2, 0, 3, 5, 8 });
 
-		_characterLookup['.'] = addCharToElement(elements, { 4, 7 });
+		m_characterLookup['.'] = addCharToElement(elements, {4, 7 });
 
-		_characterLookup['A'] = addCharToElement(elements, { 6, 3, 1, 5, 8, R, 5, 3 });
-		_characterLookup['B'] = _characterLookup['8'];
-		_characterLookup['C'] = addCharToElement(elements, { 2, 0, 6, 8 });
-		_characterLookup['D'] = addCharToElement(elements, { 1, 0, 6, 7, 5, 1 });
-		_characterLookup['E'] = addCharToElement(elements, { 2, 0, 3, 5, R, 3, 6, 8 });
-		_characterLookup['F'] = addCharToElement(elements, { 2, 0, 6, R, 5, 3, 6 });
-		_characterLookup['G'] = addCharToElement(elements, { 2, 0, 6, 8, 5, 4 });
-		_characterLookup['H'] = addCharToElement(elements, { 6, 0, R, 3, 5, R, 2, 8 });
-		_characterLookup['I'] = addCharToElement(elements, { 0, 2, R, 1, 7, R, 6, 8 });
-		_characterLookup['J'] = addCharToElement(elements, { 0, 2, R, 1, 7, 6 });
-		_characterLookup['K'] = addCharToElement(elements, { 0, 6, R, 3, 2, R, 8, 3 });
-		_characterLookup['L'] = addCharToElement(elements, { 0, 6, 8 });
-		_characterLookup['M'] = addCharToElement(elements, { 6, 0, 4, 2, 8 });
-		_characterLookup['N'] = addCharToElement(elements, { 6, 0, 8, 2 });
-		_characterLookup['O'] = _characterLookup['0'];
-		_characterLookup['P'] = addCharToElement(elements, { 6, 0, 2, 5, 3 });
-		_characterLookup['Q'] = addCharToElement(elements, { 8, 6, 0, 2, 8, 4 });
-		_characterLookup['R'] = addCharToElement(elements, { 6, 0, 2, 5, 3, 8 });
-		_characterLookup['S'] = _characterLookup['5'];
-		_characterLookup['T'] = addCharToElement(elements, { 0, 2, R, 1, 7 });
-		_characterLookup['U'] = addCharToElement(elements, { 0, 6, 8, 2 });
-		_characterLookup['V'] = addCharToElement(elements, { 0, 3, 7, 5, 2 });
-		_characterLookup['W'] = addCharToElement(elements, { 0, 6, 4, 8, 2 });
-		_characterLookup['X'] = addCharToElement(elements, { 0, 8, R, 6, 2 });
-		_characterLookup['Y'] = addCharToElement(elements, { 0, 4, 2, R, 4, 7 });
-		_characterLookup['Z'] = addCharToElement(elements, { 0, 2, 6, 8 });
-		_unknownCharacter = addCharToElement(elements, {0, 2, 8, 6, 0, 8, R, 2, 6});
+		m_characterLookup['A'] = addCharToElement(elements, {6, 3, 1, 5, 8, R, 5, 3 });
+		m_characterLookup['B'] = m_characterLookup['8'];
+		m_characterLookup['C'] = addCharToElement(elements, {2, 0, 6, 8 });
+		m_characterLookup['D'] = addCharToElement(elements, {1, 0, 6, 7, 5, 1 });
+		m_characterLookup['E'] = addCharToElement(elements, {2, 0, 3, 5, R, 3, 6, 8 });
+		m_characterLookup['F'] = addCharToElement(elements, {2, 0, 6, R, 5, 3, 6 });
+		m_characterLookup['G'] = addCharToElement(elements, {2, 0, 6, 8, 5, 4 });
+		m_characterLookup['H'] = addCharToElement(elements, {6, 0, R, 3, 5, R, 2, 8 });
+		m_characterLookup['I'] = addCharToElement(elements, {0, 2, R, 1, 7, R, 6, 8 });
+		m_characterLookup['J'] = addCharToElement(elements, {0, 2, R, 1, 7, 6 });
+		m_characterLookup['K'] = addCharToElement(elements, {0, 6, R, 3, 2, R, 8, 3 });
+		m_characterLookup['L'] = addCharToElement(elements, {0, 6, 8 });
+		m_characterLookup['M'] = addCharToElement(elements, {6, 0, 4, 2, 8 });
+		m_characterLookup['N'] = addCharToElement(elements, {6, 0, 8, 2 });
+		m_characterLookup['O'] = m_characterLookup['0'];
+		m_characterLookup['P'] = addCharToElement(elements, {6, 0, 2, 5, 3 });
+		m_characterLookup['Q'] = addCharToElement(elements, {8, 6, 0, 2, 8, 4 });
+		m_characterLookup['R'] = addCharToElement(elements, {6, 0, 2, 5, 3, 8 });
+		m_characterLookup['S'] = m_characterLookup['5'];
+		m_characterLookup['T'] = addCharToElement(elements, {0, 2, R, 1, 7 });
+		m_characterLookup['U'] = addCharToElement(elements, {0, 6, 8, 2 });
+		m_characterLookup['V'] = addCharToElement(elements, {0, 3, 7, 5, 2 });
+		m_characterLookup['W'] = addCharToElement(elements, {0, 6, 4, 8, 2 });
+		m_characterLookup['X'] = addCharToElement(elements, {0, 8, R, 6, 2 });
+		m_characterLookup['Y'] = addCharToElement(elements, {0, 4, 2, R, 4, 7 });
+		m_characterLookup['Z'] = addCharToElement(elements, {0, 2, 6, 8 });
+		m_unknownCharacter = addCharToElement(elements, {0, 2, 8, 6, 0, 8, R, 2, 6});
 
 		// Also allow lower case characters, but use upper case
 		for (char c = 'A'; c <= 'Z'; c++)
 		{
-			_characterLookup['a' + c - 'A'] = _characterLookup[c];
+			m_characterLookup['a' + c - 'A'] = m_characterLookup[c];
 		}
 
-		_mesh.reset(new Graphics::Mesh(vertices, elements));
+		m_mesh.reset(new Graphics::Mesh(vertices, elements));
 	}
 
 	FontRenderer &FontRenderer::instance()
@@ -91,24 +91,24 @@ namespace Game
 
 	void FontRenderer::draw(Math::vec2 position, std::string text, float size)
 	{
-		_shader->use();
-		_shader->uniform("size") = size;
+		m_shader->use();
+		m_shader->uniform("size") = size;
 
 		for (char &c : text)
 		{
-			_shader->uniform("position") = position;
+			m_shader->uniform("position") = position;
 
 			if(c != ' ')
 			{
-				auto it = _characterLookup.find(c);
+				auto it = m_characterLookup.find(c);
 
-				if (it != std::end(_characterLookup))
+				if (it != std::end(m_characterLookup))
 				{
-					_mesh->draw(Graphics::DrawMode::LineStrip, it->second.first, it->second.second);
+					m_mesh->draw(Graphics::DrawMode::LineStrip, it->second.first, it->second.second);
 				}
 				else
 				{
-					_mesh->draw(Graphics::DrawMode::LineStrip, _unknownCharacter.first, _unknownCharacter.second);
+					m_mesh->draw(Graphics::DrawMode::LineStrip, m_unknownCharacter.first, m_unknownCharacter.second);
 				}
 			}
 

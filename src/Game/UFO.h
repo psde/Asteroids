@@ -17,15 +17,15 @@ namespace Game
 	class UFO : public GameObject
 	{
 	private:
-		std::unique_ptr<Graphics::Mesh> _mesh;
-		std::shared_ptr<Graphics::Program> _shader;
+		std::unique_ptr<Graphics::Mesh> m_mesh;
+		std::shared_ptr<Graphics::Program> m_shader;
 
-		float _size;
-		float _reloadTime;
+		float m_size;
+		float m_reloadTime;
 
-		std::vector<std::shared_ptr<Projectile>> _projectiles;
+		std::vector<std::shared_ptr<Projectile>> m_projectiles;
 
-		float _movementTimeRemaining;
+		float m_movementTimeRemaining;
 
 	public:
 		UFO(float size = 50.f);

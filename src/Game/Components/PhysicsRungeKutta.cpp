@@ -17,15 +17,15 @@ namespace Components
 
 	void PhysicsRungeKutta::reset(Math::vec2 position, Math::vec2 velocity)
 	{
-		_state.position = position;
-		_state.velocity = velocity;
+		m_state.position = position;
+		m_state.velocity = velocity;
 	}
 
 	PhysicsState PhysicsRungeKutta::evaluate(const PhysicsState &initial)
 	{
 		PhysicsState output;
 		output.position = initial.velocity;
-		output.velocity = _acceleration;
+		output.velocity = m_acceleration;
 		return output;
 	}
 
@@ -36,7 +36,7 @@ namespace Components
 		state.velocity = initial.velocity + d.velocity*dt;
 		PhysicsState output;
 		output.position = state.velocity;
-		output.velocity = _acceleration;
+		output.velocity = m_acceleration;
 		return output;
 	}
 
@@ -56,9 +56,9 @@ namespace Components
 
 	void PhysicsRungeKutta::update(float timeDelta)
 	{
-		integrate(_state, timeDelta);
+		integrate(m_state, timeDelta);
 
-		applyTerminalVelocity(_state);
-		performWrapAround(_state);
+		applyTerminalVelocity(m_state);
+		performWrapAround(m_state);
 	}
 }

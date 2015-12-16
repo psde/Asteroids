@@ -9,7 +9,7 @@ namespace Graphics
 	class UniformAssigner
 	{
 	private:
-		GLuint _location;
+		GLuint m_location;
 
 	public:
 		explicit UniformAssigner(GLuint location);

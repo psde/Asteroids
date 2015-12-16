@@ -8,9 +8,9 @@
 namespace Graphics
 {
 	Program::Program(std::string universalShader)
-		: _linked(false)
+		: m_linked(false)
 	{
-		_shaderProgram = glCreateProgram();
+		m_shaderProgram = glCreateProgram();
 		addUniversalShader(universalShader);
 	}
 
@@ -21,11 +21,11 @@ namespace Graphics
 	bool Program::addShader(GLuint type, std::string file)
 	{
 		std::shared_ptr<Shader> shader(new Shader(file, type));
-		_shaders.push_back(shader);
+		m_shaders.push_back(shader);
 
 		if (shader->load())
 		{
-			glAttachShader(_shaderProgram, shader->id());
+			glAttachShader(m_shaderProgram, shader->id());
 		}
 		return true;
 	}
@@ -48,7 +48,7 @@ namespace Graphics
 
 	bool Program::needsReload()
 	{
-		for (auto shader : _shaders)
+		for (auto shader : m_shaders)
 		{
 			if (shader->needsReload())
 			{
@@ -63,11 +63,11 @@ namespace Graphics
 		if (needsReload() == false)
 			return false;
 
-		_linked = false;
-		_shaderProgram = glCreateProgram();
+		m_linked = false;
+		m_shaderProgram = glCreateProgram();
 
-		auto oldShaders = _shaders;
-		_shaders.clear();
+		auto oldShaders = m_shaders;
+		m_shaders.clear();
 		for (auto shader : oldShaders)
 		{
 			addShader(shader->type(), shader->name());
@@ -75,35 +75,35 @@ namespace Graphics
 
 		link();
 
-		_uniformLocations.clear();
+		m_uniformLocations.clear();
 
 		return true;
 	}
 
 	void Program::link()
 	{
-		if (_linked == false)
+		if (m_linked == false)
 		{
-			glLinkProgram(_shaderProgram);
+			glLinkProgram(m_shaderProgram);
 
 			GLint isCompiled = 0;
-			glGetProgramiv(_shaderProgram, GL_LINK_STATUS, &isCompiled);
+			glGetProgramiv(m_shaderProgram, GL_LINK_STATUS, &isCompiled);
 
 			if (isCompiled == GL_FALSE)
 			{
 				GLint maxLength = 1000;
-				glGetProgramiv(_shaderProgram, GL_INFO_LOG_LENGTH, &maxLength);
+				glGetProgramiv(m_shaderProgram, GL_INFO_LOG_LENGTH, &maxLength);
 
 				std::vector<char> errorLog(maxLength);
-				glGetProgramInfoLog(_shaderProgram, maxLength, &maxLength, &errorLog[0]);
+				glGetProgramInfoLog(m_shaderProgram, maxLength, &maxLength, &errorLog[0]);
 
 				std::cerr << "Failed to compile program" << std::endl << &errorLog[0] << std::endl;
 
-				glDeleteProgram(_shaderProgram);
+				glDeleteProgram(m_shaderProgram);
 				return;
 			}
 
-			_linked = true;
+			m_linked = true;
 		}
 	}
 
@@ -118,7 +118,7 @@ namespace Graphics
 		}
 
 		link();
-		glUseProgram(_shaderProgram);
+		glUseProgram(m_shaderProgram);
 
 		ShaderGlobals::updateProgram(this);
 	}
@@ -126,7 +126,7 @@ namespace Graphics
 	GLuint Program::getProgram()
 	{
 		link();
-		return _shaderProgram;
+		return m_shaderProgram;
 	}
 
 
@@ -138,11 +138,11 @@ namespace Graphics
 	UniformAssigner Program::operator[](const std::string& uniformName)
 	{
 		GLuint location = -1;
-		auto it = _uniformLocations.find(uniformName);
-		if (it == _uniformLocations.end())
+		auto it = m_uniformLocations.find(uniformName);
+		if (it == m_uniformLocations.end())
 		{
-			location = glGetUniformLocation(_shaderProgram, uniformName.c_str());
-			_uniformLocations[uniformName] = location;
+			location = glGetUniformLocation(m_shaderProgram, uniformName.c_str());
+			m_uniformLocations[uniformName] = location;
 		}
 		else
 		{

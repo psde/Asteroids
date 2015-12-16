@@ -17,16 +17,16 @@ namespace Components
 
 	void PhysicsEuler::reset(Math::vec2 position, Math::vec2 velocity)
 	{
-		_state.position = position;
-		_state.velocity = velocity;
+		m_state.position = position;
+		m_state.velocity = velocity;
 	}
 
 	void PhysicsEuler::update(float timeDelta)
 	{
-		_state.position += _state.velocity * timeDelta;
-		_state.velocity += _acceleration * timeDelta;
+		m_state.position += m_state.velocity * timeDelta;
+		m_state.velocity += m_acceleration * timeDelta;
 
-		applyTerminalVelocity(_state);
-		performWrapAround(_state);
+		applyTerminalVelocity(m_state);
+		performWrapAround(m_state);
 	}
 }

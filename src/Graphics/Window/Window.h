@@ -145,7 +145,7 @@ namespace Graphics
 	class Window
 	{
 	private:
-		GLFWwindow *_glfwWindow;
+		GLFWwindow *m_glfwWindow;
 
 		Window(int width, int height);
 		
@@ -166,5 +166,7 @@ namespace Graphics
 		void finishFrame();
 		
 		KeyState getKeyState(Key key);
+
+		float time();
 	};
 }

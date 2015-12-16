@@ -16,13 +16,13 @@ namespace Game
 	class Projectile : public GameObject
 	{
 	private:
-		std::unique_ptr<Graphics::Mesh> _mesh;
-		std::shared_ptr<Graphics::Program> _shader;
+		std::unique_ptr<Graphics::Mesh> m_mesh;
+		std::shared_ptr<Graphics::Program> m_shader;
 
-		bool _launched;
-		float _time;
-		float _lifetime;
-		bool _friendly;
+		bool m_launched;
+		float m_time;
+		float m_lifetime;
+		bool m_friendly;
 
 	public:
 		Projectile(float lifetime, bool friendly);
@@ -42,6 +42,6 @@ namespace Game
 		// Reloads the projectile, allowing it to be fired again
 		void reload();
 
-		bool friendly() { return _friendly; }
+		bool friendly() { return m_friendly; }
 	};
 }

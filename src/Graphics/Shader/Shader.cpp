@@ -8,18 +8,18 @@
 namespace Graphics
 {
 	Shader::Shader(std::string name, GLuint type)
-		:_name(name), _type(type)
+		: m_name(name), m_type(type)
 	{
 	}
 
 	Shader::~Shader()
 	{
-		glDeleteShader(_shader);
+		glDeleteShader(m_shader);
 	}
 
 	bool Shader::needsReload()
 	{
-		if (loadShaderfile(_name) != _content || loadShaderfile("data/shader/global.inc.glsl") != _global)
+		if (loadShaderfile(m_name) != m_content || loadShaderfile("data/shader/global.inc.glsl") != m_global)
 		{
 			return true;
 		}
@@ -42,13 +42,13 @@ namespace Graphics
 
 	bool Shader::load()
 	{
-		_global = loadShaderfile("data/shader/global.inc.glsl");
-		_content = loadShaderfile(_name);
+		m_global = loadShaderfile("data/shader/global.inc.glsl");
+		m_content = loadShaderfile(m_name);
 
 		std::stringstream source;
 		source << "#version 330 core\n";
 
-		switch (_type)
+		switch (m_type)
 		{
 		case GL_GEOMETRY_SHADER:
 			source << "#define GEOMETRY\n";
@@ -61,34 +61,34 @@ namespace Graphics
 			break;
 
 		default:
-			std::cout << "Unknown shader type " << _type << std::endl;
+			std::cout << "Unknown shader type " << m_type << std::endl;
 		}
 
-		source << _global << "\n";
+		source << m_global << "\n";
 		source << "#line 0\n";
-		source << _content;
+		source << m_content;
 
-		_shader = glCreateShader(_type);
-		std::cout << _type << " -> " << _shader << std::endl;
+		m_shader = glCreateShader(m_type);
+		std::cout << m_type << " -> " << m_shader << std::endl;
 		std::string s = source.str();
 		const char *src = s.c_str();
-		glShaderSource(_shader, 1, &src, NULL);
-		glCompileShader(_shader);
+		glShaderSource(m_shader, 1, &src, NULL);
+		glCompileShader(m_shader);
 
 		GLint isCompiled = 0;
-		glGetShaderiv(_shader, GL_COMPILE_STATUS, &isCompiled);
+		glGetShaderiv(m_shader, GL_COMPILE_STATUS, &isCompiled);
 
 		if (isCompiled == GL_FALSE)
 		{
 			GLint maxLength = 1000;
-			glGetShaderiv(_shader, GL_INFO_LOG_LENGTH, &maxLength);
+			glGetShaderiv(m_shader, GL_INFO_LOG_LENGTH, &maxLength);
 
 			std::vector<char> errorLog(maxLength);
-			glGetShaderInfoLog(_shader, maxLength, &maxLength, &errorLog[0]);
+			glGetShaderInfoLog(m_shader, maxLength, &maxLength, &errorLog[0]);
 
-			std::cerr << "Failed to compile shader '" << _name << "'" << std::endl << &errorLog[0] << std::endl;
+			std::cerr << "Failed to compile shader '" << m_name << "'" << std::endl << &errorLog[0] << std::endl;
 
-			glDeleteShader(_shader);
+			glDeleteShader(m_shader);
 			return false;
 		}
 

@@ -6,8 +6,8 @@ namespace Game
 {
 	GameObject::GameObject(Components::CollisionComponent *collision,
 						   Components::PhysicsComponent *physics)
-		: _collisionComponent(collision)
-		, _physicsComponent(physics)
+		: m_collisionComponent(collision)
+		, m_physicsComponent(physics)
 	{
 
 	}
@@ -27,11 +27,11 @@ namespace Game
 
 	const Components::CollisionComponent *GameObject::collisionComponent() const
 	{
-		return _collisionComponent;
+		return m_collisionComponent;
 	}
 
 	const Components::PhysicsComponent *GameObject::physicsComponent() const
 	{
-		return _physicsComponent;
+		return m_physicsComponent;
 	}
 }

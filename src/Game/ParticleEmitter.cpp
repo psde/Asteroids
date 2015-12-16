@@ -6,35 +6,35 @@ namespace Game
 {
 	Particle::Particle(std::shared_ptr<Graphics::Mesh> mesh, Math::vec2 position, Math::vec2 direction)
 		: GameObject(nullptr, new Components::PhysicsEuler())
-		, _shader(Graphics::Program::getProgram("data/shader/particle.glsl"))
-		, _mesh(mesh)
+		, m_shader(Graphics::Program::getProgram("data/shader/particle.glsl"))
+		, m_mesh(mesh)
 	{
-		_physicsComponent->reset(position, direction * 10.f);
+		m_physicsComponent->reset(position, direction * 10.f);
 
 		std::random_device rd;
 		std::mt19937 gen(rd());
 		std::uniform_real_distribution<float> size(0.25f, 0.75f);
 		std::uniform_real_distribution<float> time(2.2f, 3.75f);
 
-		_remainingTime = time(gen);
-		_particleSize = size(gen);
+		m_remainingTime = time(gen);
+		m_particleSize = size(gen);
 	}
 
 	void Particle::update(float timeDelta)
 	{
-		_physicsComponent->update(timeDelta);
-		_physicsComponent->setAcceleration(Math::vec2(-1.f));
-		_remainingTime -= timeDelta;
+		m_physicsComponent->update(timeDelta);
+		m_physicsComponent->setAcceleration(Math::vec2(-1.f));
+		m_remainingTime -= timeDelta;
 	}
 
 	void Particle::draw()
 	{
-		_shader->use();
+		m_shader->use();
 
-		_shader->uniform("remainingTime") = _remainingTime;
-		_shader->uniform("size") = _particleSize;
-		_shader->uniform("position") = _physicsComponent->getPosition();
-		_mesh->draw(Graphics::DrawMode::LineStrip);
+		m_shader->uniform("remainingTime") = m_remainingTime;
+		m_shader->uniform("size") = m_particleSize;
+		m_shader->uniform("position") = m_physicsComponent->getPosition();
+		m_mesh->draw(Graphics::DrawMode::LineStrip);
 	}
 
 	ParticleEmitter::ParticleEmitter()
@@ -52,7 +52,7 @@ namespace Game
 			vertices.push_back(Math::vec2(sin(r), cos(r)));
 		}
 
-		_mesh.reset(new Graphics::Mesh(vertices));
+		m_mesh.reset(new Graphics::Mesh(vertices));
 	}
 
 	ParticleEmitter &ParticleEmitter::instance()
@@ -76,25 +76,25 @@ namespace Game
 			pos = position + Math::vec2(offset(gen) * cos(t), offset(gen) * sin(t));
 
 			Math::vec2 dir = Math::normalize(pos - position);
-			_particles.push_back(std::unique_ptr<Particle>(new Particle(_mesh, pos, dir)));
+			m_particles.push_back(std::unique_ptr<Particle>(new Particle(m_mesh, pos, dir)));
 		}
 	}
 
 	void ParticleEmitter::reset()
 	{
-		_particles.clear();
+		m_particles.clear();
 	}
 
 	void ParticleEmitter::update(float timeDelta)
 	{
-		auto particleIterator = std::begin(_particles);
-		while (particleIterator != std::end(_particles)) {
+		auto particleIterator = std::begin(m_particles);
+		while (particleIterator != std::end(m_particles)) {
 			auto &particle = *particleIterator;
 			particle->update(timeDelta);
 
 			if (particle->isDead())
 			{
-				particleIterator = _particles.erase(particleIterator);
+				particleIterator = m_particles.erase(particleIterator);
 			}
 			else
 			{
@@ -105,7 +105,7 @@ namespace Game
 
 	void ParticleEmitter::draw()
 	{
-		for (auto &p : _particles)
+		for (auto &p : m_particles)
 		{
 			p->draw();
 		}

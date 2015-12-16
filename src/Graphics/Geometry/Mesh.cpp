@@ -8,27 +8,27 @@
 namespace Graphics
 {
 	Mesh::Mesh(const Mesh &other)
-		: _initialized(false)
-		, _vertices(other._vertices)
-		, _indices(other._indices)
-		, _boundingBox(other._boundingBox)
+		: m_initialized(false)
+		, m_vertices(other.m_vertices)
+		, m_indices(other.m_indices)
+		, m_boundingBox(other.m_boundingBox)
 	{ }
 
 	Mesh::Mesh(std::vector<Math::vec2> vertices)
-		: _initialized(false)
-		, _vertices(vertices)
+		: m_initialized(false)
+		, m_vertices(vertices)
 	{
 		for (decltype(vertices)::size_type i = 0; i < vertices.size(); ++i)
 		{
-			_indices.push_back(i);
+			m_indices.push_back(i);
 		}
 		createBoundingBox();
 	}
 
 	Mesh::Mesh(std::vector<Math::vec2> vertices, std::vector<GLuint> indices)
-		: _initialized(false)
-		, _vertices(vertices)
-		, _indices(indices)
+		: m_initialized(false)
+		, m_vertices(vertices)
+		, m_indices(indices)
 	{
 		createBoundingBox();
 	}
@@ -40,74 +40,74 @@ namespace Graphics
 
 	void Mesh::deleteMesh()
 	{
-		if (!_initialized)
+		if (!m_initialized)
 			return;
-		glDeleteBuffers(1, &_vbo);
-		glDeleteBuffers(1, &_ebo);
-		glDeleteVertexArrays(1, &_vao);
-		_initialized = false;
+		glDeleteBuffers(1, &m_vbo);
+		glDeleteBuffers(1, &m_ebo);
+		glDeleteVertexArrays(1, &m_vao);
+		m_initialized = false;
 	}
 
 	void Mesh::initializeMesh()
 	{
-		if (_initialized)
+		if (m_initialized)
 			return;
 		
-		glGenVertexArrays(1, &_vao);
-		glBindVertexArray(_vao);
+		glGenVertexArrays(1, &m_vao);
+		glBindVertexArray(m_vao);
 
-		glGenBuffers(1, &_vbo);
-		glBindBuffer(GL_ARRAY_BUFFER, _vbo);
-		glBufferData(GL_ARRAY_BUFFER, _vertices.size() * sizeof(Math::vec2), _vertices.data(), GL_STATIC_DRAW);
+		glGenBuffers(1, &m_vbo);
+		glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
+		glBufferData(GL_ARRAY_BUFFER, m_vertices.size() * sizeof(Math::vec2), m_vertices.data(), GL_STATIC_DRAW);
 
 		glEnableVertexAttribArray(0);
 		glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(GLfloat), 0);
 
-		glGenBuffers(1, &_ebo);
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _ebo);
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, _indices.size() * sizeof(GLuint), _indices.data(), GL_STATIC_DRAW);
+		glGenBuffers(1, &m_ebo);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_ebo);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, m_indices.size() * sizeof(GLuint), m_indices.data(), GL_STATIC_DRAW);
 
 		glPrimitiveRestartIndex(GeometryRestartIndex);
 
 		glBindVertexArray(0);
 
-		_initialized = true;
+		m_initialized = true;
 	}
 
 	void Mesh::createBoundingBox()
 	{
 		// Create bounding box
-		for (auto &v : _vertices)
+		for (auto &v : m_vertices)
 		{
-			_boundingBox.x = std::min(_boundingBox.x, v.x);
-			_boundingBox.y = std::min(_boundingBox.y, v.y);
-			_boundingBox.z = std::max(_boundingBox.z, v.x);
-			_boundingBox.w = std::max(_boundingBox.w, v.y);
+			m_boundingBox.x = std::min(m_boundingBox.x, v.x);
+			m_boundingBox.y = std::min(m_boundingBox.y, v.y);
+			m_boundingBox.z = std::max(m_boundingBox.z, v.x);
+			m_boundingBox.w = std::max(m_boundingBox.w, v.y);
 		}
 	}
 
 	void Mesh::draw(DrawMode mode)
 	{
-		draw(mode, _indices.size(), 0);
+		draw(mode, m_indices.size(), 0);
 	}
 
 	void Mesh::draw(DrawMode mode, int count, int offset)
 	{
 		glEnable(GL_PRIMITIVE_RESTART);
 		initializeMesh();
-		glBindVertexArray(_vao);
+		glBindVertexArray(m_vao);
 		glDrawElements(static_cast<int>(mode), count, GL_UNSIGNED_INT, (void*)(offset * sizeof(GLuint)));
 		glBindVertexArray(0);
 	}
 
 	Math::vec4 Mesh::boundingBox()
 	{
-		return _boundingBox;
+		return m_boundingBox;
 	}
 
 	std::unique_ptr<Mesh> Mesh::rotate(float rotation, Math::vec2 center)
 	{
-		auto vertices = _vertices;
+		auto vertices = m_vertices;
 
 		for (auto &v : vertices)
 		{
@@ -116,18 +116,18 @@ namespace Graphics
 			v += center;
 		}
 
-		return std::unique_ptr<Mesh>(new Mesh(vertices, _indices));
+		return std::unique_ptr<Mesh>(new Mesh(vertices, m_indices));
 	}
 
 	std::unique_ptr<Mesh> Mesh::scale(Math::vec2 scaling)
 	{
-		auto vertices = _vertices;
+		auto vertices = m_vertices;
 
 		for (auto &v : vertices)
 		{
 			v *= scaling;
 		}
 
-		return std::unique_ptr<Mesh>(new Mesh(vertices, _indices));
+		return std::unique_ptr<Mesh>(new Mesh(vertices, m_indices));
 	}
 }

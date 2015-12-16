@@ -11,7 +11,7 @@ namespace Components
 
 	void CollisionComponent::setCollisionMesh(Graphics::Mesh* mesh)
 	{
-		_mesh = mesh;
+		m_mesh = mesh;
 	}
 
 	bool CollisionComponent::collidesWithAABB(const CollisionComponent *other) const
@@ -20,8 +20,8 @@ namespace Components
 		{
 			for (int x = -1; x <= 1; ++x)
 			{
-				Math::vec4 a = _mesh->boundingBox() + Math::vec4(_position + Math::vec2(800 * x, 600 * y), _position + Math::vec2(800 * x, 600 * y));
-				Math::vec4 b = other->_mesh->boundingBox() + Math::vec4(other->_position, other->_position);
+				Math::vec4 a = m_mesh->boundingBox() + Math::vec4(m_position + Math::vec2(800 * x, 600 * y), m_position + Math::vec2(800 * x, 600 * y));
+				Math::vec4 b = other->m_mesh->boundingBox() + Math::vec4(other->m_position, other->m_position);
 
 				if (a.z >= b.x && a.x <= b.z && a.w >= b.y && a.y <= b.w) return true;
 			}
@@ -49,8 +49,8 @@ namespace Components
 		if (!collidesWithAABB(other))
 			return false;
 		
-		auto myVertices = _mesh->vertices();
-		auto otherVertices = other->_mesh->vertices();
+		auto myVertices = m_mesh->vertices();
+		auto otherVertices = other->m_mesh->vertices();
 
 		for (auto a1 = std::begin(myVertices); a1 != std::end(myVertices); a1++) {
 			auto a2 = a1 + 1;
@@ -66,7 +66,7 @@ namespace Components
 				{
 					for (int x = -1; x <= 1; ++x)
 					{
-						if (isIntersecting(*a1 + _position + Math::vec2(800 * x, 600 * y), *a2 + _position + Math::vec2(800 * x, 600 * y), *b1 + other->_position, *b2 + other->_position))
+						if (isIntersecting(*a1 + m_position + Math::vec2(800 * x, 600 * y), *a2 + m_position + Math::vec2(800 * x, 600 * y), *b1 + other->m_position, *b2 + other->m_position))
 						{
 							return true;
 						}

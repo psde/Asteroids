@@ -17,14 +17,14 @@ namespace Game
 	class Asteroid : public GameObject
 	{
 	private:
-		int _size;
-		float _meshSize;
-		bool _destroyed;
+		int m_size;
+		float m_meshSize;
+		bool m_destroyed;
 
-		float _rotation;
+		float m_rotation;
 
-		std::unique_ptr<Graphics::Mesh> _mesh;
-		std::shared_ptr<Graphics::Program> _shader;
+		std::unique_ptr<Graphics::Mesh> m_mesh;
+		std::shared_ptr<Graphics::Program> m_shader;
 
 		void init(int size, Math::vec2 position, Math::vec2 direction);
 	public:
@@ -51,7 +51,7 @@ namespace Game
 		int asteroidSize();
 
 		void destroy() override;
-		bool isDestroyed() { return _destroyed; }
+		bool isDestroyed() { return m_destroyed; }
 
 		// Returns a vector<float> contains all possible asteroid sizes,
 		// accessible with the size index
