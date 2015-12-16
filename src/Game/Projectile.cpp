@@ -34,7 +34,7 @@ namespace Game
 
 	void Projectile::update(float delta)
 	{
-		if(isLaunched() == false)
+		if(launched() == false)
 			return;
 
 		_time -= delta;
@@ -58,12 +58,12 @@ namespace Game
 			for (int x = -1; x <= 1; ++x)
 			{
 				_shader->uniform("position") = _physicsComponent->getPosition() + Math::vec2(800 * x, 600 * y);
-				_mesh->draw(Graphics::LINE_STRIP);
+				_mesh->draw(Graphics::DrawMode::LineStrip);
 			}
 		}
 	}
 
-	bool Projectile::isLaunched()
+	bool Projectile::launched()
 	{
 		return _launched;
 	}

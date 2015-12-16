@@ -35,6 +35,8 @@ namespace Game
 		// Advances the ships simulation by the given time step
 		void update(float delta) override;
 
+		void destroy() override;
+
 		// Draws the UFO at its current position
 		void draw() override;
 	};

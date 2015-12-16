@@ -34,7 +34,7 @@ namespace Game
 		void draw() override;
 
 		// Returns true if the projectile is currently in flight 
-		bool isLaunched();
+		bool launched();
 
 		// Launches the projectile from the given position in the given direction
 		void shoot(Math::vec2 position, Math::vec2 direction);
@@ -42,6 +42,6 @@ namespace Game
 		// Reloads the projectile, allowing it to be fired again
 		void reload();
 
-		bool isFriendly() { return _friendly; }
+		bool friendly() { return _friendly; }
 	};
 }

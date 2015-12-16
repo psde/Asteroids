@@ -36,8 +36,13 @@ namespace Game
 		std::vector<std::unique_ptr<Particle>> _particles;
 		std::shared_ptr<Graphics::Mesh> _mesh;
 
-	public:
 		ParticleEmitter();
+	public:
+		static ParticleEmitter& instance();
+		ParticleEmitter(const ParticleEmitter&) = delete;
+		ParticleEmitter(ParticleEmitter&&) = delete;
+		ParticleEmitter operator=(const ParticleEmitter&) = delete;
+		ParticleEmitter operator=(ParticleEmitter&&) = delete;
 
 		void emitParticles(Math::vec2 position, float radius, int count);
 		void reset();

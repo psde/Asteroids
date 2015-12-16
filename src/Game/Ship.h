@@ -56,14 +56,16 @@ namespace Game
 		// Draws the ship at its current position
 		void draw() override;
 
+		void destroy() override;
+
 		// Handles input. Returns valid shared_ptr<Projectile> if shot was released
 		const std::shared_ptr<Projectile> handleInput();
 
 		void addScore(unsigned int points);
-		unsigned int getScore() { return _score; }
+		unsigned int score() { return _score; }
 
 		void removeLive() { _lives--; }
-		unsigned int getLives() { return _lives; }
+		unsigned int lives() { return _lives; }
 		void resetLives() { _lives = 3; }
 	};
 }

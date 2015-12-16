@@ -148,7 +148,7 @@ Das Ziel des Spiels ist es, alle Asteroiden eines Levels komplett zu zerstören.
 
 Alle Objekte im Spiel erben von der \texttt{GameObject}-Klasse (siehe Listing~\autoref{lst:GameObject.h}). Diese Klasse stellt die grundlegenden Funktionen jedes Spielobjektes bereit, wie etwa die \texttt{update}-Methode, welche die Logik des Objets implementiert. Auch wird das Objekt so per \texttt{draw}-Methode gezeichnet.
 
-Jedes Objekt entscheidet selbst ob es eine Physik- und Kollisionskomponente besitzt. So sind auch die Methoden \texttt{getCollisionComponent} und \texttt{getPhysicsComponent} zu implementieren. Dabei kann eine Referenz auf die jeweilige Komponente zurückgegeben werden oder aber ein \texttt{nullptr}, wenn diese Komponente nicht benutzt wird.
+Jedes Objekt entscheidet selbst ob es eine Physik- und Kollisionskomponente besitzt. So sind auch die Methoden \texttt{collisionComponent} und \texttt{physicsComponent} zu implementieren. Dabei kann eine Referenz auf die jeweilige Komponente zurückgegeben werden oder aber ein \texttt{nullptr}, wenn diese Komponente nicht benutzt wird.
 
 Die Kollision zweier Komponenten wird in der Basisklasse anhand der Kollisionskomponente berechnet. Sollte ein Objekt keine Kollisionskomponente besitzen so kann kein anderes Objekt mit ihm kollidieren.
 

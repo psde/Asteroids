@@ -96,11 +96,11 @@ namespace Graphics
 		glEnable(GL_PRIMITIVE_RESTART);
 		initializeMesh();
 		glBindVertexArray(_vao);
-		glDrawElements(mode, count, GL_UNSIGNED_INT, (void*)(offset * sizeof(GLuint)));
+		glDrawElements(static_cast<int>(mode), count, GL_UNSIGNED_INT, (void*)(offset * sizeof(GLuint)));
 		glBindVertexArray(0);
 	}
 
-	Math::vec4 Mesh::getBoundingBox()
+	Math::vec4 Mesh::boundingBox()
 	{
 		return _boundingBox;
 	}

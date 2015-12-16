@@ -5,6 +5,7 @@
 #include "Graphics/Graphics.h"
 #include "Graphics/Window/Window.h"
 
+#include "ParticleEmitter.h"
 #include "Ship.h"
 
 namespace Game
@@ -86,7 +87,7 @@ namespace Game
 		std::shared_ptr<Projectile> projectile = nullptr;
 		for (auto p : _projectiles)
 		{
-			if (p->isLaunched() == false)
+			if (p->launched() == false)
 			{
 				projectile = p;
 				break;
@@ -152,10 +153,10 @@ namespace Game
 			for (int x = -1; x <= 1; ++x)
 			{
 				_shader->uniform("position") = _physicsComponent->getPosition() + Math::vec2(800 * x, 600 * y);
-				_rotatedMesh->draw(Graphics::LINE_STRIP, 8, 0);
+				_rotatedMesh->draw(Graphics::DrawMode::LineStrip, 8, 0);
 				if (Math::length(_physicsComponent->getAcceleration()) > 0.f && std::fmod(Graphics::getTime(), 0.2) >= 0.1)
 				{
-					_rotatedMesh->draw(Graphics::LINE_STRIP, 3, 8);
+					_rotatedMesh->draw(Graphics::DrawMode::LineStrip, 3, 8);
 				}
 			}
 		}
@@ -209,5 +210,10 @@ namespace Game
 			return shoot();
 		}
 		return nullptr;
+	}
+
+	void Ship::destroy()
+	{
+		ParticleEmitter::instance().emitParticles(physicsComponent()->getPosition() + 12.5f, 5, 5);
 	}
 }

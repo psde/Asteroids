@@ -48,16 +48,16 @@ namespace Game
 		void update(float delta) override;
 
 		// Returns the current asteroid size index
-		int getAsteroidSize();
+		int asteroidSize();
 
-		void destroy() { _destroyed = true; }
+		void destroy() override;
 		bool isDestroyed() { return _destroyed; }
 
-		// Returns a vector<float> containt all possible asteroid sizes, 
+		// Returns a vector<float> contains all possible asteroid sizes,
 		// accessible with the size index
 		static const std::vector<float> &AsteroidSizes()
 		{
-			static std::vector <float> sizes = { 15.f, 45.f, 95.f };
+			static std::vector <float> sizes = { 12.f, 35.f, 65.f, 100.f };
 			return sizes;
 		}
 	};

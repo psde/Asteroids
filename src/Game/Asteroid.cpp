@@ -4,6 +4,8 @@
 #include <memory>
 #include "Math/Math.h"
 
+#include "ParticleEmitter.h"
+
 #include "Asteroid.h"
 
 namespace Game
@@ -166,13 +168,23 @@ namespace Game
 			for (int x = -1; x <= 1; ++x)
 			{
 				_shader->uniform("position") = _physicsComponent->getPosition() + Math::vec2(800 * x, 600 * y);
-				_mesh->draw(Graphics::LINE_LOOP);
+				_mesh->draw(Graphics::DrawMode::LineLoop);
 			}
 		}
 	}
 
-	int Asteroid::getAsteroidSize()
+	int Asteroid::asteroidSize()
 	{
 		return _size;
+	}
+
+	void Asteroid::destroy()
+	{
+		_destroyed = true;
+		float size = Asteroid::AsteroidSizes().at(asteroidSize());
+		auto pos = physicsComponent()->getPosition() + (size / 2.f);
+
+		// Emit particle cloud
+		ParticleEmitter::instance().emitParticles(pos, size / 2.f, static_cast<int>(size));
 	}
 }

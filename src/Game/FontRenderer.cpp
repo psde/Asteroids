@@ -83,6 +83,12 @@ namespace Game
 		_mesh.reset(new Graphics::Mesh(vertices, elements));
 	}
 
+	FontRenderer &FontRenderer::instance()
+	{
+		static FontRenderer instance;
+		return instance;
+	}
+
 	void FontRenderer::draw(Math::vec2 position, std::string text, float size)
 	{
 		_shader->use();
@@ -98,11 +104,11 @@ namespace Game
 
 				if (it != std::end(_characterLookup))
 				{
-					_mesh->draw(Graphics::LINE_STRIP, it->second.first, it->second.second);
+					_mesh->draw(Graphics::DrawMode::LineStrip, it->second.first, it->second.second);
 				}
 				else
 				{
-					_mesh->draw(Graphics::LINE_STRIP, _unknownCharacter.first, _unknownCharacter.second);
+					_mesh->draw(Graphics::DrawMode::LineStrip, _unknownCharacter.first, _unknownCharacter.second);
 				}
 			}
 

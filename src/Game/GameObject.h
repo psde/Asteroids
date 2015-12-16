@@ -16,7 +16,7 @@ namespace Game
 		Components::PhysicsComponent* _physicsComponent;
 
 	public:
-		GameObject(Components::CollisionComponent* c = nullptr, Components::PhysicsComponent* p = nullptr);
+		GameObject(Components::CollisionComponent* c, Components::PhysicsComponent* p);
 
 		virtual ~GameObject() = default;
 
@@ -27,10 +27,12 @@ namespace Game
 		virtual void draw() = 0;
 
 		// Returns a const pointer to the game objects CollisionComponent, if any. nullptr if none.
-		const Components::CollisionComponent* getCollisionComponent() const;
+		const Components::CollisionComponent* collisionComponent() const;
 
 		// Returns a const pointer to the game objects PhysicsComponent, if any. nullptr if none.
-		const Components::PhysicsComponent* getPhysicsComponent() const;
+		const Components::PhysicsComponent* physicsComponent() const;
+
+		virtual void destroy() {}
 
 		bool collidesWith(const GameObject& other);
 		bool collidesWith(const GameObject* other);

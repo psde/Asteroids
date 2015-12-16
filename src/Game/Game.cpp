@@ -15,7 +15,9 @@
 namespace Game
 {
 	Game::Game()
-		: _window(&Graphics::Window::instance())
+		: _window(Graphics::Window::instance())
+		, _emitter(ParticleEmitter::instance())
+		, _fontRenderer(FontRenderer::instance())
 		, _livesRenderer(22.5f)
 		, _stateTime(0.f)
 	{
@@ -39,7 +41,7 @@ namespace Game
 		auto startTime = Graphics::getTime();
 		auto endTime = startTime;
 
-		while (!_window->shouldClose())
+		while (!_window.shouldClose())
 		{
 			float timeDelta = endTime - startTime;
 			startTime = Graphics::getTime();
@@ -60,8 +62,9 @@ namespace Game
 			}
 
 			Graphics::ShaderGlobals::update<float>("time", endTime);
-			auto ratio = _window->windowDimensions().x / 800.0;
-			Graphics::ShaderGlobals::update<Math::vec2>("windowDimensions", _window->windowDimensions() / ratio);
+			auto dimensions = _window.windowDimensions();
+			auto ratio = dimensions.x / 800.0;
+			Graphics::ShaderGlobals::update<Math::vec2>("windowDimensions", dimensions / ratio);
 
 			draw();
 
@@ -75,7 +78,7 @@ namespace Game
 				frames = 0;
 			}
 
-			_window->finishFrame();
+			_window.finishFrame();
 			endTime = Graphics::getTime();
 		}
 	}
@@ -137,7 +140,7 @@ namespace Game
 				}
 				break;
 			case Dead:
-				if (_ship.getLives() <= 0)
+				if (_ship.lives() <= 0)
 				{
 					_state = Game::GameOver;
 				}
@@ -148,8 +151,8 @@ namespace Game
 					_stateTime = 2.f;
 				}
 			case GameOver:
-				if (_window->getKeyState(Graphics::KEY_ENTER) == Graphics::KeyState::Press
-					|| _window->getKeyState(Graphics::KEY_KP_ENTER) == Graphics::KeyState::Press)
+				if (_window.getKeyState(Graphics::KEY_ENTER) == Graphics::KeyState::Press
+					|| _window.getKeyState(Graphics::KEY_KP_ENTER) == Graphics::KeyState::Press)
 				{
 					reset();
 				}
@@ -166,14 +169,14 @@ namespace Game
 		if (_ufo &&  _ufo->collidesWith(_ship))
 		{
 			// Destroy ufo
-			_emitter.emitParticles(_ufo->getPhysicsComponent()->getPosition() + 12.5f, 5, 5);
-			_ufo = nullptr;
+			_ufo->destroy();
+			_ufo.reset(nullptr);
 
 			if (_ship.isInvincible() == false)
 			{
 				// Player is dead, set state and release particle cloud
 				_state = Game::Dead;
-				_emitter.emitParticles(_ship.getPhysicsComponent()->getPosition() + 12.5f, 5, 5);
+				_ship.destroy();
 			}
 		}
 
@@ -188,7 +191,7 @@ namespace Game
 			for(auto projectile : _projectiles)
 			{
 				// If the projectile is not launched, we do not need to consider it
-				if(projectile->isLaunched() == false)
+				if(projectile->launched() == false)
 					continue;
 
 				bool collides = projectile->collidesWith(asteroid.get());
@@ -196,7 +199,7 @@ namespace Game
 				{
 					// Destroy asteroid, add score if projectile is friendly
 					asteroid->destroy();
-					destroyedAsteroids.push_back({ asteroid, projectile->isFriendly() });
+					destroyedAsteroids.push_back({ asteroid, projectile->friendly() });
 
 					projectile->reload();
 
@@ -212,8 +215,8 @@ namespace Game
 			if (_ufo && _ufo->collidesWith(asteroid.get()))
 			{
 				// Destroy Ufo
-				_emitter.emitParticles(_ufo->getPhysicsComponent()->getPosition() + 12.5f, 5, 5);
-				_ufo = nullptr;
+				_ufo->destroy();
+				_ufo.reset(nullptr);
 
 				// Destroy asteroid and don't add to score
 				asteroid->destroy();
@@ -231,7 +234,7 @@ namespace Game
 				{
 					// Player is dead, set state and release particle cloud
 					_state = Game::Dead;
-					_emitter.emitParticles(_ship.getPhysicsComponent()->getPosition() + 12.5f, 5, 5);
+					_ship.destroy();
 				}
 
 				// Destroy asteroid and don't add to score
@@ -244,17 +247,17 @@ namespace Game
 		for (auto projectile : _projectiles)
 		{
 			// If the projectile is not launched, we do not need to consider it
-			if (projectile->isLaunched() == false)
+			if (projectile->launched() == false)
 				continue;
 
 			if (_ufo && projectile->collidesWith(_ufo.get()))
 			{
 				// Destroy Ufo
-				_emitter.emitParticles(_ufo->getPhysicsComponent()->getPosition() + 12.5f, 5, 5 );
-				_ufo = nullptr;
+				_ufo->destroy();
+				_ufo.reset(nullptr);
 
 				// Add to score if projectile originated from player 
-				if (projectile->isFriendly())
+				if (projectile->friendly())
 					_ship.addScore(500);
 				
 				// Reload projectile
@@ -267,7 +270,7 @@ namespace Game
 				{
 					// Player is dead, set state and release particle cloud
 					_state = Game::Dead;
-					_emitter.emitParticles(_ship.getPhysicsComponent()->getPosition() + 12.5f, 5, 5);
+					_ship.destroy();
 				}
 				projectile->reload();
 			}
@@ -281,7 +284,7 @@ namespace Game
 		// Delete non-launched projectiles
 		_projectiles.erase(std::remove_if(std::begin(_projectiles),
 										  std::end(_projectiles),
-										  [](const std::shared_ptr<Projectile>& d){ return !d->isLaunched(); }),
+										  [](const std::shared_ptr<Projectile>& d){ return !d->launched(); }),
 						   std::end(_projectiles));
 
 		// Delete destroyed asteroids
@@ -293,16 +296,13 @@ namespace Game
 
 	void Game::destroyAsteroid(std::shared_ptr<Asteroid>& asteroid, bool addPoints)
 	{
-		int size = asteroid->getAsteroidSize();
+		int size = asteroid->asteroidSize();
 		float asteroidSize = Asteroid::AsteroidSizes().at(size);
-		Math::vec2 pos = asteroid->getPhysicsComponent()->getPosition() + (asteroidSize / 2.f);
+		Math::vec2 pos = asteroid->physicsComponent()->getPosition() + (asteroidSize / 2.f);
 
 		// Add to score if needed
 		if (addPoints)
 			_ship.addScore((Asteroid::AsteroidSizes().size() - size) * 100);
-
-		// Emit particle cloud
-		_emitter.emitParticles(pos, asteroidSize / 2.f, static_cast<int>(asteroidSize));
 
 		// Flag asteroid as destroyed
 		asteroid->destroy();
@@ -313,7 +313,7 @@ namespace Game
 			size--;
 			asteroidSize = Asteroid::AsteroidSizes().at(size);
 			pos -= asteroidSize / 2.f;
-			Math::vec2 dir = Math::normalize(asteroid->getPhysicsComponent()->getVelocity());
+			Math::vec2 dir = Math::normalize(asteroid->physicsComponent()->getVelocity());
 
 			dir = Math::rotate(dir, 0.5f * Math::pi<float>());
 			_asteroids.push_back(std::make_shared<Asteroid>(size, pos + (dir * asteroidSize / 2.f), dir));
@@ -324,7 +324,7 @@ namespace Game
 	void Game::update(float timeDelta)
 	{
 		// Cheats!
-		if (_window->getKeyState(Graphics::KEY_DELETE) == Graphics::KeyState::Press)
+		if (_window.getKeyState(Graphics::KEY_DELETE) == Graphics::KeyState::Press)
 		{
 			//_lives = 3;
 			_asteroids.clear();
@@ -401,7 +401,7 @@ namespace Game
 
 		for (auto p : _projectiles)
 		{
-			if (p->isLaunched())
+			if (p->launched())
 				p->draw();
 		}
 
@@ -425,15 +425,15 @@ namespace Game
 			}
 
 			_fontRenderer.draw(Math::vec2(10, 35), "LIVES", 17.f);
-			for (unsigned int i = 0; i < _ship.getLives(); i++)
+			for (unsigned int i = 0; i < _ship.lives(); i++)
 			{
-				Components::PhysicsComponent *component = const_cast<Components::PhysicsComponent*>(_livesRenderer.getPhysicsComponent());
+				Components::PhysicsComponent *component = const_cast<Components::PhysicsComponent*>(_livesRenderer.physicsComponent());
 				component->reset(Math::vec2(110.f + i * 15.f, 32.f), Math::vec2(0));
 				_livesRenderer.draw();
 			}
 
 			std::stringstream scoress;
-			scoress << "SCORE " << std::setw(4) << std::setfill('0') << _ship.getScore();
+			scoress << "SCORE " << std::setw(4) << std::setfill('0') << _ship.score();
 			std::string score = scoress.str();
 			_fontRenderer.draw(Math::vec2(10, 10), score, 17.f);
 

@@ -30,7 +30,8 @@ namespace Components
 	void PhysicsComponent::applyTerminalVelocity(PhysicsState &state)
 	{
 		float terminalVelocity = getTerminalVelocity();
-		if (terminalVelocity > 0.f && (std::abs(state.velocity.x) > terminalVelocity || std::abs(state.velocity.y) > terminalVelocity))
+		if (terminalVelocity > 0.f &&
+			(std::abs(state.velocity.x) > terminalVelocity || std::abs(state.velocity.y) > terminalVelocity))
 		{
 			state.velocity = Math::normalize(state.velocity) * std::fmin(Math::length(state.velocity), terminalVelocity);
 		}

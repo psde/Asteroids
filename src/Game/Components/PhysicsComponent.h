@@ -24,8 +24,7 @@ namespace Components
 			, _terminalVelocity(0.0f)
 		{}
 
-		// Virtual (but empty) deconstructor
-		virtual ~PhysicsComponent() {};
+		virtual ~PhysicsComponent() = default;
 
 		// Resets the simulation to given position and velocity
 		virtual void reset(Math::vec2 position, Math::vec2 velocity) = 0;

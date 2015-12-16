@@ -19,18 +19,18 @@ namespace Game
 
 	bool GameObject::collidesWith(const GameObject* other)
 	{
-		if (getCollisionComponent() == nullptr || other->getCollisionComponent() == nullptr)
+		if (collisionComponent() == nullptr || other->collisionComponent() == nullptr)
 			return false;
 
-		return getCollisionComponent()->collidesWith(other->getCollisionComponent());
+		return collisionComponent()->collidesWith(other->collisionComponent());
 	}
 
-	const Components::CollisionComponent *GameObject::getCollisionComponent() const
+	const Components::CollisionComponent *GameObject::collisionComponent() const
 	{
 		return _collisionComponent;
 	}
 
-	const Components::PhysicsComponent *GameObject::getPhysicsComponent() const
+	const Components::PhysicsComponent *GameObject::physicsComponent() const
 	{
 		return _physicsComponent;
 	}

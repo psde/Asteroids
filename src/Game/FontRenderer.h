@@ -24,9 +24,15 @@ namespace Game
 		std::pair<int, int> _unknownCharacter;
 
 		std::shared_ptr<Graphics::Program> _shader;
-	public:
-		// Constructor
+
 		FontRenderer();
+	public:
+		static FontRenderer& instance();
+
+		FontRenderer(const FontRenderer&) = delete;
+		FontRenderer(FontRenderer&&) = delete;
+		FontRenderer operator=(const FontRenderer&) = delete;
+		FontRenderer operator=(FontRenderer&&) = delete;
 
 		// Renders a given string at a given position with a given size
 		void draw(Math::vec2 position, std::string text, float size);

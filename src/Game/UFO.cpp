@@ -3,6 +3,7 @@
 
 #include "Math/Math.h"
 
+#include "ParticleEmitter.h"
 #include "UFO.h"
 
 namespace Game
@@ -73,7 +74,7 @@ namespace Game
 		std::shared_ptr<Projectile> projectile = nullptr;
 		for (auto p : _projectiles)
 		{
-			if (p->isLaunched() == false)
+			if (p->launched() == false)
 			{
 				projectile = p;
 				break;
@@ -132,8 +133,13 @@ namespace Game
 			for (int x = -1; x <= 1; ++x)
 			{
 				_shader->uniform("position") = _physicsComponent->getPosition() + Math::vec2(800 * x, 600 * y);
-				_mesh->draw(Graphics::LINE_STRIP);
+				_mesh->draw(Graphics::DrawMode::LineStrip);
 			}
 		}
+	}
+
+	void UFO::destroy()
+	{
+		ParticleEmitter::instance().emitParticles(physicsComponent()->getPosition() + 20.f, 10, 25 );
 	}
 }

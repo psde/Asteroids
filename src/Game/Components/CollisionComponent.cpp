@@ -20,8 +20,8 @@ namespace Components
 		{
 			for (int x = -1; x <= 1; ++x)
 			{
-				Math::vec4 a = _mesh->getBoundingBox() + Math::vec4(_position + Math::vec2(800 * x, 600 * y), _position + Math::vec2(800 * x, 600 * y));
-				Math::vec4 b = other->_mesh->getBoundingBox() + Math::vec4(other->_position, other->_position);
+				Math::vec4 a = _mesh->boundingBox() + Math::vec4(_position + Math::vec2(800 * x, 600 * y), _position + Math::vec2(800 * x, 600 * y));
+				Math::vec4 b = other->_mesh->boundingBox() + Math::vec4(other->_position, other->_position);
 
 				if (a.z >= b.x && a.x <= b.z && a.w >= b.y && a.y <= b.w) return true;
 			}
@@ -46,7 +46,7 @@ namespace Components
 
 	bool CollisionComponent::collidesWith(const CollisionComponent *other) const
 	{
-		if (collidesWithAABB(other) == false)
+		if (!collidesWithAABB(other))
 			return false;
 		
 		auto myVertices = _mesh->vertices();

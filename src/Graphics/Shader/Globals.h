@@ -12,21 +12,21 @@
 namespace Graphics
 {
 	namespace Impl {
-		class ShaderGlobalBase
+		class ShaderValueBase
 		{
 		public:
 			virtual void update(Program *program) = 0;
 		};
 
 		template<class T>
-		class ShaderGlobal : public ShaderGlobalBase
+		class ShaderValue : public ShaderValueBase
 		{
 		private:
 			std::string _name;
 			T _val;
 
 		public:
-			ShaderGlobal(std::string name, T val) : _name(name), _val(val) { }
+			ShaderValue(std::string name, T val) : _name(name), _val(val) { }
 
 			void updateValue(T val)
 			{
@@ -43,7 +43,7 @@ namespace Graphics
 	class ShaderGlobals
 	{
 	private:
-		std::unordered_map<std::string, std::shared_ptr<Impl::ShaderGlobalBase>> _globals;
+		std::unordered_map<std::string, std::shared_ptr<Impl::ShaderValueBase>> _globals;
 
 		ShaderGlobals() {};
 		
@@ -59,14 +59,14 @@ namespace Graphics
 		{
 			ShaderGlobals& globals = instance();
 
-			std::shared_ptr<Impl::ShaderGlobalBase> &entry = globals._globals[name];
+			std::shared_ptr<Impl::ShaderValueBase> &entry = globals._globals[name];
 
 			if (!entry)
 			{
-				entry = std::make_shared<Impl::ShaderGlobal<T>>(name, val);
+				entry = std::make_shared<Impl::ShaderValue<T>>(name, val);
 			}
 
-			std::shared_ptr<Impl::ShaderGlobal<T>> global = std::dynamic_pointer_cast<Impl::ShaderGlobal<T>>(entry);
+			std::shared_ptr<Impl::ShaderValue<T>> global = std::dynamic_pointer_cast<Impl::ShaderValue<T>>(entry);
 			global->updateValue(val);
 		}
 

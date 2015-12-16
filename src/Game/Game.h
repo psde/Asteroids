@@ -27,16 +27,13 @@ namespace Game
 			LevelTransition
 		};
 
-		//std::shared_ptr<Graphics::Window> _window;
-		Graphics::Window* _window;
+		Graphics::Window& _window;
+		ParticleEmitter& _emitter;
+		FontRenderer& _fontRenderer;
 
 		std::vector<std::shared_ptr<Asteroid>> _asteroids;
 		std::vector<std::shared_ptr<Projectile>> _projectiles;
 		std::unique_ptr<UFO> _ufo;
-
-		ParticleEmitter _emitter;
-
-		FontRenderer _fontRenderer;
 
 		Ship _ship;
 		Ship _livesRenderer;

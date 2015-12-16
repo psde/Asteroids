@@ -50,7 +50,7 @@ namespace Graphics
 		Math::vec2 dimensions(framebufferDimensions());
 		glViewport(0, 0, static_cast<GLsizei>(dimensions.x), static_cast<GLsizei>(dimensions.y));
 
-		glfwSetWindowSizeCallback(_glfwWindow, [](GLFWwindow* window, int width, int height)
+		glfwSetWindowSizeCallback(_glfwWindow, [](GLFWwindow* window, int, int)
 		{
 			int x, y;
 			glfwGetFramebufferSize(window, &x, &y);
@@ -60,7 +60,7 @@ namespace Graphics
 
 	Window& Window::instance()
 	{
-		static Window instance = Window{800, 600};
+		static Window instance(800, 600);
 		return instance;
 	}
 

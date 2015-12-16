@@ -10,12 +10,12 @@
 namespace Graphics
 {
 	const unsigned int GeometryRestartIndex = 65535;
-	enum DrawMode
+	enum class DrawMode
 	{
-		POINTS = GL_POINTS,
-		LINES = GL_LINES,
-		LINE_STRIP = GL_LINE_STRIP,
-		LINE_LOOP = GL_LINE_LOOP
+		Points = GL_POINTS,
+		Lines = GL_LINES,
+		LineStrip = GL_LINE_STRIP,
+		LineLoop = GL_LINE_LOOP
 	};
 
 	class Mesh
@@ -42,7 +42,7 @@ namespace Graphics
 		void draw(DrawMode mode);
 		void draw(DrawMode mode, int count, int offset);
 
-		Math::vec4 getBoundingBox();
+		Math::vec4 boundingBox();
 		std::unique_ptr<Mesh> rotate(float rotation, Math::vec2 center);
 		std::unique_ptr<Mesh> scale(Math::vec2 scaling);
 

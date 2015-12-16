@@ -34,11 +34,11 @@ namespace Game
 		_shader->uniform("remainingTime") = _remainingTime;
 		_shader->uniform("size") = _particleSize;
 		_shader->uniform("position") = _physicsComponent->getPosition();
-		_mesh->draw(Graphics::LINE_STRIP);
+		_mesh->draw(Graphics::DrawMode::LineStrip);
 	}
 
 	ParticleEmitter::ParticleEmitter()
-		: GameObject()
+		: GameObject(nullptr, nullptr)
 	{
 		// Preload shader so it does not happen mid-game
 		auto shader = Graphics::Program::getProgram("data/shader/particle.glsl");
@@ -53,6 +53,12 @@ namespace Game
 		}
 
 		_mesh.reset(new Graphics::Mesh(vertices));
+	}
+
+	ParticleEmitter &ParticleEmitter::instance()
+	{
+		static ParticleEmitter instance;
+		return instance;
 	}
 
 	void ParticleEmitter::emitParticles(Math::vec2 position, float radius, int count)
@@ -104,4 +110,5 @@ namespace Game
 			p->draw();
 		}
 	}
+
 }

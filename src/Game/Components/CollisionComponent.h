@@ -22,6 +22,7 @@ namespace Components
 
 	public:
 		CollisionComponent();
+		virtual ~CollisionComponent() = default;
 
 		// Sets the collision mesh to the given mesh
 		void setCollisionMesh(Graphics::Mesh* mesh);
