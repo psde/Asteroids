@@ -61,5 +61,4 @@ namespace Game
 			return sizes;
 		}
 	};
-
 }

@@ -37,5 +37,4 @@ namespace Game
 		// Renders a given string at a given position with a given size
 		void draw(Math::vec2 position, std::string text, float size);
 	};
-
 }
