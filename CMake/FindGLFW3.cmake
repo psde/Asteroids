@@ -19,7 +19,7 @@ FIND_PATH(GLFW3_INCLUDE_DIR GLFW/glfw3.h
 )
 
 FIND_LIBRARY(GLFW3_LIBRARY 
-    NAMES glfw3 libglfw.so libglfw3.a
+    NAMES glfw3 libglfw.so libglfw3.a libglfw.3.dylib
     DOC "Absolute path to GLFW3 library."
     HINTS 
     $ENV{GLFW_ROOT}
@@ -28,6 +28,7 @@ FIND_LIBRARY(GLFW3_LIBRARY
     /usr/local/lib/
     /usr/lib/
     ${GLFW3_ROOT}/build/src/Release/
+    ${GLFW3_ROOT}/lib/
 )
 
 
